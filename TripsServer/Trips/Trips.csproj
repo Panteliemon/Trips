@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20200326205530_InitialTripsDBCreate.cs" />
+    <Compile Remove="Migrations\20200326205530_InitialTripsDBCreate.Designer.cs" />
+    <Compile Remove="Migrations\20200328230845_MainDB.cs" />
+    <Compile Remove="Migrations\20200328230845_MainDB.Designer.cs" />
+    <Compile Remove="Migrations\20200329103855_RefiningTripsDb1.cs" />
+    <Compile Remove="Migrations\20200329103855_RefiningTripsDb1.Designer.cs" />
+    <Compile Remove="Migrations\20200418214656_PicturesTable2.cs" />
+    <Compile Remove="Migrations\20200418214656_PicturesTable2.Designer.cs" />
+    <Compile Remove="Migrations\Pics\20200418094613_Miniatures.cs" />
+    <Compile Remove="Migrations\Pics\20200418094613_Miniatures.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.WebHost" Version="5.2.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0007" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.5.0" />
+  </ItemGroup>
+
+</Project>

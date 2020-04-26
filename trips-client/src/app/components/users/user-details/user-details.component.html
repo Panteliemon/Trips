@@ -1,0 +1,103 @@
+<section *ngIf="user">
+    <h2>Профиль участника: {{user.name}}</h2>
+    <div class="uniter">
+        <div class="flex-container">
+            <div class="left-panel">
+                <img *ngIf="!isPictureLoaderVisible" [src]="imgSrc" [alt]="imgAlt" class="profile-pic-big centered" />
+                <app-loader *ngIf="isPictureLoaderVisible"></app-loader>
+                <br />
+                <input type="file" placeholder="select file" #selectFileButton (change)="onPictureFileSelected(selectFileButton.files)" style="display:none;" />
+                <button *ngIf="isChangeProfilePicButtonVisible" class="button button-std" (click)="selectFileButton.click()">{{changeProfilePicButtonCaption}}</button>
+                <button *ngIf="isResetProfilePicButtonVisible" class="button button-std" (click)="resetProfilePic()">Удалить аватар</button>
+            </div>
+            <div class="right-panel">
+                <p class="parameter-group"><span>Зарегистрирован:</span> {{user.registeredDate | date:"dd/MMM/yyyy"}}</p>
+                <div class="parameter-group" *ngIf="canChangeLogin && !isChangeLoginExpanded">
+                    <button class="button button-std" (click)="onExpandChangeLoginClicked()">Поменять логин</button>
+                </div>
+                <fieldset class="parameter-group" *ngIf="isChangeLoginExpanded">
+                    <legend>Изменение логина</legend>
+                    <div>
+                        <label for="txtNewLogin">Новый логин:</label>
+                        <input type="text" id="txtNewLogin" [(ngModel)]="newLogin"
+                               required="required" />
+                    </div>
+                    <p class="red-text" *ngIf="isLoginAlreadyExistsVisible">Пользователь с данным именем уже существует. Попробуйте другое.</p>
+                    <p>Внимание: изменять логин можно не чаще чем один раз в неделю. Выбирайте ответственно.</p>
+                    <button class="button button-std" (click)="onDoChangeLoginClicked()">Поменять логин</button>
+                    <button class="button button-std" (click)="onCancelChangeLoginClicked()">Отмена</button>
+                </fieldset>
+                <div class="parameter-group" *ngIf="canChangePassword && !isChangePasswordExpanded">
+                    <button class="button button-std" (click)="onExpandChangePasswordClicked()">Поменять пароль</button>
+                </div>
+                <fieldset class="parameter-group" *ngIf="isChangePasswordExpanded">
+                    <legend>Изменение пароля</legend>
+                    <p>В целях безопастности для этого потребуется ваш текущий пароль ввести ещё раз.</p>
+                    <div>
+                        <label for="pwCurrentPassword">Текущий пароль</label>
+                        <input type="password" id="pwCurrentPassword" [(ngModel)]="currentPassword" />
+                    </div>
+                    <div>
+                        <label for="pwNewPassword">Новый пароль</label>
+                        <input type="password" id="pwNewPassword" [(ngModel)]="newPassword" />
+                    </div>
+                    <div>
+                        <label for="pwNewPassword2">Подтверждение нового пароля</label>
+                        <input type="password" id="pwNewPassword2" [(ngModel)]="newPassword2" />
+                    </div>
+                    <button class="button button-std" (click)="onDoChangePasswordClicked()">Поменять пароль</button>
+                    <button class="button button-std" (click)="onCancelChangePasswordClicked()">Отмена</button>
+                </fieldset>
+                <div class="parameter-group" *ngIf="canSeeIsAdmin">
+                    <input type="checkbox" id="cbIsAdmin" [(ngModel)]="user.isAdmin"
+                           [disabled]="!canSetIsAdmin"
+                           (click)="onIsAdminClicked()" >
+                    <label for="cbIsAdmin">Администратор</label>
+                </div>
+                <fieldset class="parameter-group" *ngIf="canSeePrivileges">
+                    <legend>Может редактировать:</legend>
+                    <div class="parameter-group">
+                        <input type="checkbox" id="cbCanPublishNews" [(ngModel)]="user.canPublishNews"
+                               [disabled]="!canEditPrivileges"
+                               (change)="onPrivilegeCheckboxChanged()" >
+                        <label for="cbCanPublishNews">Новости</label>
+                    </div>
+                    <div class="parameter-group">
+                        <input type="checkbox" id="cbCanPublishTrips" [(ngModel)]="user.canPublishTrips"
+                               [disabled]="!canEditPrivileges"
+                               (change)="onPrivilegeCheckboxChanged()" >
+                        <label for="cbCanPublishTrips">Поездочки</label>
+                    </div>
+                    <div class="parameter-group">
+                        <input type="checkbox" id="cbCanEditGeography" [(ngModel)]="user.canEditGeography"
+                               [disabled]="!canEditPrivileges"
+                               (change)="onPrivilegeCheckboxChanged()" >
+                        <label for="cbCanEditGeography">Места и регионы</label>
+                    </div>
+                </fieldset>
+                <div class="parameter-group" *ngIf="canResetPassword && !isResetPasswordExpanded">
+                    <button class="button button-std" (click)="onExpandResetPasswordClicked()">Сброс пароля</button>
+                </div>
+                <fieldset class="parameter-group" *ngIf="isResetPasswordExpanded">
+                    <legend>Сброс пароля</legend>
+                    <div>
+                        <label for="pwNewPasswordForReset">Новый пароль</label>
+                        <input type="password" id="pwNewPasswordForReset" [(ngModel)]="passwordForReset" />
+                    </div>
+                    <button class="button button-std" (click)="onDoResetPasswordClicked()">Установить пароль</button>
+                    <button class="button button-std" (click)="onCancelResetPasswordClicked()">Отмена</button>
+                </fieldset>
+                <div class="parameter-group" *ngIf="canDeleteUser">
+                    <button class="button button-std button-danger" (click)="onDeleteUserClicked()">Удолить участника</button>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="isOverallLoaderVisible" class="fog"></div>
+        <div *ngIf="isOverallLoaderVisible">
+            <app-loader class="centered-both"></app-loader>
+        </div>
+    </div>
+</section>
+<app-page404 *ngIf="notFound"></app-page404>
+<app-loader *ngIf="(!user) && (!notFound)"></app-loader>
+

@@ -1,0 +1,22 @@
+<div class="uniter">
+    <div>
+        <div class="centered">
+            <p>
+                Для просмотра страницы <em>{{returnUrl}}</em> надо бы войти на сайт.
+            </p>
+            <div>
+                <label for="tbUserName">Имя</label>
+                <input type="text" id="tbUserName" [(ngModel)]="userName" (keyup)="onTextFieldsKeyUp($event)"/>
+            </div>
+            <div>
+                <label for="tbPassword">Пароль</label>
+                <input type="password" id="tbPassword" [(ngModel)]="password" (keyup)="onTextFieldsKeyUp($event)" />
+            </div>
+            <button class="button button-std" (click)="onEnterButtonClicked()">Войти</button>
+        </div>
+    </div>
+    <div class="fog" *ngIf="isLoaderVisible"></div>
+    <div *ngIf="isLoaderVisible">
+        <app-loader class="centered-both"></app-loader>
+    </div>
+</div>

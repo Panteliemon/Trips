@@ -1,0 +1,22 @@
+<div *ngIf="isShown">
+    <div class="modal-popup-background">
+    </div>
+    <div class="modal-popup">
+        <img *ngIf="aboveHeaderPictureSrc" [src]="aboveHeaderPictureSrc" class="centered above-header-pic" />
+        <h3 *ngIf="header" class="centered">{{header}}</h3>
+        <div class="flex-container flex-items-vcenter">
+            <img *ngIf="iconSrc" [src]="iconSrc" class="icon-holder" />
+            <img *ngIf="largeIconSrc" [src]="largeIconSrc" class="large-icon-holder" />
+            <p class="message">{{message}}</p>
+        </div>
+        <div class="buttons-row">
+            <div class="centered">
+                <button *ngIf="isOkVisible" class="button button-std button-messagebox" (click)="onButtonClicked(MessageResultEnum.ok)">OK</button>
+                <button *ngIf="isYesVisible" class="button button-std button-messagebox" [ngClass]="{'button-danger': isYesButtonDanger}"
+                        (click)="onButtonClicked(MessageResultEnum.yes)">Да</button>
+                <button *ngIf="isNoVisible" class="button button-std button-messagebox" (click)="onButtonClicked(MessageResultEnum.no)">Нет</button>
+            </div>
+        </div>
+    </div>
+</div>
+

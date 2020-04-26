@@ -1,0 +1,19 @@
+<div *ngIf="isShown">
+    <div class="modal-popup-background"></div>
+    <div class="login-form">
+        <div class="uniter">
+            <div>
+                <label for="userName">Имя</label>
+                <input id="userName" type="text" [(ngModel)]="userName" (keyup)="onTextFieldsKeyUp($event)" />
+                <label for="password">Пароль</label>
+                <input id="password" type="password" [(ngModel)]="password" (keyup)="onTextFieldsKeyUp($event)" />
+                <button (click)="onEnterButtonClicked()">Вход</button>
+                <button (click)="closeButtonClicked()">Отмена</button>
+            </div>
+            <div class="fog" *ngIf="isLoaderVisible"></div>
+            <div *ngIf="isLoaderVisible">
+                <app-loader class="centered-both"></app-loader>
+            </div>
+        </div>
+    </div>
+</div>

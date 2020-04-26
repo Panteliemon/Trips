@@ -1,0 +1,26 @@
+<section>
+    <h2>Добавить участника</h2>
+    <div class="uniter">
+        <div>
+            <div>
+                <label for="userName">Имя / Логин</label>
+                <input type="text" id="userName" required="required" [(ngModel)]="userName" />
+                <p *ngIf="isUserExistsVisible" class="red-text">Пользователь с таким именем уже есть</p>
+            </div>
+            <div>
+                <label for="password">Пароль</label>
+                <input type="password" id="password" [(ngModel)]="password" />
+            </div>
+            <div>
+                <label for="password2">Подтверждение пароля</label>
+                <input type="password" id="password2" [(ngModel)]="password2" />
+            </div>
+            <div>
+                <button class="button button-std" (click)="addButtonClicked()">Добавить</button>
+            </div>
+        </div>
+        <div *ngIf="isLoaderVisible" class="fog"></div>
+    </div>
+    <app-loader *ngIf="isLoaderVisible"></app-loader>
+</section>
+

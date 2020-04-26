@@ -1,0 +1,15 @@
+<section>
+    <h1>Участники</h1>
+    <a routerLink="/users/create" class="button">Добавить участника</a>
+    <table *ngIf="users" class="items-presenter">
+        <tr *ngFor="let user of users">
+            <td>
+                <img [src]="userPicSrc(user.profilePicture)" class="profile-pic" />
+            </td>
+            <td>
+                <a routerLink="/user/{{user.id}}" class="item-ref">{{user.name}}</a>
+            </td>
+        </tr>
+    </table>
+    <app-loader *ngIf="isLoaderVisible"></app-loader>
+</section>

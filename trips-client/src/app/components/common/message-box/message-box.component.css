@@ -1,0 +1,26 @@
+.button-messagebox {
+    margin:0 10px 0 0;
+}
+
+div.buttons-row {
+    margin:10px -10px 0 0;
+}
+
+.icon-holder {
+    width: 64px;
+    height: 64px;
+}
+
+.large-icon-holder {
+    width: 128px;
+    height: 128px;
+}
+
+.above-header-pic {
+    max-width:400px;
+}
+
+p.message {
+    margin-left:10px;
+    margin-right:10px;
+}

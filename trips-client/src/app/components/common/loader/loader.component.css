@@ -1,0 +1,11 @@
+div.loader-frame {
+    position: relative;
+    min-width:200px;
+    min-height:200px;
+}
+
+p.loader-msg {
+    margin-top: 5px;
+    min-width:150px;
+    text-align:center;
+}
