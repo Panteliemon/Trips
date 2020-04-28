@@ -13,6 +13,8 @@
     <Compile Remove="Migrations\20200329103855_RefiningTripsDb1.Designer.cs" />
     <Compile Remove="Migrations\20200418214656_PicturesTable2.cs" />
     <Compile Remove="Migrations\20200418214656_PicturesTable2.Designer.cs" />
+    <Compile Remove="Migrations\20200428171857_PlaceAccessibility.cs" />
+    <Compile Remove="Migrations\20200428171857_PlaceAccessibility.Designer.cs" />
     <Compile Remove="Migrations\Pics\20200418094613_Miniatures.cs" />
     <Compile Remove="Migrations\Pics\20200418094613_Miniatures.Designer.cs" />
   </ItemGroup>

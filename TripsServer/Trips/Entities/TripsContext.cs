@@ -14,10 +14,10 @@ namespace Trips.Entities
         {
         }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder.UseSqlServer(Program.TripsConnectionString);
-        //}
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer(Program.TripsConnectionString);
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

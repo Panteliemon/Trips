@@ -19,6 +19,9 @@ namespace Trips.Entities
         public DateTime? ChangedDate { get; set; }
 
         public DateTime? DiscoveryDate { get; set; }
+        public PlaceAccessibility? Accessibility { get; set; }
+        public PlaceAccessibility? NearestAccessibility { get; set; }
+        public PlacePopularity? Popularity { get; set; }
         public bool IsXBApproved { get; set; }
 
         public Picture TitlePicture { get; set; }

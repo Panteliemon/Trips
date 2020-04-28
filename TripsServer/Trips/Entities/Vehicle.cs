@@ -13,6 +13,7 @@ namespace Trips.Entities
         public string OfficialName { get; set; }
         public string LicenseNumber { get; set; }
         public int? YearOfManufacture { get; set; }
+        public PlaceAccessibility? AcceptableAccessibility { get; set; }
         public Gallery Gallery { get; set; }
 
         public ICollection<VehiclesToTrips> Trips { get; set; }
