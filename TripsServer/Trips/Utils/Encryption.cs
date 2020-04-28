@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Trips.Config;
 using Trips.Dtos;
 
 namespace Trips.Utils
@@ -30,28 +31,28 @@ namespace Trips.Utils
 
         public static SymmetricSecurityKey AuthenticationTokenKey { get; private set; }
 
-        public static void Configure(IConfiguration configuration)
+        public static void Configure(Keys keys)
         {
             if (_configured)
             {
                 throw new InvalidOperationException("Already configured");
             }
 
-            if ((configuration["Keys:TKN"] == null) || (configuration["Keys:PWH"] == null))
+            if ((keys.AuthTokensKey == null) || (keys.PasswordHashSeed == null))
             {
-                throw new InvalidOperationException("Keys not found (security.json)");
+                throw new InvalidOperationException("Keys not found (keys.xml)");
             }
 
-            if (configuration["Keys:PBP"] == null)
+            if (keys.AppDefaultUserPassword == null)
             {
-                throw new InvalidOperationException("Predefined password not set (security.json)");
+                throw new InvalidOperationException("Predefined password not set (keys.xml)");
             }
 
-            _keyForTokens = Encoding.ASCII.GetBytes(configuration["Keys:TKN"]);
-            _saltForPasswords = Encoding.ASCII.GetBytes(configuration["Keys:PWH"]);
+            _keyForTokens = Encoding.ASCII.GetBytes(keys.AuthTokensKey);
+            _saltForPasswords = Encoding.ASCII.GetBytes(keys.PasswordHashSeed);
 
             AuthenticationTokenKey = new SymmetricSecurityKey(_keyForTokens);
-            PredefinedHashedPassword = GetHashedPassword(configuration["Keys:PBP"]);
+            PredefinedHashedPassword = GetHashedPassword(keys.AppDefaultUserPassword);
 
             _configured = true;
         }
