@@ -34,7 +34,7 @@ export class UsersService {
   }
 
   getUserByName(userName: string): Observable<UserHeader> {
-    return this.http.get<User>(API_BASE_PATH + `/user/name=${userName}`);
+    return this.http.get<User>(API_BASE_PATH + `/user/name=${encodeURIComponent(userName)}`);
   }
 
   createNewUser(userName: string, password: string): Observable<any> {
