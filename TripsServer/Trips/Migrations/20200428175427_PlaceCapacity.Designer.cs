@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Trips.Entities;
 
 namespace Trips.Migrations
 {
     [DbContext(typeof(TripsContext))]
-    partial class TripsContextModelSnapshot : ModelSnapshot
+    [Migration("20200428175427_PlaceCapacity")]
+    partial class PlaceCapacity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -101,13 +103,10 @@ namespace Trips.Migrations
                     b.Property<int>("Index")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("LargeSizeId")
+                    b.Property<Guid>("MiniatureId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("MediumSizeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("SmallSizeId")
+                    b.Property<Guid>("PictureId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int?>("UploadedById")

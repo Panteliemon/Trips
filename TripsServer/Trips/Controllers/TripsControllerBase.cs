@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Trips.Entities;
 using Trips.Utils;
@@ -53,7 +54,7 @@ namespace Trips.Controllers
             {
                 if (int.TryParse(uidClaim.Value, out int userId))
                 {
-                    return await Task.Run(() => DbContext.Users.FirstOrDefault(u => u.Id == userId));
+                    return await DbContext.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();
                 }
             }
 

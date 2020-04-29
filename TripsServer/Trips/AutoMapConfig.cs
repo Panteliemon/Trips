@@ -14,6 +14,12 @@ namespace Trips
         {
             CreateMap<User, UserDto>();
             CreateMap<User, UserHeaderDto>();
+
+            CreateMap<Picture, PictureDto>();
+            CreateMap<Gallery, GalleryDto>();
+
+            CreateMap<Place, PlaceDto>();
+            CreateMap<Place, PlaceHeaderDto>();
         }
     }
 }

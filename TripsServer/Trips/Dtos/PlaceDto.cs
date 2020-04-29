@@ -2,20 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Trips.Entities;
 
-namespace Trips.Entities
+namespace Trips.Dtos
 {
-    public class Place
+    public class PlaceDto
     {
         public int Id { get; set; }
         public PlaceKind? Kind { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Location { get; set; }
-        public Region Region { get; set; }
-        public User AddedBy { get; set; }
+        public UserHeaderDto AddedBy { get; set; }
         public DateTime? AddedDate { get; set; }
-        public User ChangedBy { get; set; }
+        public UserHeaderDto ChangedBy { get; set; }
         public DateTime? ChangedDate { get; set; }
 
         public DateTime? DiscoveryDate { get; set; }
@@ -25,9 +25,7 @@ namespace Trips.Entities
         public PlaceCapacity? Capacity { get; set; }
         public bool IsXBApproved { get; set; }
 
-        public Picture TitlePicture { get; set; }
-        public Gallery Gallery { get; set; }
-
-        public ICollection<Visit> Visits { get; set; }
+        public Guid? TitlePictureSmallSizeId { get; set; }
+        public GalleryDto Gallery { get; set; }
     }
 }
