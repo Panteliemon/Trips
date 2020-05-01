@@ -19,6 +19,10 @@ import { UserCreateComponent } from './components/users/user-create/user-create.
 import { LoaderComponent } from './components/common/loader/loader.component';
 import { AuthInterceptor } from './services/auth.interceptor';
 import { LoginPageComponent } from './components/common/login-page/login-page.component';
+import { GalleryComponent } from './components/common/gallery/gallery.component';
+import { PlaceDetailsComponent } from './components/places/place-details/place-details.component';
+import { AdaptiveDatePipe } from './services/adaptive-date.pipe';
+import { UserLinkComponent } from './components/common/user-link/user-link.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +39,11 @@ import { LoginPageComponent } from './components/common/login-page/login-page.co
     Page404Component,
     UserCreateComponent,
     LoaderComponent,
-    LoginPageComponent
+    LoginPageComponent,
+    GalleryComponent,
+    PlaceDetailsComponent,
+    AdaptiveDatePipe,
+    UserLinkComponent
   ],
   imports: [
     BrowserModule,

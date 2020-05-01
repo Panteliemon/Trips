@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { NewsMainComponent } from './components/news/news-main/news-main.component';
 import { TripsMainComponent } from './components/trips/trips-main/trips-main.component';
 import { PlacesMainComponent } from './components/places/places-main/places-main.component';
+import { PlaceDetailsComponent } from './components/places/place-details/place-details.component';
 import { RegionsMainComponent } from './components/regions/regions-main/regions-main.component';
 import { VehiclesMainComponent } from './components/vehicles/vehicles-main/vehicles-main.component';
 import { UsersMainComponent } from './components/users/users-main/users-main.component';
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: "news", component: NewsMainComponent },
   { path: "trips", component: TripsMainComponent, canActivate: [AuthGuard] },
   { path: "places", component: PlacesMainComponent, canActivate: [AuthGuard] },
+  { path: "place/:id", component: PlaceDetailsComponent, canActivate: [AuthGuard] },
   { path: "regions", component: RegionsMainComponent, canActivate: [AuthGuard] },
   { path: "vehicles", component: VehiclesMainComponent, canActivate: [AuthGuard] },
   { path: "users", component: UsersMainComponent, canActivate: [AuthGuard] },

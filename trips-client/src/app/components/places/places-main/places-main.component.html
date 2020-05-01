@@ -1,3 +1,24 @@
-<section>
-    <h1>places</h1>
-</section>
+<div class="uniter">
+    <section>
+        <h1>Места</h1>
+        <button *ngIf="isAddNewPlaceVisible" class="button" (click)="onAddNewPlaceClicked()">Добавить место</button>
+        <div>
+            <label for="tbSearchString">Поиск по имени:</label>
+            <input type="text" id="tbSearchString" [(ngModel)]="searchString" />
+        </div>
+        <table class="items-presenter">
+            <tr *ngFor="let place of places">
+                <td>
+
+                </td>
+                <td>
+                    <a routerLink="/place/{{place.id}}" class="item-ref">{{place.name ? place.name : "<без имени>"}}</a>
+                </td>
+            </tr>
+        </table>
+        <button *ngIf="isLoadMorePlacesVisible" class="button" (click)="onLoadMorePlacesClicked()">Загрузить ещё</button>
+        <app-loader *ngIf="isPlacesLoaderVisible"></app-loader>
+    </section>
+    <div class="fog" *ngIf="isOverallLoaderVisible"></div>
+    <app-loader *ngIf="isOverallLoaderVisible"></app-loader>
+</div>

@@ -85,6 +85,16 @@ a.item-ref:hover {
     color:#8a7;
 }
 
+a.inline-ref:visited, a.inline-ref:link {
+    color:#484;
+    font-weight:bold;
+    text-decoration:underline;
+}
+
+a.inline-ref:hover {
+    color:#8a7;
+}
+
 div.fog {
     background-color:white;
     opacity:50%;
@@ -152,6 +162,10 @@ div.uniter > *:first-child {
     align-items: center;
 }
 
+.parameter-group {
+    margin:5px;
+}
+
 div.login-form {
     position: fixed;
     right:20px;
@@ -164,6 +178,12 @@ img.profile-pic {
     width:64px;
     height:64px;
     border-radius:5px;
+}
+
+img.small-profile-pic {
+    width:32px;
+    height:32px;
+    border-radius:3px;
 }
 
 .button {

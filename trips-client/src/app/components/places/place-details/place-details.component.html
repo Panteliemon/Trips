@@ -1,0 +1,25 @@
+<div class="uniter">
+    <section *ngIf="place">
+        <h2>{{place.name ? place.name : "< без имени >"}}</h2>
+        <div>
+            <div>
+
+            </div>
+            <div>
+                <div>
+                    <label for="tbName">Название:</label>
+                    <input type="text" #tbName id="tbName" [value]="place.name"
+                           (blur)="setPlaceName(tbName.value)"
+                           (keyup.enter)="setPlaceName(tbName.value)" />
+                </div>
+            </div>
+        </div>
+        <p *ngIf="place.addedDate">Добавлено: {{place.addedDate|adaptiveDate}} участником <app-user-link [user]="place.addedBy"></app-user-link></p>
+        <p *ngIf="place.changedDate">Изменено: {{place.changedDate|adaptiveDate}} участником <app-user-link [user]="place.changedBy"></app-user-link></p>
+        <h2>Галерея</h2>
+        <app-gallery [gallery]="place.gallery"></app-gallery>
+    </section>
+    <app-page404 *ngIf="isNotFound"></app-page404>
+    <div class="fog" *ngIf="isOverallLoaderVisible"></div>
+    <app-loader *ngIf="isOverallLoaderVisible"></app-loader>
+</div>

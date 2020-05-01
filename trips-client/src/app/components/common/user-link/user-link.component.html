@@ -1,0 +1,5 @@
+<a class="inline-ref" *ngIf="user"
+   routerLink="/user/{{user.id}}">
+   <img *ngIf="showProfilePicture" class="small-profile-pic" [src]="userPicSrc(user.profilePicture)"/>
+   <span style="vertical-align: center;">{{user.name}}</span>
+</a>

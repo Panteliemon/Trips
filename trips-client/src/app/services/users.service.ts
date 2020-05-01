@@ -134,7 +134,7 @@ export class UsersService {
     return false;
   }
 
-  getServerErrorText(errorCode: string): string {
+  getErrorCodeText(errorCode: string): string {
     switch (errorCode) {
       case "BAD_NAME":
         return "Имя пользователя не должно быть пустым, и не должно состоять из одних лишь пробелов.";
@@ -164,7 +164,7 @@ export class UsersService {
   getFullErrorText(error: any): string {
     if (error.error) {
       if (typeof error.error == "string") {
-        return this.getServerErrorText(error.error);
+        return this.getErrorCodeText(error.error);
       } else if (error.error.errors && error.error.errors.id && Array.isArray(error.error.errors.id)) {
         return error.error.errors.id.join("\r\n");
       }

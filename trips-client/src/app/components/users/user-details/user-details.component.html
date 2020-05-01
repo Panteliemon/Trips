@@ -11,7 +11,7 @@
                 <button *ngIf="isResetProfilePicButtonVisible" class="button button-std" (click)="resetProfilePic()">Удалить аватар</button>
             </div>
             <div class="right-panel">
-                <p class="parameter-group"><span>Зарегистрирован:</span> {{user.registeredDate | date:"dd/MMM/yyyy"}}</p>
+                <p class="parameter-group"><span>Зарегистрирован:</span> {{user.registeredDate | adaptiveDate}}</p>
                 <div class="parameter-group" *ngIf="canChangeLogin && !isChangeLoginExpanded">
                     <button class="button button-std" (click)="onExpandChangeLoginClicked()">Поменять логин</button>
                 </div>
