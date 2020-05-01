@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,7 @@ using AutoMapper;
 namespace Trips.Controllers
 {
     [ApiController]
+    [Authorize]
     public class PlacesController : TripsControllerBase
     {
         public PlacesController(TripsContext dbContext, IMapper mapper)
@@ -82,12 +84,18 @@ namespace Trips.Controllers
         [Route("places")]
         public async Task<PlaceDto> CreatePlace()
         {
-            // TODO check permissions
+            // Check permissions
+            User currentUser = await GetCurrentUserAsync();
+            if ((currentUser == null) || (!currentUser.CanEditGeography))
+            {
+                Response.StatusCode = StatusCodes.Status403Forbidden;
+                return null;
+            }
 
             // Create and insert entity
             Place place = new Place();
+            place.AddedBy = currentUser;
             place.AddedDate = DateTime.Now;
-            // TODO ADDED BY
             place.Gallery = new Gallery();
             place.Gallery.Owner = GalleryOwner.Place;
             DbContext.Add<Place>(place);
@@ -109,11 +117,16 @@ namespace Trips.Controllers
         [Route("place")]
         public async Task<IActionResult> UpdatePlace(PlaceDto placeDto)
         {
-            // TODO check permissions
-
             if (placeDto == null)
             {
                 return BadRequest("MISSING_PARAMS");
+            }
+
+            // Check permissions
+            User currentUser = await GetCurrentUserAsync();
+            if ((currentUser == null) || (!currentUser.CanEditGeography))
+            {
+                return Forbid();
             }
 
             // 1. ---------- Load place entity from DB
@@ -182,7 +195,7 @@ namespace Trips.Controllers
             EntityUtils.ReorderPicturesInTheGallery(place.Gallery, placeDto.Gallery);
 
             // 5. ---------- Changed By
-            // TODO: USER!
+            place.ChangedBy = currentUser;
             place.ChangedDate = DateTime.Now;
 
             await DbContext.SaveChangesAsync();
@@ -194,12 +207,27 @@ namespace Trips.Controllers
         [Route("place/{id}")]
         public async Task<IActionResult> DeletePlace(int id, [FromQuery] bool? deleteVisits)
         {
-            // TODO check permissions
+            // Check permissions
+            User currentUser = await GetCurrentUserAsync();
+            if ((currentUser == null) || (!currentUser.CanEditGeography))
+            {
+                return Forbid();
+            }
+
+            // For deleting visits there should be "edit trips" privilege
+            if ((deleteVisits == true) && (!currentUser.CanPublishTrips))
+            {
+                return Forbid();
+            }
 
             Place place = await DbContext.Places.Where(p => p.Id == id)
                                                 .Include(p => p.Gallery)
                                                 .ThenInclude(g => g.Pictures)
                                                 .FirstOrDefaultAsync();
+            if (place == null)
+            {
+                return NotFound();
+            }
 
             // Clear Visits
             if (deleteVisits == true)
@@ -246,9 +274,137 @@ namespace Trips.Controllers
         /// </summary>
         [HttpPost]
         [Route("place/{id}/gallery")]
-        public async Task<PictureDto> UploadPicture(int id)
+        public async Task<IActionResult> UploadPicture(int id)
         {
-            return new PictureDto();
+            // Check permissions
+            User currentUser = await GetCurrentUserAsync();
+            if ((currentUser == null) || (!currentUser.CanEditGeography))
+            {
+                return Forbid();
+            }
+
+            // Find gallery and remember its metadata
+            var galleryData = await DbContext.Places
+                .Where(p => (p.Id == id) && (p.Gallery != null))
+                .Select(p => new
+                {
+                    GalleryId = p.Gallery.Id,
+                    LastPictureIndex = p.Gallery.Pictures.Max(p => (int?)p.Index)
+                }).FirstOrDefaultAsync();
+
+            if (galleryData == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                if (Request.Form.Files.Count == 0)
+                {
+                    return BadRequest("NO_FILE");
+                }
+
+                IFormFile file = Request.Form.Files[0];
+                if (file.Length > 0)
+                {
+                    if (file.Length > PictureUtils.MAX_FILESIZE)
+                    {
+                        return BadRequest("FILE_TOO_LARGE");
+                    }
+
+                    if (!PictureUtils.TryParseMimeType(file.ContentType, out PicFormat format))
+                    {
+                        return BadRequest($"FILE_NOT_SUPPORTED");
+                    }
+
+                    // Upload
+                    byte[] buffer = new byte[file.Length];
+                    using (var stream = file.OpenReadStream())
+                    {
+                        await stream.ReadAsync(buffer, 0, buffer.Length);
+                    }
+
+                    // Process picture
+                    var pictureData = await PictureUtils.PrepareGalleryPicture(format, buffer);
+                    
+                    switch (pictureData.Status)
+                    {
+                        case PictureUtils.GalleryStatus.SmallPicture:
+                            return BadRequest("SMALL_PICTURE");
+                        case PictureUtils.GalleryStatus.BadProportion:
+                            return BadRequest("CROOKED_PICTURE");
+                    }
+
+                    // Insert data into Pics DB
+                    PicsContext picsDb = new PicsContext();
+
+                    PicData largeSizeEntry = new PicData();
+                    largeSizeEntry.Id = Guid.NewGuid();
+                    largeSizeEntry.Format = format;
+                    largeSizeEntry.Data = pictureData.LargeSizeData;
+                    await picsDb.AddAsync(largeSizeEntry);
+
+                    PicData mediumSizeEntry = largeSizeEntry;
+                    if (pictureData.MediumSizeData != pictureData.LargeSizeData)
+                    {
+                        mediumSizeEntry = new PicData();
+                        mediumSizeEntry.Id = Guid.NewGuid();
+                        mediumSizeEntry.Format = format;
+                        mediumSizeEntry.Data = pictureData.MediumSizeData;
+                        await picsDb.AddAsync(mediumSizeEntry);
+                    }
+
+                    PicData smallSizeEntry = mediumSizeEntry;
+                    if (pictureData.SmallSizeData != pictureData.MediumSizeData)
+                    {
+                        smallSizeEntry = new PicData();
+                        smallSizeEntry.Id = Guid.NewGuid();
+                        smallSizeEntry.Format = format;
+                        smallSizeEntry.Data = pictureData.SmallSizeData;
+                        await picsDb.AddAsync(smallSizeEntry);
+                    }
+
+                    await picsDb.SaveChangesAsync();
+
+                    // Insert picture data into Trips DB
+                    Picture pictureEntry = new Picture();
+                    pictureEntry.GalleryId = galleryData.GalleryId;
+                    pictureEntry.Index = galleryData.LastPictureIndex.HasValue
+                        ? galleryData.LastPictureIndex.Value + 1 : 1; // Indexes in gallery start from 1.
+                    pictureEntry.SmallSizeId = smallSizeEntry.Id;
+                    pictureEntry.MediumSizeId = mediumSizeEntry.Id;
+                    pictureEntry.LargeSizeId = largeSizeEntry.Id;
+                    pictureEntry.DateTaken = pictureData.DateTaken;
+                    pictureEntry.DateUploaded = DateTime.Now;
+                    pictureEntry.UploadedBy = currentUser;
+                    pictureEntry.Height = pictureData.Height;
+                    pictureEntry.Width = pictureData.Width;
+
+                    await DbContext.Pictures.AddAsync(pictureEntry);
+
+                    // Update place's changed date
+                    Place place = await DbContext.Places.Where(p => p.Id == id).FirstOrDefaultAsync();
+                    if (place != null)
+                    {
+                        place.ChangedDate = pictureEntry.DateUploaded;
+                        place.ChangedBy = currentUser;
+                    }
+
+                    await DbContext.SaveChangesAsync();
+
+                    // OK so return DTO for what has been inserted
+                    PictureDto picDto = Mapper.Map<PictureDto>(pictureEntry);
+                    return Ok(picDto);
+                }
+                else
+                {
+                    return BadRequest("FILE_EMPTY");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         /// <summary>
@@ -257,10 +413,53 @@ namespace Trips.Controllers
         /// <param name="placeId"></param>
         /// <param name="pictureSmallSizeId"></param>
         [HttpDelete]
-        [Route("place/{placeId}/gallery/{pictureId}")]
+        [Route("place/{placeId}/gallery/{pictureSmallSizeId}")]
         public async Task<IActionResult> DeletePicture(int placeId, string pictureSmallSizeId)
         {
-            return Ok();
+            // Check permissions
+            User currentUser = await GetCurrentUserAsync();
+            if ((currentUser == null) || (!currentUser.CanEditGeography))
+            {
+                return Forbid();
+            }
+
+            if (Guid.TryParse(pictureSmallSizeId, out Guid smallSizeId))
+            {
+                Place place = await DbContext.Places
+                                .Where(p => p.Id == placeId)
+                                .Include(p => p.Gallery)
+                                .ThenInclude(g => g.Pictures).FirstOrDefaultAsync();
+                if (place == null)
+                {
+                    return NotFound();
+                }
+
+                Picture pictureEntry = place.Gallery.Pictures?.FirstOrDefault(p => p.SmallSizeId == smallSizeId);
+                if (pictureEntry == null)
+                {
+                    return NotFound();
+                }
+
+                // Delete picture data from Pics DB
+                PicsContext picsDb = new PicsContext();
+                EntityUtils.DeletePictureData(pictureEntry, picsDb);
+                await picsDb.SaveChangesAsync();
+
+                // Delete from the main DB
+                DbContext.Entry(pictureEntry).State = EntityState.Deleted;
+
+                // Update place's changed date
+                place.ChangedDate = DateTime.Now;
+                place.ChangedBy = currentUser;
+
+                await DbContext.SaveChangesAsync();
+
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
         #endregion
