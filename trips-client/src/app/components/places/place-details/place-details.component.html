@@ -17,7 +17,10 @@
         <p *ngIf="place.addedDate">Добавлено: {{place.addedDate|adaptiveDate}} участником <app-user-link [user]="place.addedBy"></app-user-link></p>
         <p *ngIf="place.changedDate">Изменено: {{place.changedDate|adaptiveDate}} участником <app-user-link [user]="place.changedBy"></app-user-link></p>
         <h2>Галерея</h2>
-        <app-gallery [gallery]="place.gallery"></app-gallery>
+        <app-gallery #gallery [gallery]="place.gallery" [isEditable]="true"
+                     (fileSelected)="onGalleryAddFile($event)"
+                     (reordered)="onGalleryReordered()"
+                     (deleteConfirmed)="onGalleryDeleteConfirmed($event)"></app-gallery>
     </section>
     <app-page404 *ngIf="isNotFound"></app-page404>
     <div class="fog" *ngIf="isOverallLoaderVisible"></div>

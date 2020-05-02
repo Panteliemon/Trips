@@ -59,10 +59,7 @@ export class PlacesService {
       this.http.post(`${API_BASE_PATH}/place/${placeId}/gallery`, formData, { reportProgress: true, observe: "events" })
         .subscribe(event => {
           if (event.type == HttpEventType.Response) {
-            // TODO!
-            debugger;
-
-            let result = new Picture();
+            let result = <Picture>event.body;
             observer.next(result);
             observer?.complete();
           }

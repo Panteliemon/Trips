@@ -1,3 +1,100 @@
-div.gal-border {
+#galBorder {
     border: 3px solid #888;
+}
+
+#galButtons {
+    border-bottom: 2px solid #bbb;
+    clear:both;
+}
+
+.gal-button-left {
+    margin:5px 0 5px 5px;
+}
+
+.gal-button-right {
+    float:right;
+    margin:5px 5px 5px 0;
+}
+
+#galMiniatures {
+    position:relative;
+    overflow-x: auto;
+    white-space: nowrap;
+    border-bottom: 2px solid #bbb;
+    min-height:192px;
+    clear:both;
+}
+
+.miniature-holder {
+    position:relative;
+    display:inline-block;
+    height:188px;
+    width:188px;
+    border:2px solid #bbb;
+    background-color:white;
+    margin:1px;
+    cursor:pointer;
+}
+
+.miniature-holder:hover {
+    border-color:#484;
+}
+
+.miniature-img {
+    max-height:180px;
+    max-width:180px;
+}
+
+.selected {
+    border-color:#484;
+    background-color: #bc9;
+}
+
+#galPictureView {
+    position:relative;
+    height:770px;
+}
+
+.navigation-button {
+    display: block;
+    background-color: white;
+    border:none;
+    cursor:pointer;
+    position:absolute;
+    width:64px;
+    height:100%;
+}
+
+.navigation-button:hover {
+    background-color: #ddd;
+}
+
+#navLeft {
+    left:0;
+}
+
+#navRight {
+    right:0;
+}
+
+#centralPictureArea {
+    position:absolute;
+    left:64px;
+    right:64px;
+    top:0;
+    bottom:0;
+}
+
+#centralImageWrapper {
+    position:relative;
+    height:720px;
+}
+
+#centralImage {
+    max-height:98%;
+    max-width:98%;
+}
+
+#divMeta {
+    margin-left:20px;
 }

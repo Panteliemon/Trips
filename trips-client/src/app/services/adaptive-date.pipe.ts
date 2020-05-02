@@ -6,21 +6,27 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class AdaptiveDatePipe implements PipeTransform {
 
   transform(value: unknown, ...args: unknown[]): unknown {
+    let isAdaptive = true;
+    if (args.length > 0) {
+      isAdaptive=!!args[0];
+    }
+    
     if (value instanceof Date) {
-      return this.transformCore(value);
+      return this.transformCore(value, isAdaptive);
     } else if (typeof value == "string") {
       let d = new Date(value);
-      return this.transformCore(d);
+      return this.transformCore(d, isAdaptive);
     }
 
     return value;
   }
 
-  private transformCore(date: Date): string {
+  private transformCore(date: Date, adaptive: boolean): string {
     let today = new Date();
-    if ((date.getFullYear() == today.getFullYear())
-          && (date.getMonth() == today.getMonth())
-          && (date.getDate() == today.getDate())) {
+    if ((!adaptive)
+          || ((date.getFullYear() == today.getFullYear())
+              && (date.getMonth() == today.getMonth())
+              && (date.getDate() == today.getDate()))) {
       return `${date.getFullYear()}/${this.getShortMonth(date.getMonth())}/${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
     } else {
       return `${date.getFullYear()}/${this.getShortMonth(date.getMonth())}/${date.getDate().toString().padStart(2, '0')}`;

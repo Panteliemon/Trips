@@ -123,6 +123,10 @@ div.modal-popup {
     background: white;
 }
 
+.container-simple {
+    position:relative;
+}
+
 .centered {
     display:inline-block;
     position:relative;
@@ -131,7 +135,6 @@ div.modal-popup {
 }
 
 .centered-both {
-    display:inline-block;
     position:absolute;
     left:50%;
     top:50%;
@@ -199,16 +202,20 @@ img.small-profile-pic {
     cursor:pointer;
 }
 
+.button:disabled {
+    color:#bc9;
+}
+
 .button-std {
     min-width:150px;
 }
 
-.button:hover {
+.button:hover:enabled {
     background-color:#cda;
     color: black;
 }
 
-.button:active {
+.button:active:enabled {
     background-color:white;
     color: black;
 }
@@ -218,12 +225,16 @@ img.small-profile-pic {
     color:white;
 }
 
-.button-danger:hover {
+.button-danger:disabled {
+    color:#f99;
+}
+
+.button-danger:hover:enabled {
     background-color:#f99;
     color:black;
 }
 
-.button-danger:active {
+.button-danger:active:enabled {
     background-color:white;
     color:black;
 }
@@ -242,4 +253,14 @@ input:invalid {
 
 .red-text {
     color:red;
+}
+
+.big-gray-text {
+    font-size: 24pt;
+    font-weight: bold;
+    color:#bbb;
+}
+
+.hidden {
+    visibility:hidden;
 }

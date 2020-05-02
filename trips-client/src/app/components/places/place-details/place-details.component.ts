@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Place } from 'src/app/models/place';
 import { ActivatedRoute } from '@angular/router';
 import { PlacesService } from 'src/app/services/places.service';
 import { MessageService, MessageButtons, MessageIcon } from 'src/app/services/message.service';
+import { GalleryComponent } from '../../common/gallery/gallery.component';
 
 @Component({
   selector: 'app-place-details',
@@ -15,7 +16,8 @@ export class PlaceDetailsComponent implements OnInit {
   isOverallLoaderVisible: boolean;
   isNotFound: boolean;
 
-
+  @ViewChild('gallery')
+  galleryView: GalleryComponent;
 
   constructor(private route: ActivatedRoute,
     private placesService: PlacesService,
@@ -45,6 +47,36 @@ export class PlaceDetailsComponent implements OnInit {
     }
 
     this.initiatePartialSilentUpdate();
+  }
+
+  onGalleryAddFile(file: File) {
+    this.isOverallLoaderVisible = true;
+    this.placesService.uploadPicture(this.place.id, file).subscribe(pic => {
+      // We will not reread the place, just append recieved image entry to the end of the gallery
+      this.place.gallery.pictures.push(pic);
+      this.galleryView.selectImageByIndex(this.place.gallery.pictures.length-1);
+      this.isOverallLoaderVisible = false;
+    }, error => {
+      this.isOverallLoaderVisible = false;
+      // TODO add some custom message icons
+      this.messageService.showMessage(this.placesService.getServerErrorText(error), MessageButtons.ok, MessageIcon.error);
+    });
+  }
+
+  onGalleryReordered() {
+    this.initiateFullSilentUpdate();
+  }
+
+  onGalleryDeleteConfirmed(index: number) {
+    this.isOverallLoaderVisible = true;
+    this.placesService.deletePicture(this.place.id, this.place.gallery.pictures[index].smallSizeId).subscribe(() => {
+      this.isOverallLoaderVisible = false;
+      this.place.gallery.pictures.splice(index, 1);
+      this.galleryView.selectImageByIndex(index);
+    }, error => {
+      this.isOverallLoaderVisible = false;
+      this.messageService.showMessage(this.placesService.getServerErrorText(error), MessageButtons.ok, MessageIcon.error);
+    });
   }
 
   // Updates the place without sending gallery data to server (minimize traffic)
