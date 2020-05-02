@@ -18,6 +18,7 @@ export class MessageBoxComponent implements OnInit {
   isOkVisible: boolean;
   isYesVisible: boolean;
   isNoVisible: boolean;
+  isCancelVisible: boolean;
 
   iconSrc: string;
   largeIconSrc: string;

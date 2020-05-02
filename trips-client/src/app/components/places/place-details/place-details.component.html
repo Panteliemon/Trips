@@ -1,12 +1,15 @@
 <div class="uniter">
     <section *ngIf="place">
-        <h2>{{place.name ? place.name : "< без имени >"}}</h2>
-        <div>
+        <h2 class="allows-float-beside">{{getPlaceName()}}</h2>
+        <button class="button button-danger up-right-button" *ngIf="isEditMode" (click)="onDeleteClicked()">Удалить</button>
+        <button class="button up-right-button" *ngIf="!isEditMode" (click)="onEditClicked()">Редактировать</button>
+        <button class="button up-right-button" *ngIf="isEditMode" (click)="onEndEditClicked()">Выйти в режим просмотра</button>
+        <div id="placeAttributesDiv" class="flex-container">
             <div>
-
+                <img class="title-picture" [src]="titlePicSrc" />
             </div>
             <div>
-                <div>
+                <div *ngIf="isEditMode">
                     <label for="tbName">Название:</label>
                     <input type="text" #tbName id="tbName" [value]="place.name"
                            (blur)="setPlaceName(tbName.value)"
@@ -16,8 +19,9 @@
         </div>
         <p *ngIf="place.addedDate">Добавлено: {{place.addedDate|adaptiveDate}} участником <app-user-link [user]="place.addedBy"></app-user-link></p>
         <p *ngIf="place.changedDate">Изменено: {{place.changedDate|adaptiveDate}} участником <app-user-link [user]="place.changedBy"></app-user-link></p>
-        <h2>Галерея</h2>
-        <app-gallery #gallery [gallery]="place.gallery" [isEditable]="true"
+        <h2 *ngIf="place.gallery">Галерея</h2>
+        <app-gallery #gallery *ngIf="place.gallery"
+                     [gallery]="place.gallery" [isEditable]="isEditMode"
                      (fileSelected)="onGalleryAddFile($event)"
                      (reordered)="onGalleryReordered()"
                      (deleteConfirmed)="onGalleryDeleteConfirmed($event)"></app-gallery>

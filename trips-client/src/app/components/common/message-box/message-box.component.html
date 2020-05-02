@@ -15,6 +15,7 @@
                 <button *ngIf="isYesVisible" class="button button-std button-messagebox" [ngClass]="{'button-danger': isYesButtonDanger}"
                         (click)="onButtonClicked(MessageResultEnum.yes)">Да</button>
                 <button *ngIf="isNoVisible" class="button button-std button-messagebox" (click)="onButtonClicked(MessageResultEnum.no)">Нет</button>
+                <button *ngIf="isCancelVisible" class="button button-std button-messagebox" (click)="onButtonClicked(MessageResultEnum.cancel)">Отмена</button>
             </div>
         </div>
     </div>

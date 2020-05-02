@@ -25,7 +25,7 @@ namespace Trips.Dtos
         public PlaceCapacity? Capacity { get; set; }
         public bool IsXBApproved { get; set; }
 
-        public Guid? TitlePictureSmallSizeId { get; set; }
+        public PictureDto TitlePicture { get; set; }
         public GalleryDto Gallery { get; set; }
     }
 }

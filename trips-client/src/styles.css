@@ -127,6 +127,10 @@ div.modal-popup {
     position:relative;
 }
 
+h1.allows-float-beside, h2.allows-float-beside {
+    display:inline-block;
+}
+
 .centered {
     display:inline-block;
     position:relative;
@@ -187,6 +191,12 @@ img.small-profile-pic {
     width:32px;
     height:32px;
     border-radius:3px;
+}
+
+img.title-picture {
+    max-width:400px;
+    max-height:400px;
+    margin-right:10px;
 }
 
 .button {

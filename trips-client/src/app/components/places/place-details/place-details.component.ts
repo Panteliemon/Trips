@@ -1,9 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Place } from 'src/app/models/place';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PlacesService } from 'src/app/services/places.service';
-import { MessageService, MessageButtons, MessageIcon } from 'src/app/services/message.service';
+import { MessageService, MessageButtons, MessageIcon, MessageResult } from 'src/app/services/message.service';
 import { GalleryComponent } from '../../common/gallery/gallery.component';
+import { AuthService } from 'src/app/services/auth.service';
+import { Message } from '@angular/compiler/src/i18n/i18n_ast';
+import { API_BASE_PATH } from 'src/app/services/api';
 
 @Component({
   selector: 'app-place-details',
@@ -13,15 +16,21 @@ import { GalleryComponent } from '../../common/gallery/gallery.component';
 export class PlaceDetailsComponent implements OnInit {
   place: Place;
 
+  isEditMode: boolean;
+
   isOverallLoaderVisible: boolean;
   isNotFound: boolean;
+
+  titlePicSrc: string;
 
   @ViewChild('gallery')
   galleryView: GalleryComponent;
 
   constructor(private route: ActivatedRoute,
+    private router: Router,
     private placesService: PlacesService,
-    private messageService: MessageService) { }
+    private messageService: MessageService,
+    private authService: AuthService) { }
 
   ngOnInit(): void {
     let placeId = +this.route.snapshot.paramMap.get("id");
@@ -31,6 +40,7 @@ export class PlaceDetailsComponent implements OnInit {
       if (!place) {
         this.isNotFound = true;
       }
+      this.refreshTitlePicSrc();
       this.isOverallLoaderVisible = false;
     }, error => {
       this.messageService.showMessage(this.placesService.getServerErrorText(error), MessageButtons.ok, MessageIcon.error);
@@ -49,6 +59,78 @@ export class PlaceDetailsComponent implements OnInit {
     this.initiatePartialSilentUpdate();
   }
 
+  onEditClicked() {
+    this.isEditMode = true;
+  }
+
+  onEndEditClicked() {
+    this.isEditMode = false;
+  }
+
+  onDeleteClicked() {
+    // Gather some statistics before ask
+    this.isOverallLoaderVisible = true;
+    this.placesService.getVisitsForPlace(this.place.id, 1, 0).subscribe(async result => {
+      this.isOverallLoaderVisible = false;
+      let hasVisits = result.length > 0;
+
+      let answer: boolean;
+      if (hasVisits) {
+        answer = (await this.messageService.showMessage(`Собираемся удалить ${this.getPlaceName()}. ВНИМАНИЕ: в данное место есть ПОЕЗДОЧКИ! Строго говоря, вы должны понимать последствия содеянного. Удолизм у нас тут не приветствуется. Так, и что.`,
+                                                        MessageButtons.yesNo, MessageIcon.seriously,
+                                                        "То, что ты говоришь - это очень серьёзно").toPromise()) == MessageResult.yes;
+      } else {
+        if (this.place.gallery.pictures.length == 0) {
+          answer = (await this.messageService.showMessage(`Удалить ${this.getPlaceName()}?`,
+                                                          MessageButtons.yesNo, MessageIcon.warning).toPromise()) == MessageResult.yes;
+        } else {
+          answer = (await this.messageService.showMessage(`${this.getPlaceName()} будет удалено со всеми картинками. ЛИЧНО удаляем данное место?`,
+                                                          MessageButtons.yesNo, MessageIcon.seriously,
+                                                          "То, что ты говоришь - это очень серьёзно!").toPromise()) == MessageResult.yes;
+        }
+      }
+
+      let deleteVisits = false;
+      if (answer && hasVisits) {
+        let canEditTrips = this.authService.user?.canPublishTrips;
+        if (canEditTrips) {
+          let result2 = await this.messageService.showMessage("Удалить все упоминания данного места из поездочек? (Да - удалить (соотв. галереи тоже будут удалены), Нет - галереи и данные останутся, но имя места пропадёт, Отмена - передумал вообще удалять место (рекомендуемый вариант))",
+                                                              MessageButtons.yesNoCancel, MessageIcon.warning).toPromise();
+          if (result2 == MessageResult.cancel) {
+            answer = false;
+          } else if (result2 == MessageResult.yes) {
+            deleteVisits = true;
+          }
+        } else {
+          answer = (await this.messageService.showMessage("У вас нет прав на редактирование поездочек, поэтому галереи и данные по данному месту не будут удалены, но имя места пропадёт. Подтверждаем удаление?",
+                                                          MessageButtons.yesNo, MessageIcon.warning).toPromise()) == MessageResult.yes;
+        }
+      }
+
+      if (answer) {
+        // Well, start deleting process
+        try {
+          this.isOverallLoaderVisible = true;
+          await this.placesService.deletePlace(this.place.id, deleteVisits).toPromise();
+          this.isOverallLoaderVisible = false;
+
+          this.router.navigate(["/places"]);
+          this.messageService.showMessage("УДОЛИЛ!!1", MessageButtons.ok,
+                                          hasVisits || (this.place.gallery.pictures.length > 0)
+                                          ? MessageIcon.prokhanization : MessageIcon.info);
+        } catch (error) {
+          this.isOverallLoaderVisible = false;
+          this.messageService.showMessage(this.placesService.getServerErrorText(error), MessageButtons.ok, MessageIcon.error);
+        }
+      } else {
+        this.isOverallLoaderVisible = false;
+      }
+    }, error => {
+      this.isOverallLoaderVisible = false;
+      this.messageService.showMessage("Не получится удалить, так как сервер не может получить данные из-за ошибки: " + this.placesService.getServerErrorText(error), MessageButtons.ok, MessageIcon.error);
+    });
+  }
+
   onGalleryAddFile(file: File) {
     this.isOverallLoaderVisible = true;
     this.placesService.uploadPicture(this.place.id, file).subscribe(pic => {
@@ -56,10 +138,15 @@ export class PlaceDetailsComponent implements OnInit {
       this.place.gallery.pictures.push(pic);
       this.galleryView.selectImageByIndex(this.place.gallery.pictures.length-1);
       this.isOverallLoaderVisible = false;
+      // If the first image, then auto-set as title picture
+      if ((this.place.gallery.pictures.length == 1) && (!this.place.titlePicture)) {
+        this.place.titlePicture = this.place.gallery.pictures[0];
+        this.refreshTitlePicSrc();
+        this.initiatePartialSilentUpdate();
+      }
     }, error => {
       this.isOverallLoaderVisible = false;
-      // TODO add some custom message icons
-      this.messageService.showMessage(this.placesService.getServerErrorText(error), MessageButtons.ok, MessageIcon.error);
+      this.messageService.showMessage(this.placesService.getServerErrorText(error), MessageButtons.ok, this.placesService.getServerErrorIcon(error));
     });
   }
 
@@ -68,15 +155,24 @@ export class PlaceDetailsComponent implements OnInit {
   }
 
   onGalleryDeleteConfirmed(index: number) {
+    let deletedPicture = this.place.gallery.pictures[index];
     this.isOverallLoaderVisible = true;
-    this.placesService.deletePicture(this.place.id, this.place.gallery.pictures[index].smallSizeId).subscribe(() => {
+    this.placesService.deletePicture(this.place.id, deletedPicture.smallSizeId).subscribe(() => {
       this.isOverallLoaderVisible = false;
       this.place.gallery.pictures.splice(index, 1);
       this.galleryView.selectImageByIndex(index);
+      if (this.place.titlePicture.smallSizeId == deletedPicture.smallSizeId) {
+        this.place.titlePicture = null;
+        this.refreshTitlePicSrc();
+      }
     }, error => {
       this.isOverallLoaderVisible = false;
       this.messageService.showMessage(this.placesService.getServerErrorText(error), MessageButtons.ok, MessageIcon.error);
     });
+  }
+
+  getPlaceName() {
+    return this.placesService.getDisplayablePlaceName(this.place.name);
   }
 
   // Updates the place without sending gallery data to server (minimize traffic)
@@ -95,5 +191,13 @@ export class PlaceDetailsComponent implements OnInit {
     this.placesService.updatePlace(this.place).subscribe(() => {}, error => {
       this.messageService.showMessage(this.placesService.getServerErrorText(error), MessageButtons.ok, MessageIcon.error);
     });
+  }
+
+  private refreshTitlePicSrc() {
+    if (this.place?.titlePicture) {
+      this.titlePicSrc = API_BASE_PATH + "/pics/" + this.place.titlePicture.mediumSizeId;
+    } else {
+      this.titlePicSrc = "/assets/no-pic-place.png";
+    }
   }
 }

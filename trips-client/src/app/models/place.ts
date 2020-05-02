@@ -1,5 +1,6 @@
 import { UserHeader } from './user-header';
 import { Gallery } from './gallery';
+import { Picture } from './picture';
 
 export enum PlaceKind {
     LAKE = 1,
@@ -51,6 +52,6 @@ export class Place {
     capacity: PlaceCapacity;
     isXBApproved: boolean;
 
-    titlePictureSmallSizeId: string;
+    titlePicture: Picture;
     gallery: Gallery;
 }

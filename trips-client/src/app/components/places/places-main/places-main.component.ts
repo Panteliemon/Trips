@@ -61,6 +61,10 @@ export class PlacesMainComponent implements OnInit {
     this.fetchMorePlaces();
   }
 
+  getPlaceName(placeName: string) {
+    return this.placesService.getDisplayablePlaceName(placeName);
+  }
+
   // Initiates places loading
   private startFetchPlacesWithCurrentSettings() {
     this._fetchResetCounter++;

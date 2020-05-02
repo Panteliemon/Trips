@@ -170,9 +170,9 @@ namespace Trips.Controllers
             place.IsXBApproved = placeDto.IsXBApproved;
 
             // 3. ---------- Title picture
-            if (place.TitlePicture?.SmallSizeId != placeDto.TitlePictureSmallSizeId)
+            if (place.TitlePicture?.SmallSizeId != placeDto.TitlePicture?.SmallSizeId)
             {
-                if (placeDto.TitlePictureSmallSizeId == null)
+                if (placeDto.TitlePicture == null)
                 {
                     place.TitlePicture = null;
                 }
@@ -190,7 +190,7 @@ namespace Trips.Controllers
                     }
 
                     place.TitlePicture = place.Gallery?.Pictures?.FirstOrDefault(p =>
-                        p.SmallSizeId == placeDto.TitlePictureSmallSizeId);
+                        p.SmallSizeId == placeDto.TitlePicture.SmallSizeId);
                 }
             }
 
@@ -430,6 +430,7 @@ namespace Trips.Controllers
             {
                 Place place = await DbContext.Places
                                 .Where(p => p.Id == placeId)
+                                .Include(p => p.TitlePicture)
                                 .Include(p => p.Gallery)
                                 .ThenInclude(g => g.Pictures).FirstOrDefaultAsync();
                 if (place == null)
@@ -450,6 +451,10 @@ namespace Trips.Controllers
 
                 // Delete from the main DB
                 DbContext.Entry(pictureEntry).State = EntityState.Deleted;
+                if (pictureEntry.Id == place.TitlePicture?.Id)
+                {
+                    place.TitlePicture = null;
+                }
 
                 // Update place's changed date
                 place.ChangedDate = DateTime.Now;

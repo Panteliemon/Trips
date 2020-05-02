@@ -7,6 +7,7 @@ import { API_BASE_PATH } from './api';
 import { Place } from '../models/place';
 import { Picture } from '../models/picture';
 import { VisitForPlace } from '../models/visit-for-place';
+import { MessageIcon } from './message.service';
 
 @Injectable({
   providedIn: 'root'
@@ -124,5 +125,26 @@ export class PlacesService {
     }
 
     return "Communication error";
+  }
+
+  getServerErrorIcon(error: any): MessageIcon {
+    if (error.error) {
+      if (typeof error.error == "string") {
+        if ((error.error == "SMALL_PICTURE")
+            || (error.error == "CROOKED_PICTURE")) {
+          return MessageIcon.smallImage;
+        }
+      }
+    }
+
+    return MessageIcon.error;
+  }
+
+  getDisplayablePlaceName(placeName: string) {
+    if (placeName) {
+      return placeName;
+    } else {
+      return "< без имени >";
+    }
   }
 }

@@ -3,15 +3,15 @@ import { MessageBoxComponent } from '../components/common/message-box/message-bo
 import { Observable, of, Observer } from 'rxjs';
 
 export enum MessageButtons {
-  ok, yesNo
+  ok, yesNo, yesNoCancel
 }
 
 export enum MessageIcon {
-  none, error, warning, info, question, seriously, prokhanization
+  none, error, warning, info, question, seriously, prokhanization, smallImage
 }
 
 export enum MessageResult {
-  ok, yes, no
+  ok, yes, no, cancel
 }
 
 class MsgData {
@@ -111,12 +111,21 @@ export class MessageService {
         this.messageBoxComponent.isOkVisible = true;
         this.messageBoxComponent.isYesVisible = false;
         this.messageBoxComponent.isNoVisible = false;
+        this.messageBoxComponent.isCancelVisible = false;
         break;
 
       case MessageButtons.yesNo:
         this.messageBoxComponent.isOkVisible = false;
         this.messageBoxComponent.isYesVisible = true;
         this.messageBoxComponent.isNoVisible = true;
+        this.messageBoxComponent.isCancelVisible = false;
+        break;
+
+      case MessageButtons.yesNoCancel:
+        this.messageBoxComponent.isOkVisible = false;
+        this.messageBoxComponent.isYesVisible = true;
+        this.messageBoxComponent.isNoVisible = true;
+        this.messageBoxComponent.isCancelVisible = true;
         break;
     }
   }
@@ -141,6 +150,10 @@ export class MessageService {
     }
 
     switch (this.currentlyDisplayedMessage.icon) {
+      case MessageIcon.smallImage:
+        this.messageBoxComponent.aboveHeaderPictureSrc = "/assets/smallimage.jpg";
+        this.messageBoxComponent.isYesButtonDanger = false;
+        break;
       case MessageIcon.seriously:
         this.messageBoxComponent.aboveHeaderPictureSrc = "/assets/seriously.jpg";
         this.messageBoxComponent.isYesButtonDanger = true;
