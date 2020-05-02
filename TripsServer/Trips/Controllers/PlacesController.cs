@@ -73,8 +73,11 @@ namespace Trips.Controllers
                                                 .ThenInclude((Picture pic) => pic.UploadedBy)
                                                 .FirstOrDefaultAsync();
 
-            // Pictures in gallery entity are already ordered due to DB index.
-            // No additional work is needed.
+            if (place?.Gallery?.Pictures != null)
+            {
+                // Order by index
+                place.Gallery.Pictures = place.Gallery.Pictures.OrderBy(p => p.Index).ToList();
+            }
 
             PlaceDto result = Mapper.Map<PlaceDto>(place);
             return result;
