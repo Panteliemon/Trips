@@ -8,12 +8,55 @@
             <div>
                 <img class="title-picture" [src]="titlePicSrc" />
             </div>
-            <div>
+            <div class="fill-parent-horizontally">
                 <div *ngIf="isEditMode">
                     <label for="tbName">Название:</label>
                     <input type="text" #tbName id="tbName" [value]="place.name"
                            (blur)="setPlaceName(tbName.value)"
                            (keyup.enter)="setPlaceName(tbName.value)" />
+                </div>
+
+                <div>
+                    <p>Тип места:</p>
+                    <app-place-kind-selector [(value)]="placeKind" [isEditable]="isEditMode"></app-place-kind-selector>
+                </div>
+
+                <div *ngIf="isEditMode">
+                    <label for="tbDescription">Описание</label>
+                    <textarea id="tbDescription" class="description-field" [value]="place.description"
+                              #tbDescription (blur)="setPlaceDescription(tbDescription.value)"></textarea>
+                </div>
+                <div *ngIf="(!isEditMode) && place.description">
+                    <p>Описание:</p>
+                    <p>{{place.description}}</p>
+                    <br />
+                </div>
+
+                <div *ngIf="isEditMode">
+                    <label for="tbLocation">Расположение:</label>
+                    <input type="text" #tbLocation id="tbLocation" [value]="place.location"
+                           (blur)="setPlaceLocation(tbLocation.value)" (keyup.enter)="setPlaceLocation(tbLocation.value)" />
+                </div>
+                <div *ngIf="(!isEditMode) && place.location">
+                    <p>Расположение: {{place.location}}</p>
+                </div>
+
+                <div>
+                    <p>Доступность:</p>
+                    <app-place-accessibility-selector [(value)]="placeAccessibility" [isEditable]="isEditMode"></app-place-accessibility-selector>
+                </div>
+                <div *ngIf="isNearestAccessibilityVisible">
+                    <p>Доступность к ближайшей точке:</p>
+                    <app-place-accessibility-selector [(value)]="placeNearestAccessibility" [isEditable]="isEditMode"></app-place-accessibility-selector>
+                    <p class="red-text" *ngIf="placeAccessibility <= placeNearestAccessibility">"Ближайшая точка" по идее должна быть более доступна, чем само место</p>
+                </div>
+                <div>
+                    <p>Популярность:</p>
+                    <app-place-popularity-selector [(value)]="placePopularity" [isEditable]="isEditMode"></app-place-popularity-selector>
+                </div>
+                <div>
+                    <p>Количество мест на компанию:</p>
+                    <app-place-capacity-selector [(value)]="placeCapacity" [isEditable]="isEditMode"></app-place-capacity-selector>
                 </div>
             </div>
         </div>

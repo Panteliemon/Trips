@@ -1,0 +1,59 @@
+div.selector-frame {
+    display:inline-block;
+    border-radius:24px;
+    padding: 2px;
+}
+
+div.selector-frame-border {
+    border: 2px solid #bbb;
+}
+
+div.selector-option {
+    float:left;
+    border-radius:20px;
+    height:40px;
+    min-width:40px;
+    padding:0 10px;
+    margin:2px;
+}
+
+div.selector-option-selectable {
+    cursor: pointer;
+}
+
+img.selector-icon {
+    display:block;
+    float:left;
+    height:16px;
+    width:16px;
+}
+
+span.selector-big-text {
+    display:block;
+    float:left;
+    font-size:20pt;
+}
+
+span.selector-small-text {
+    display:block;
+    float:left;
+    position:relative;
+    top:8px;
+    font-size:12pt;
+}
+
+.spaceafter {
+    margin-right:5px;
+}
+
+p.selector-description-inline {
+    position:relative;
+    float:left;
+    top:8px;
+    margin:2px;
+}
+
+#underTextHelper {
+    clear:both;
+    margin:2px 10px 2px 10px;
+}

@@ -1,0 +1,22 @@
+<div class="selector-frame"
+     [class.selector-frame-border]="isEditable">
+    <div *ngFor="let option of availableChoices"
+         class="selector-option"
+         [class.selector-option-selectable]="isEditable"
+         [style.color]="option == selectedValue ? option.colorWhenSelected : option.colorWhenNotSelected"
+         [style.background-color]="option == selectedValue ? option.backgroundColorWhenSelected : option.backgroundColorWhenNotSelected"
+         (click)="selectOption(option)">
+        <div class="centered">
+            <img *ngIf="option.iconSrc" class="selector-icon" [src]="option.iconSrc" />
+            <span *ngIf="option.showBigText" class="selector-big-text"
+                [class.spaceafter]="option.showBigText && option.showSmallText">{{option.bigText}}</span>
+            <span *ngIf="option.showSmallText" class="selector-small-text">{{option.smallText}}</span>
+        </div>
+    </div>
+    <p *ngIf="selectedValue && selectedValue.description && (!isEditable)"
+       class="selector-description-inline">{{selectedValue.description}}</p>
+    <div *ngIf="selectedValue && selectedValue.description && isEditable"
+         id="underTextHelper" class="flex-container">
+        <p class="fill-parent-horizontally">{{selectedValue.description}}</p>
+    </div>
+</div>

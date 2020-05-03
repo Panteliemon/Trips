@@ -169,6 +169,11 @@ div.uniter > *:first-child {
     align-items: center;
 }
 
+.fill-parent-horizontally {
+    width:0;
+    flex-grow:1;
+}
+
 .parameter-group {
     margin:5px;
 }
@@ -259,6 +264,17 @@ input[type="text"], input[type="password"] {
 input:invalid {
     background-color:#faa;
     border:2px solid red;
+}
+
+textarea {
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 12pt;
+    border: 2px solid #bbb;
+}
+
+textarea.description-field {
+    width:100%;
+    min-height: 100px;
 }
 
 .red-text {

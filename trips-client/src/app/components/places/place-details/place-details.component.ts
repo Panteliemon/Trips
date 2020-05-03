@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Place } from 'src/app/models/place';
+import { Place, PlaceKind, PlaceAccessibility, PlacePopularity, PlaceCapacity } from 'src/app/models/place';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PlacesService } from 'src/app/services/places.service';
 import { MessageService, MessageButtons, MessageIcon, MessageResult } from 'src/app/services/message.service';
@@ -23,6 +23,8 @@ export class PlaceDetailsComponent implements OnInit {
 
   titlePicSrc: string;
 
+  isNearestAccessibilityVisible: boolean;
+
   @ViewChild('gallery')
   galleryView: GalleryComponent;
 
@@ -32,21 +34,48 @@ export class PlaceDetailsComponent implements OnInit {
     private messageService: MessageService,
     private authService: AuthService) { }
 
-  ngOnInit(): void {
-    let placeId = +this.route.snapshot.paramMap.get("id");
-    this.isOverallLoaderVisible = true;
-    this.placesService.getPlace(placeId).subscribe(place => {
-      this.place = place;
-      if (!place) {
-        this.isNotFound = true;
-      }
-      this.refreshTitlePicSrc();
-      this.isOverallLoaderVisible = false;
-    }, error => {
-      this.messageService.showMessage(this.placesService.getServerErrorText(error), MessageButtons.ok, MessageIcon.error);
-      // Nothing is visible. Display empty page.
-      this.isOverallLoaderVisible = false;
-    });
+  get placeKind(): PlaceKind {
+    return this.place.kind;
+  }
+  set placeKind(value: PlaceKind) {
+    this.place.kind = value;
+    this.initiatePartialSilentUpdate();
+  }
+
+  get placeAccessibility(): PlaceAccessibility {
+    return this.place.accessibility;
+  }
+  set placeAccessibility(value: PlaceAccessibility) {
+    this.place.accessibility = value;
+    if (this.place.nearestAccessibility > this.place.accessibility) {
+      this.place.nearestAccessibility = this.place.accessibility;
+    }
+    this.refreshNearestAccessibilityVisible();
+    this.initiatePartialSilentUpdate();
+  }
+
+  get placeNearestAccessibility(): PlaceAccessibility {
+    return this.place.nearestAccessibility;
+  }
+  set placeNearestAccessibility(value: PlaceAccessibility) {
+    this.place.nearestAccessibility = value;
+    this.initiatePartialSilentUpdate();
+  }
+
+  get placePopularity(): PlacePopularity {
+    return this.place.popularity;
+  }
+  set placePopularity(value: PlacePopularity) {
+    this.place.popularity = value;
+    this.initiatePartialSilentUpdate();
+  }
+
+  get placeCapacity(): PlaceCapacity {
+    return this.place.capacity;
+  }
+  set placeCapacity(value: PlaceCapacity) {
+    this.place.capacity = value;
+    this.initiatePartialSilentUpdate();
   }
 
   setPlaceName(value: string) {
@@ -57,6 +86,38 @@ export class PlaceDetailsComponent implements OnInit {
     }
 
     this.initiatePartialSilentUpdate();
+  }
+
+  setPlaceDescription(value: string) {
+    if (value != this.place.description) {
+      this.place.description = value;
+      this.initiatePartialSilentUpdate();
+    }
+  }
+
+  setPlaceLocation(value: string) {
+    if (value != this.place.location) {
+      this.place.location = value;
+      this.initiatePartialSilentUpdate();
+    }
+  }
+
+  ngOnInit(): void {
+    let placeId = +this.route.snapshot.paramMap.get("id");
+    this.isOverallLoaderVisible = true;
+    this.placesService.getPlace(placeId).subscribe(place => {
+      this.place = place;
+      if (!place) {
+        this.isNotFound = true;
+      }
+      this.refreshTitlePicSrc();
+      this.refreshNearestAccessibilityVisible();
+      this.isOverallLoaderVisible = false;
+    }, error => {
+      this.messageService.showMessage(this.placesService.getServerErrorText(error), MessageButtons.ok, MessageIcon.error);
+      // Nothing is visible. Display empty page.
+      this.isOverallLoaderVisible = false;
+    });
   }
 
   onEditClicked() {
@@ -199,5 +260,9 @@ export class PlaceDetailsComponent implements OnInit {
     } else {
       this.titlePicSrc = "/assets/no-pic-place.png";
     }
+  }
+
+  private refreshNearestAccessibilityVisible() {
+    this.isNearestAccessibilityVisible = (this.place) && (this.place.accessibility) && (this.place.accessibility >= PlaceAccessibility.TRACTORONLY);
   }
 }

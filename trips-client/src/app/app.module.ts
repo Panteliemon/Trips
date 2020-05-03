@@ -23,6 +23,11 @@ import { GalleryComponent } from './components/common/gallery/gallery.component'
 import { PlaceDetailsComponent } from './components/places/place-details/place-details.component';
 import { AdaptiveDatePipe } from './services/adaptive-date.pipe';
 import { UserLinkComponent } from './components/common/user-link/user-link.component';
+import { SelectorEngineComponent } from './components/common/selectors/selector-engine/selector-engine.component';
+import { PlaceKindSelectorComponent } from './components/common/selectors/place-kind-selector/place-kind-selector.component';
+import { PlaceAccessibilitySelectorComponent } from './components/common/selectors/place-accessibility-selector/place-accessibility-selector.component';
+import { PlacePopularitySelectorComponent } from './components/common/selectors/place-popularity-selector/place-popularity-selector.component';
+import { PlaceCapacitySelectorComponent } from './components/common/selectors/place-capacity-selector/place-capacity-selector.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +48,12 @@ import { UserLinkComponent } from './components/common/user-link/user-link.compo
     GalleryComponent,
     PlaceDetailsComponent,
     AdaptiveDatePipe,
-    UserLinkComponent
+    UserLinkComponent,
+    SelectorEngineComponent,
+    PlaceKindSelectorComponent,
+    PlaceAccessibilitySelectorComponent,
+    PlacePopularitySelectorComponent,
+    PlaceCapacitySelectorComponent
   ],
   imports: [
     BrowserModule,

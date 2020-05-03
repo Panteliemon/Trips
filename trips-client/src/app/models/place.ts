@@ -10,8 +10,7 @@ export enum PlaceKind {
     RUINS = 5
 }
 
-export enum PlaceAccessibility
-{
+export enum PlaceAccessibility {
     ASPHALTGRAVEL = 1,
     DIRTROADFLAT = 2,
     DEEPTRACKSPUDDLES = 3,
@@ -19,16 +18,14 @@ export enum PlaceAccessibility
     NOROAD = 5
 }
 
-export enum PlacePopularity
-{
+export enum PlacePopularity {
     ALWAYSFREE = 1,
     SOMETIMESOCCUPIED = 2,
     MOSTPROBABLYOCCUPIED = 3,
     CROWDED = 4
 }
 
-export enum PlaceCapacity
-{
+export enum PlaceCapacity {
     SINGLE = 1,
     SEVERAL = 2,
     NUMEROUS = 3
