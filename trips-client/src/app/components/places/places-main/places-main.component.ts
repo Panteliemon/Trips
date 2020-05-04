@@ -65,6 +65,10 @@ export class PlacesMainComponent implements OnInit {
     return this.placesService.getDisplayablePlaceName(placeName);
   }
 
+  getPlacePicSrc(place: PlaceHeader) {
+    return this.placesService.getMiniaturePicSrc(place);
+  }
+
   // Initiates places loading
   private startFetchPlacesWithCurrentSettings() {
     this._fetchResetCounter++;

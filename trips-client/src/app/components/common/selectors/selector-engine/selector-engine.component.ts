@@ -18,9 +18,9 @@ export class ChoiceViewModel {
 // Background colors
 export const SEL_NOT_SELECTED = "#bbb";
 export const SEL_GRAY = "#888";
-export const SEL_BLUE = "#08f";
+export const SEL_BLUE = "#06f";
 export const SEL_DARKGREEN = "#082";
-export const SEL_LIGHTGREEN = "#2f0";
+export const SEL_LIGHTGREEN = "#2d0";
 export const SEL_YELLOW = "#fd0";
 export const SEL_ORANGE = "#f80";
 export const SEL_RED = "#f00";

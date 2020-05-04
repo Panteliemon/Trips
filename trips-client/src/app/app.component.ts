@@ -10,19 +10,13 @@ import { AuthService } from './services/auth.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-    users: User[];
-    
     isLoginFormShown: boolean;
 
     constructor (private usersService: UsersService, private authService: AuthService) {
     }
 
-    get userName(): string {
-      return this.authService.user?.name;
-    }
-
-    get userId(): number {
-      return this.authService.user?.id;
+    get user(): User {
+      return this.authService.user;
     }
 
     ngOnInit() {

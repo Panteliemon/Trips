@@ -9,7 +9,7 @@
         <table class="items-presenter">
             <tr *ngFor="let place of places">
                 <td>
-
+                    <img class="small-item-pic" [src]="getPlacePicSrc(place)" />
                 </td>
                 <td>
                     <a routerLink="/place/{{place.id}}" class="item-ref">{{getPlaceName(place.name)}}</a>

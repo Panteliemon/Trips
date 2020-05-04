@@ -2,11 +2,17 @@
     <section *ngIf="place">
         <h2 class="allows-float-beside">{{getPlaceName()}}</h2>
         <button class="button button-danger up-right-button" *ngIf="isEditMode" (click)="onDeleteClicked()">Удалить</button>
-        <button class="button up-right-button" *ngIf="!isEditMode" (click)="onEditClicked()">Редактировать</button>
-        <button class="button up-right-button" *ngIf="isEditMode" (click)="onEndEditClicked()">Выйти в режим просмотра</button>
+        <button class="button up-right-button" *ngIf="isEditButtonVisible && (!isEditMode)" (click)="onEditClicked()">Редактировать</button>
+        <button class="button up-right-button" *ngIf="isEditMode" (click)="onEndEditClicked()">Режим просмотра</button>
         <div id="placeAttributesDiv" class="flex-container">
-            <div>
-                <img class="title-picture" [src]="titlePicSrc" />
+            <div class="title-picture-holder">
+                <img class="title-picture centered" [src]="titlePicSrc" />
+                <br/>
+                <button *ngIf="isSelectTitlePicButtonVisible" class="button" (click)="onChangeTitlePicClicked()">Выбрать заглавную картинку...</button>
+                <p *ngIf="isSelectTitlePicLabelVisible">Добавьте изображения в галерею, чтобы установить заглавную картинку</p>
+                <br />
+                <button *ngIf="isEditMode && place.titlePicture" class="button"
+                        (click)="onResetTitlePicClicked()">Сбросить картинку</button>
             </div>
             <div class="fill-parent-horizontally">
                 <div *ngIf="isEditMode">
@@ -60,16 +66,17 @@
                 </div>
             </div>
         </div>
-        <p *ngIf="place.addedDate">Добавлено: {{place.addedDate|adaptiveDate}} участником <app-user-link [user]="place.addedBy"></app-user-link></p>
-        <p *ngIf="place.changedDate">Изменено: {{place.changedDate|adaptiveDate}} участником <app-user-link [user]="place.changedBy"></app-user-link></p>
-        <h2 *ngIf="place.gallery">Галерея</h2>
-        <app-gallery #gallery *ngIf="place.gallery"
+        <h2 *ngIf="isGalleryVisible">Галерея</h2>
+        <app-gallery #gallery *ngIf="isGalleryVisible"
                      [gallery]="place.gallery" [isEditable]="isEditMode"
                      (fileSelected)="onGalleryAddFile($event)"
                      (reordered)="onGalleryReordered()"
                      (deleteConfirmed)="onGalleryDeleteConfirmed($event)"></app-gallery>
+        <p *ngIf="place.addedDate">Добавлено: {{place.addedDate|adaptiveDate}} участником <app-user-link [user]="place.addedBy"></app-user-link></p>
+        <p *ngIf="place.changedDate">Изменено: {{place.changedDate|adaptiveDate}} участником <app-user-link [user]="place.changedBy"></app-user-link></p>
     </section>
     <app-page404 *ngIf="isNotFound"></app-page404>
     <div class="fog" *ngIf="isOverallLoaderVisible"></div>
     <app-loader *ngIf="isOverallLoaderVisible"></app-loader>
 </div>
+<app-from-gallery-picker #fromGalleryPicker></app-from-gallery-picker>

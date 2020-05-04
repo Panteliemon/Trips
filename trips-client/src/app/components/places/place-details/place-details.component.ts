@@ -5,8 +5,8 @@ import { PlacesService } from 'src/app/services/places.service';
 import { MessageService, MessageButtons, MessageIcon, MessageResult } from 'src/app/services/message.service';
 import { GalleryComponent } from '../../common/gallery/gallery.component';
 import { AuthService } from 'src/app/services/auth.service';
-import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { API_BASE_PATH } from 'src/app/services/api';
+import { FromGalleryPickerComponent } from '../../common/selectors/from-gallery-picker/from-gallery-picker.component';
 
 @Component({
   selector: 'app-place-details',
@@ -23,10 +23,17 @@ export class PlaceDetailsComponent implements OnInit {
 
   titlePicSrc: string;
 
+  isEditButtonVisible: boolean;
   isNearestAccessibilityVisible: boolean;
+  isGalleryVisible: boolean;
+  isSelectTitlePicButtonVisible: boolean;
+  isSelectTitlePicLabelVisible: boolean;
 
   @ViewChild('gallery')
   galleryView: GalleryComponent;
+
+  @ViewChild('fromGalleryPicker')
+  fromGalleryPicker: FromGalleryPickerComponent;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -112,7 +119,20 @@ export class PlaceDetailsComponent implements OnInit {
       }
       this.refreshTitlePicSrc();
       this.refreshNearestAccessibilityVisible();
+      this.refreshGalleryVisible();
       this.isOverallLoaderVisible = false;
+
+      if (this.authService.user?.canEditGeography) {
+        this.isEditButtonVisible = true;
+        if (this.route.snapshot.paramMap.get("edit") == "true") {
+          this.onEditClicked();
+        }
+      } else {
+        this.isEditButtonVisible = false;
+        if (this.route.snapshot.paramMap.get("edit") == "true") {
+          this.messageService.showMessage("У вас нет прав на редактирование");
+        }
+      }
     }, error => {
       this.messageService.showMessage(this.placesService.getServerErrorText(error), MessageButtons.ok, MessageIcon.error);
       // Nothing is visible. Display empty page.
@@ -122,10 +142,20 @@ export class PlaceDetailsComponent implements OnInit {
 
   onEditClicked() {
     this.isEditMode = true;
+    this.refreshGalleryVisible();
+    this.refreshSelectTitlePicVisible();
   }
 
   onEndEditClicked() {
+    if (this.route.snapshot.paramMap.get("edit")) {
+      this.router.navigate([`/place/${this.place.id}`]);
+      // This action doesn't actually reload the page, since url not changed,
+      // but it clears the "edit" parameter, and that's exactly what we need.
+    }
+
     this.isEditMode = false;
+    this.refreshGalleryVisible();
+    this.refreshSelectTitlePicVisible();
   }
 
   onDeleteClicked() {
@@ -155,7 +185,7 @@ export class PlaceDetailsComponent implements OnInit {
       if (answer && hasVisits) {
         let canEditTrips = this.authService.user?.canPublishTrips;
         if (canEditTrips) {
-          let result2 = await this.messageService.showMessage("Удалить все упоминания данного места из поездочек? (Да - удалить (соотв. галереи тоже будут удалены), Нет - галереи и данные останутся, но имя места пропадёт, Отмена - передумал вообще удалять место (рекомендуемый вариант))",
+          let result2 = await this.messageService.showMessage("Удалить все упоминания данного места из поездочек? (Да - удалить (соотв. галереи с картинками в них тоже будут удалены!), Нет - галереи и данные останутся, но имя места пропадёт, Отмена - передумал вообще удалять место (рекомендуемый вариант))",
                                                               MessageButtons.yesNoCancel, MessageIcon.warning).toPromise();
           if (result2 == MessageResult.cancel) {
             answer = false;
@@ -192,6 +222,24 @@ export class PlaceDetailsComponent implements OnInit {
     });
   }
 
+  onChangeTitlePicClicked() {
+    this.fromGalleryPicker.open([this.place.gallery], this.place?.titlePicture?.smallSizeId, pic => {
+      if (pic?.smallSizeId != this.place.titlePicture?.smallSizeId) {
+        this.place.titlePicture = pic;
+        this.refreshTitlePicSrc();
+        this.initiatePartialSilentUpdate();
+      }
+    });
+  }
+
+  onResetTitlePicClicked() {
+    if (this.place.titlePicture) {
+      this.place.titlePicture = null;
+      this.refreshTitlePicSrc();
+      this.initiatePartialSilentUpdate();
+    }
+  }
+
   onGalleryAddFile(file: File) {
     this.isOverallLoaderVisible = true;
     this.placesService.uploadPicture(this.place.id, file).subscribe(pic => {
@@ -199,6 +247,8 @@ export class PlaceDetailsComponent implements OnInit {
       this.place.gallery.pictures.push(pic);
       this.galleryView.selectImageByIndex(this.place.gallery.pictures.length-1);
       this.isOverallLoaderVisible = false;
+      this.refreshSelectTitlePicVisible();
+
       // If the first image, then auto-set as title picture
       if ((this.place.gallery.pictures.length == 1) && (!this.place.titlePicture)) {
         this.place.titlePicture = this.place.gallery.pictures[0];
@@ -222,6 +272,7 @@ export class PlaceDetailsComponent implements OnInit {
       this.isOverallLoaderVisible = false;
       this.place.gallery.pictures.splice(index, 1);
       this.galleryView.selectImageByIndex(index);
+      this.refreshSelectTitlePicVisible();
       if (this.place.titlePicture.smallSizeId == deletedPicture.smallSizeId) {
         this.place.titlePicture = null;
         this.refreshTitlePicSrc();
@@ -264,5 +315,20 @@ export class PlaceDetailsComponent implements OnInit {
 
   private refreshNearestAccessibilityVisible() {
     this.isNearestAccessibilityVisible = (this.place) && (this.place.accessibility) && (this.place.accessibility >= PlaceAccessibility.TRACTORONLY);
+  }
+
+  private refreshGalleryVisible() {
+    this.isGalleryVisible = (this.place) && (this.place.gallery) && (this.isEditMode || (this.place.gallery.pictures.length > 0));
+  }
+
+  private refreshSelectTitlePicVisible() {
+    if (this.isEditMode) {
+      let galleryHasImage = this.place?.gallery && this.place.gallery.pictures.length > 0;
+      this.isSelectTitlePicButtonVisible = galleryHasImage;
+      this.isSelectTitlePicLabelVisible = !galleryHasImage;
+    } else {
+      this.isSelectTitlePicButtonVisible = false;
+      this.isSelectTitlePicLabelVisible = false;
+    }
   }
 }

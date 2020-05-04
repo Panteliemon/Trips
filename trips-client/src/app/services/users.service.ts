@@ -179,4 +179,5 @@ export class UsersService {
     }
 
     return "Communication error";
-  }}
+  }
+}

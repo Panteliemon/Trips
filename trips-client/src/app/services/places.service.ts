@@ -147,4 +147,12 @@ export class PlacesService {
       return "< без имени >";
     }
   }
+
+  getMiniaturePicSrc(place: PlaceHeader) {
+    if (place?.titlePictureSmallSizeId) {
+      return API_BASE_PATH + "/pics/" + place.titlePictureSmallSizeId;
+    } else {
+      return "/assets/no-pic-place.png";
+    }
+  }
 }

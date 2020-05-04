@@ -16,10 +16,10 @@
     </div>
     <div id="galMiniatures">
         <div *ngFor="let picture of gallery.pictures"
-             class="miniature-holder" (click)="onMiniatureSelected(picture.smallSizeId)"
-             [class.selected]="picture.smallSizeId == selectedImageSmallSizeId">
+             class="gal-miniature-holder" (click)="onMiniatureSelected(picture.smallSizeId)"
+             [class.gal-selected]="picture.smallSizeId == selectedImageSmallSizeId">
             <img [src]="getImageSrc(picture.smallSizeId)"
-                 class="miniature-img centered-both" />
+                 class="gal-miniature-img centered-both" />
         </div>
         <p class="big-gray-text centered-both" *ngIf="gallery.pictures.length == 0">Нет изображений</p>
     </div>

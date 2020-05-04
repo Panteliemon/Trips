@@ -1,0 +1,21 @@
+<div *ngIf="isVisible" class="modal-popup-background">   
+</div>
+<div *ngIf="isVisible" class="popup-parent">
+    <div class="picker-popup">
+        <h3 class="pickermargin">Выберите картинку из галереи</h3>
+        <div id="imagesScrollableFrame">
+            <div *ngFor="let picture of allPictures"
+                class="gal-miniature-holder"
+                [class.gal-selected]="picture == selectedPicture"
+                (click)="onClick(picture)"
+                (dblclick)="onSelectClicked()">
+                <img [src]="getImageSrc(picture.smallSizeId)"
+                     class="gal-miniature-img centered-both" />
+            </div>
+        </div>
+        <div>
+            <button class="button button-std pickermargin" (click)="onSelectClicked()">Выбрать</button>
+            <button class="button button-std pickermargin pickerbutton-cancel" (click)="onCancelClicked()">Отмена</button>
+        </div>
+    </div>
+</div>

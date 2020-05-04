@@ -28,6 +28,7 @@ import { PlaceKindSelectorComponent } from './components/common/selectors/place-
 import { PlaceAccessibilitySelectorComponent } from './components/common/selectors/place-accessibility-selector/place-accessibility-selector.component';
 import { PlacePopularitySelectorComponent } from './components/common/selectors/place-popularity-selector/place-popularity-selector.component';
 import { PlaceCapacitySelectorComponent } from './components/common/selectors/place-capacity-selector/place-capacity-selector.component';
+import { FromGalleryPickerComponent } from './components/common/selectors/from-gallery-picker/from-gallery-picker.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { PlaceCapacitySelectorComponent } from './components/common/selectors/pl
     PlaceKindSelectorComponent,
     PlaceAccessibilitySelectorComponent,
     PlacePopularitySelectorComponent,
-    PlaceCapacitySelectorComponent
+    PlaceCapacitySelectorComponent,
+    FromGalleryPickerComponent
   ],
   imports: [
     BrowserModule,

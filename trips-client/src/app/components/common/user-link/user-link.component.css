@@ -1,0 +1,8 @@
+div.user-link-container {
+    display:inline-block;
+}
+
+img.shifted-down {
+    position:relative;
+    top:9px;
+}

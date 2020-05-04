@@ -1,0 +1,5 @@
+#imagesScrollableFrame {
+    margin:10px;
+    overflow-y:scroll;
+    flex-grow:1;
+}
