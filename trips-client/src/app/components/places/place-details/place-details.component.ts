@@ -7,6 +7,7 @@ import { GalleryComponent } from '../../common/gallery/gallery.component';
 import { AuthService } from 'src/app/services/auth.service';
 import { API_BASE_PATH } from 'src/app/services/api';
 import { FromGalleryPickerComponent } from '../../common/selectors/from-gallery-picker/from-gallery-picker.component';
+import { dateToInputString, inputStringToDate, possibleStringToDate } from 'src/app/stringUtils';
 
 @Component({
   selector: 'app-place-details',
@@ -28,12 +29,15 @@ export class PlaceDetailsComponent implements OnInit {
   isGalleryVisible: boolean;
   isSelectTitlePicButtonVisible: boolean;
   isSelectTitlePicLabelVisible: boolean;
+  isXBApprovalCheckboxVisible: boolean;
 
   @ViewChild('gallery')
   galleryView: GalleryComponent;
 
   @ViewChild('fromGalleryPicker')
   fromGalleryPicker: FromGalleryPickerComponent;
+
+  private _suppressDiscoveryDateInput: boolean = false;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -83,6 +87,41 @@ export class PlaceDetailsComponent implements OnInit {
   set placeCapacity(value: PlaceCapacity) {
     this.place.capacity = value;
     this.initiatePartialSilentUpdate();
+  }
+
+  get placeDiscoveryDate(): string {
+    return dateToInputString(this.place.discoveryDate);
+  }
+
+  async setPlaceDiscoveryDate(value: string) {
+    // When value changed by enter and messagebox appears, we immediately receive blur event,
+    // so messagebox appears second time. Use this workaroud to prevent:
+    if (!this._suppressDiscoveryDateInput) {
+      let dValue = inputStringToDate(value);
+
+      this._suppressDiscoveryDateInput = true;
+      if (dValue && this.place.addedDate && (dValue > possibleStringToDate(this.place.addedDate))) {
+        await this.messageService.showMessage("Место не может быть открыто позже, чем добавлено сюда.").toPromise();
+      } else if (dValue && (dValue > (new Date()))) {
+        await this.messageService.showMessage("Дата больше чем сегодня").toPromise();
+      } else if (dValue && (dValue < new Date(2014, 7, 8))) { // I guess that 8 Aug 2014
+        await this.messageService.showMessage("Введенная дата - это слишком давно. Введите плз что-либо из периода эпохи поездочек.").toPromise();
+      } else {
+        this.place.discoveryDate = dValue;
+        this.initiatePartialSilentUpdate();
+      }
+      this._suppressDiscoveryDateInput = false;
+    }
+  }
+
+  get isXBApproved(): boolean {
+    return this.place.isXBApproved;
+  }
+  set isXBApproved(value: boolean) {
+    if (value != this.place.isXBApproved) {
+      this.place.isXBApproved = value;
+      this.initiatePartialSilentUpdate();
+    }
   }
 
   setPlaceName(value: string) {
@@ -144,6 +183,7 @@ export class PlaceDetailsComponent implements OnInit {
     this.isEditMode = true;
     this.refreshGalleryVisible();
     this.refreshSelectTitlePicVisible();
+    this.refreshXBApprovalCheckboxVisible();
   }
 
   onEndEditClicked() {
@@ -156,6 +196,7 @@ export class PlaceDetailsComponent implements OnInit {
     this.isEditMode = false;
     this.refreshGalleryVisible();
     this.refreshSelectTitlePicVisible();
+    this.refreshXBApprovalCheckboxVisible()
   }
 
   onDeleteClicked() {
@@ -330,5 +371,10 @@ export class PlaceDetailsComponent implements OnInit {
       this.isSelectTitlePicButtonVisible = false;
       this.isSelectTitlePicLabelVisible = false;
     }
+  }
+
+  private refreshXBApprovalCheckboxVisible() {
+    // Open for admins only: only on client, just for fun.
+    this.isXBApprovalCheckboxVisible = this.isEditMode && this.authService.user && this.authService.user.isAdmin;
   }
 }

@@ -3,3 +3,14 @@
     margin:5px 5px 5px 0;
 }
 
+img.xb-stamp {
+    max-width:96px;
+    float:left;
+}
+
+.xb-description {
+    display:inline-block;
+    position:relative;
+    margin-top:20px;
+    margin-left:20px;
+}

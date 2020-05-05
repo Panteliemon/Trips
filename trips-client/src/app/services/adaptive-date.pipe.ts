@@ -27,9 +27,9 @@ export class AdaptiveDatePipe implements PipeTransform {
           || ((date.getFullYear() == today.getFullYear())
               && (date.getMonth() == today.getMonth())
               && (date.getDate() == today.getDate()))) {
-      return `${date.getFullYear()}/${this.getShortMonth(date.getMonth())}/${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+      return `${date.getDate().toString().padStart(2, '0')}/${this.getShortMonth(date.getMonth())}/${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
     } else {
-      return `${date.getFullYear()}/${this.getShortMonth(date.getMonth())}/${date.getDate().toString().padStart(2, '0')}`;
+      return `${date.getDate().toString().padStart(2, '0')}/${this.getShortMonth(date.getMonth())}/${date.getFullYear()}`;
     }
   }
 

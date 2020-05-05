@@ -64,6 +64,25 @@
                     <p>Количество мест на компанию:</p>
                     <app-place-capacity-selector [(value)]="placeCapacity" [isEditable]="isEditMode"></app-place-capacity-selector>
                 </div>
+
+                <div *ngIf="isEditMode">
+                    <label for="tbDiscoveryDate">Дата открытия:</label>
+                    <input #discoveryDate type="date" id="tbDiscoveryDate" [value]="placeDiscoveryDate"
+                           (blur)="setPlaceDiscoveryDate(discoveryDate.value)"
+                           (keyup.enter)="setPlaceDiscoveryDate(discoveryDate.value)" />
+                </div>
+                <div *ngIf="(!isEditMode) && placeDiscoveryDate">
+                    <p>Дата открытия: {{placeDiscoveryDate | adaptiveDate}}</p>
+                </div>
+
+                <div *ngIf="isXBApprovalCheckboxVisible">
+                    <input type="checkbox" id="cbIsXBApproved" [(ngModel)]="isXBApproved" />
+                    <label for="cbIsXBApproved">Одобрено XB</label>
+                </div>
+                <div *ngIf="(!isEditMode) && place.isXBApproved">
+                    <img src="/assets/xb-approval.png" class="xb-stamp" />
+                    <p class="xb-description">Данное место официально одобрено Bn-ым и Хетцерым!</p>
+                </div>
             </div>
         </div>
         <h2 *ngIf="isGalleryVisible">Галерея</h2>
