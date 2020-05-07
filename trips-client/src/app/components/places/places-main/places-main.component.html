@@ -1,10 +1,14 @@
 <div class="uniter">
     <section>
-        <h1>Места</h1>
-        <button *ngIf="isAddNewPlaceVisible" class="button" (click)="onAddNewPlaceClicked()">Добавить место</button>
+        <h1 class="allows-float-beside">Места</h1>
+        <button *ngIf="isAddNewPlaceVisible" class="button up-right-button" (click)="onAddNewPlaceClicked()">Добавить место</button>
         <div>
             <label for="tbSearchString">Поиск по имени:</label>
             <input type="text" id="tbSearchString" [(ngModel)]="searchString" />
+        </div>
+        <div>
+            <p>Упорядочить</p>
+            <app-places-ordering-selector [(value)]="sortingOrder"></app-places-ordering-selector>
         </div>
         <table class="items-presenter">
             <tr *ngFor="let place of places">

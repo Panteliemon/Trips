@@ -70,6 +70,31 @@ namespace Trips.Utils
         }
 
         /// <summary>
+        /// Deletes records from <paramref name="picsContext"/>, which are referenced to
+        /// from the <paramref name="user"/>'s profile picture. Does NOT save changes in the picsContext.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="picsContext"></param>
+        public static void DeleteUserPictureData(User user, PicsContext picsContext)
+        {
+            if (user != null)
+            {
+                if (user.ProfilePicture != null)
+                {
+                    PicData picData = new PicData() { Id = user.ProfilePicture.Value };
+                    picsContext.Entry(picData).State = EntityState.Deleted;
+                }
+
+                if ((user.SmallSizeProfilePicture != null)
+                    && (user.SmallSizeProfilePicture != user.ProfilePicture))
+                {
+                    PicData picData = new PicData() { Id = user.SmallSizeProfilePicture.Value };
+                    picsContext.Entry(picData).State = EntityState.Deleted;
+                }
+            }
+        }
+
+        /// <summary>
         /// Deletes records from <paramref name="picsContext"/> for each picture entry from
         /// <paramref name="gallery"/>. Does NOT save changes in the picsContext.
         /// </summary>

@@ -42,9 +42,11 @@
                     <label for="tbLocation">Расположение:</label>
                     <input type="text" #tbLocation id="tbLocation" [value]="place.location"
                            (blur)="setPlaceLocation(tbLocation.value)" (keyup.enter)="setPlaceLocation(tbLocation.value)" />
+                    <p>Для превращения в ссылку гугол вставьте координаты точки в десятичном формате</p>
                 </div>
                 <div *ngIf="(!isEditMode) && place.location">
-                    <p>Расположение: {{place.location}}</p>
+                    <p *ngIf="mapRef">Расположение: <a [href]="mapRef">{{place.location}}</a></p>
+                    <p *ngIf="!mapRef">Расположение: {{place.location}}</p>
                 </div>
 
                 <div>
@@ -61,7 +63,7 @@
                     <app-place-popularity-selector [(value)]="placePopularity" [isEditable]="isEditMode"></app-place-popularity-selector>
                 </div>
                 <div>
-                    <p>Количество мест на компанию:</p>
+                    <p>Количество стоянок:</p>
                     <app-place-capacity-selector [(value)]="placeCapacity" [isEditable]="isEditMode"></app-place-capacity-selector>
                 </div>
 

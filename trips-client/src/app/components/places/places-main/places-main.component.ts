@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PlacesService } from 'src/app/services/places.service';
 import { MessageService, MessageButtons, MessageIcon } from 'src/app/services/message.service';
 import { PlaceHeader } from 'src/app/models/place-header';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 
 const LOAD_PORTION = 20;
@@ -16,6 +16,7 @@ export class PlacesMainComponent implements OnInit {
   private _searchString: string;
   private _searchStringInputCounter: number = 0;
   private _fetchResetCounter: number = 0;
+  private _sortingOrder: string;
 
   places: PlaceHeader[] = [];
 
@@ -33,15 +34,30 @@ export class PlacesMainComponent implements OnInit {
     }, 500);
   }
 
+  get sortingOrder(): string {
+    return this._sortingOrder;
+  }
+  set sortingOrder(value: string) {
+    this._sortingOrder = value;
+    this.router.navigate(["/places", { order: this._sortingOrder }]);
+    this.startFetchPlacesWithCurrentSettings();
+  }
+
   isOverallLoaderVisible: boolean;
   isPlacesLoaderVisible: boolean;
   isAddNewPlaceVisible: boolean;
   isLoadMorePlacesVisible: boolean;
 
-  constructor(private placesService: PlacesService, private messageService: MessageService, private router: Router,
+  constructor(private placesService: PlacesService, private messageService: MessageService,
+              private router: Router, private activatedRoute: ActivatedRoute,
               private authService: AuthService) { }
 
   ngOnInit(): void {
+    if (this.activatedRoute.snapshot.paramMap.get("order")) {
+      this._sortingOrder = this.activatedRoute.snapshot.paramMap.get("order");
+    } else {
+      this._sortingOrder = "name";
+    }
     this.startFetchPlacesWithCurrentSettings();
     this.isAddNewPlaceVisible = this.authService.user?.canEditGeography;
   }
@@ -83,7 +99,7 @@ export class PlacesMainComponent implements OnInit {
     this.isPlacesLoaderVisible = true;
     // Always take LOAD_PORTION+1 places, but show only LOAD_PORTION, so the extra 1 place
     // is needed to detect if we reached the end.
-    this.placesService.getPlacesList(null, LOAD_PORTION + 1, this.places.length, this.searchString).subscribe(result => {
+    this.placesService.getPlacesList(this.sortingOrder, LOAD_PORTION + 1, this.places.length, this.searchString).subscribe(result => {
       if (this._fetchResetCounter == fetchResetCounterWhenStarted) {
         this.onPlacesArrived(result);
       } else {

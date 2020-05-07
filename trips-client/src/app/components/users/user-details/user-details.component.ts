@@ -95,6 +95,12 @@ export class UserDetailsComponent implements OnInit {
                 this.usersService.getUserById(this.user.id).subscribe((user) => {
                   this.user.profilePicture = user.profilePicture;
                   this.refreshAllVisibility();
+
+                  // Refresh in current user
+                  if (this.authService.user.id == this.user.id) {
+                    this.authService.user.profilePicture = user.profilePicture;
+                    this.authService.user.smallSizeProfilePicture = user.smallSizeProfilePicture;
+                  }
                 });
               } else {
                 // TODO show upload progress // TODO no.

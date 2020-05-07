@@ -4,6 +4,7 @@ export class User {
     registeredDate: Date;
     lastChangedName: Date;
     profilePicture: string;
+    smallSizeProfilePicture: string;
     isAdmin: boolean;
     canPublishNews: boolean;
     canPublishTrips: boolean;

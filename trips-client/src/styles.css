@@ -151,6 +151,11 @@ h1.allows-float-beside, h2.allows-float-beside {
     display:inline-block;
 }
 
+button.up-right-button, a.up-right-button {
+    float:right;
+    margin:5px 5px 5px 0;
+}
+
 .centered {
     display:inline-block;
     position:relative;

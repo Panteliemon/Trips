@@ -42,13 +42,26 @@ namespace Trips.Utils
             public int Width { get; }
         }
 
+        public class ProfilePictureProcessResult
+        {
+            public ProfilePictureProcessResult(byte[] mainData, byte[] smallSizeData)
+            {
+                MainData = mainData;
+                SmallSizeData = smallSizeData;
+            }
+
+            public byte[] MainData { get; }
+            public byte[] SmallSizeData { get; }            
+        }
+
 
         /// <summary>
         /// Max acceptable file size for images
         /// </summary>
         public const long MAX_FILESIZE = 16 * 1024 * 1024;
 
-        public const int AVATAR_MAX_SIZE = 400;
+        public const int PROFILEPIC_MAX_SIZE = 400;
+        public const int PROFILEPIC_SMALL_SIZE = 64;
 
         public const int GALLERY_SMALLSIZE = 200;
         public const int GALLERY_MEDIUMSIZE = 1200;
@@ -92,17 +105,12 @@ namespace Trips.Utils
             return false;
         }
 
-        /// <summary>
-        /// Resizes avatar if needed and crops it to be square-shaped.
-        /// </summary>
-        /// <param name="sourcePicFormat"></param>
-        /// <param name="sourceImageData"></param>
-        /// <returns></returns>
-        public static async Task<byte[]> PrepareAvatar(PicFormat sourcePicFormat, byte[] sourceImageData)
+        public static async Task<ProfilePictureProcessResult> PrepareProfilePicture(PicFormat sourcePicFormat, byte[] sourceImageData)
         {
             return await Task.Run(() =>
             {
-                bool wasResized = false;
+                byte[] mainData = null;
+                byte[] smallSizeData = null;
                 bool wasCropped = false;
 
                 Image img = Image.Load(sourceImageData);
@@ -122,28 +130,37 @@ namespace Trips.Utils
                     }
                 }
 
-                // Resize if too large
-                if (img.Width > AVATAR_MAX_SIZE)
+                // Resize to fit max size, if needed
+                if (img.Width > PROFILEPIC_MAX_SIZE)
                 {
-                    wasResized = true;
-
                     ResizeOptions rszo = new ResizeOptions();
                     rszo.Mode = ResizeMode.Max;
-                    rszo.Size = new Size(AVATAR_MAX_SIZE, AVATAR_MAX_SIZE);
+                    rszo.Size = new Size(PROFILEPIC_MAX_SIZE, PROFILEPIC_MAX_SIZE);
                     img.Mutate(ctx => ctx.Resize(rszo));
-                }
 
-                if (wasResized || wasCropped)
-                {
-                    byte[] result = GetImageBytes(img, sourcePicFormat);
-                    img.Dispose();
-                    return result;
+                    mainData = GetImageBytes(img, sourcePicFormat);
                 }
                 else
                 {
-                    img.Dispose();
-                    return sourceImageData;
+                    mainData = wasCropped ? GetImageBytes(img, sourcePicFormat) : sourceImageData;
                 }
+
+                // Resize to fit small size, if needed
+                if (img.Width > PROFILEPIC_SMALL_SIZE)
+                {
+                    ResizeOptions rszo = new ResizeOptions();
+                    rszo.Mode = ResizeMode.Max;
+                    rszo.Size = new Size(PROFILEPIC_SMALL_SIZE, PROFILEPIC_SMALL_SIZE);
+                    img.Mutate(ctx => ctx.Resize(rszo));
+
+                    smallSizeData = GetImageBytes(img, sourcePicFormat);
+                }
+                else
+                {
+                    smallSizeData = wasCropped ? GetImageBytes(img, sourcePicFormat) : sourceImageData;
+                }
+
+                return new ProfilePictureProcessResult(mainData, smallSizeData);
             });
         }
 

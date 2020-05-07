@@ -15,6 +15,7 @@ namespace Trips.Dtos
         public DateTime? RegisteredDate { get; set; }
         public DateTime? LastChangedName { get; set; }
         public Guid? ProfilePicture { get; set; }
+        public Guid? SmallSizeProfilePicture { get; set; }
 
         public bool IsAdmin { get; set; }
         public bool CanPublishNews { get; set; }

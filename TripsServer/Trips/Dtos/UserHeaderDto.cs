@@ -13,6 +13,6 @@ namespace Trips.Dtos
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public Guid? ProfilePicture { get; set; }
+        public Guid? SmallSizeProfilePicture { get; set; }
     }
 }

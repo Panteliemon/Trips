@@ -7,7 +7,7 @@ import { GalleryComponent } from '../../common/gallery/gallery.component';
 import { AuthService } from 'src/app/services/auth.service';
 import { API_BASE_PATH } from 'src/app/services/api';
 import { FromGalleryPickerComponent } from '../../common/selectors/from-gallery-picker/from-gallery-picker.component';
-import { dateToInputString, inputStringToDate, possibleStringToDate } from 'src/app/stringUtils';
+import { dateToInputString, inputStringToDate, possibleStringToDate, createGoogleRefFromLocation } from 'src/app/stringUtils';
 
 @Component({
   selector: 'app-place-details',
@@ -23,6 +23,7 @@ export class PlaceDetailsComponent implements OnInit {
   isNotFound: boolean;
 
   titlePicSrc: string;
+  mapRef: string;
 
   isEditButtonVisible: boolean;
   isNearestAccessibilityVisible: boolean;
@@ -144,6 +145,7 @@ export class PlaceDetailsComponent implements OnInit {
   setPlaceLocation(value: string) {
     if (value != this.place.location) {
       this.place.location = value;
+      this.updateMapRef();
       this.initiatePartialSilentUpdate();
     }
   }
@@ -159,6 +161,7 @@ export class PlaceDetailsComponent implements OnInit {
       this.refreshTitlePicSrc();
       this.refreshNearestAccessibilityVisible();
       this.refreshGalleryVisible();
+      this.updateMapRef();
       this.isOverallLoaderVisible = false;
 
       if (this.authService.user?.canEditGeography) {
@@ -376,5 +379,13 @@ export class PlaceDetailsComponent implements OnInit {
   private refreshXBApprovalCheckboxVisible() {
     // Open for admins only: only on client, just for fun.
     this.isXBApprovalCheckboxVisible = this.isEditMode && this.authService.user && this.authService.user.isAdmin;
+  }
+
+  private updateMapRef() {
+    if (this.place) {
+      this.mapRef = createGoogleRefFromLocation(this.place.location);
+    } else {
+      this.mapRef = null;
+    }
   }
 }

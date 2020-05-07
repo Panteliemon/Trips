@@ -26,11 +26,11 @@
     <div id="galPictureView">
         <button *ngIf="selectedImage" id="navLeft" class="navigation-button"
                 [class.hidden]="!canGoBack" (click)="goBackClicked()">
-
+            <img src="/assets/gal-nav-left.png" class="centered-both" />
         </button>
         <button *ngIf="selectedImage" id="navRight" class="navigation-button"
                 [class.hidden]="!canGoNext" (click)="goNextClicked()">
-
+            <img src="/assets/gal-nav-right.png" class="centered-both" />
         </button>
         <div *ngIf="selectedImage" id="centralPictureArea">
             <div id="centralImageWrapper">
