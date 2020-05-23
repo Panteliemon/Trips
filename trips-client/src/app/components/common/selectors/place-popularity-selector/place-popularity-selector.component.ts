@@ -80,6 +80,9 @@ export class PlacePopularitySelectorComponent implements OnInit, OnChanges {
   @Input()
   isEditable: boolean = true;
 
+  @Input()
+  isShortView: boolean = false;
+
   viewModels: ChoiceViewModel[];
 
   private _selectedViewModel: ChoiceViewModel;

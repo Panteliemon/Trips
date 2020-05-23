@@ -15,6 +15,7 @@ div.selector-option {
     height:40px;
     min-width:40px;
     padding:0 10px;
+    z-index:0;
 }
 
 div.selector-option-editable {
@@ -36,10 +37,6 @@ span.selector-small-text {
     font-size:12pt;
 }
 
-.spaceafter {
-    margin-right:5px;
-}
-
 p.selector-description-inline {
     position:relative;
     float:left;
@@ -50,4 +47,19 @@ p.selector-description-inline {
 #underTextHelper {
     clear:both;
     margin:2px 10px 2px 10px;
+}
+
+.selector-tooltip {
+    position:absolute;
+    top:35px;
+    left:-5px;
+    border: 1px solid #bc9;
+    color:#484;
+    background-color:white;
+    white-space: nowrap;
+    padding:5px;
+    display:none;
+}
+div.selector-option:hover .selector-tooltip {
+    display:block;
 }

@@ -1,20 +1,21 @@
 <div class="selector-frame"
      [class.selector-frame-editable]="isEditable">
-    <div *ngFor="let option of availableChoices"
+    <div *ngFor="let option of innerChoices"
          class="selector-option"
          [class.selector-option-editable]="isEditable"
-         [style.color]="option == selectedValue ? option.colorWhenSelected : option.colorWhenNotSelected"
-         [style.background-color]="option == selectedValue ? option.backgroundColorWhenSelected : option.backgroundColorWhenNotSelected"
-         (click)="selectOption(option)">
+         [style.color]="option.isSelected ? option.choice.colorWhenSelected : option.choice.colorWhenNotSelected"
+         [style.background-color]="option.isSelected ? option.choice.backgroundColorWhenSelected : option.choice.backgroundColorWhenNotSelected"
+         (click)="selectOption(option.choice)">
         <div class="centered">
-            <span *ngIf="option.showBigText" class="selector-big-text"
-                  [class.spaceafter]="option.showBigText && option.showSmallText">{{option.bigText}}</span>
-            <span *ngIf="option.showSmallText" class="selector-small-text">{{option.smallText}}</span>
+            <span *ngIf="option.choice.showBigText" class="selector-big-text"
+                  [class.space-after]="option.isSmallTextVisible">{{option.choice.bigText}}</span>
+            <span *ngIf="option.isSmallTextVisible" class="selector-small-text">{{option.choice.smallText}}</span>
+            <div *ngIf="option.tooltip" class="selector-tooltip">{{option.tooltip}}</div>
         </div>
     </div>
-    <p *ngIf="selectedValue && selectedValue.description && (!isEditable)"
+    <p *ngIf="showDescription && (!isEditable)"
        class="selector-description-inline">{{selectedValue.description}}</p>
-    <div *ngIf="selectedValue && selectedValue.description && isEditable"
+    <div *ngIf="showDescription && isEditable"
          id="underTextHelper" class="flex-container">
         <p class="fill-parent-horizontally">{{selectedValue.description}}</p>
     </div>

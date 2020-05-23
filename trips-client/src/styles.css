@@ -66,23 +66,83 @@ p.preserve-linebreaks {
     white-space: pre-wrap;
 }
 
+/* --- items-presenter --- */
 table.items-presenter {
     width:100%;
     border-collapse: collapse;
 }
-
-table.items-presenter td, table.items-presenter th {
-    border-bottom: #bbb 2px solid;
-    padding:5px 5px 1px 5px;
+table.items-presenter tr {
+    border-top: 2px solid #bc9;
+    border-bottom: 2px solid #bc9;
+}
+table.items-presenter tr:hover {
+    background-color:#ddd;
+}
+table.items-presenter a.cell-wrapper {
+    display:block;
 }
 
+table.items-presenter a.entity-row {
+    height:90px;
+}
+table.items-presenter a.entity-row > img {
+    width:100px;
+    height:80px;
+    margin:5px;
+    object-fit:cover;
+    border-radius:5px;
+}
+
+table.items-presenter td.entity-picture-column {
+    width:110px;
+}
+
+table.items-presenter td.name-column {
+    width:auto;
+}
+
+table.items-presenter td.name-column a.cell-wrapper {
+    color:black;
+    font-weight:bold;
+    text-decoration:none;
+    padding-left:5px;
+}
+table.items-presenter td.name-column a.cell-wrapper > p {
+    font-size:16pt;
+}
+table.items-presenter th.name-column {
+    text-align: start;
+    padding-left:5px;
+}
+
+table.items-presenter td.name-column a.entity-row > p {
+    position:relative;
+    top:30px;
+}
+
+table.items-presenter td.enum-column {
+    width:80px;
+    position:relative;
+}
+table.items-presenter td.enum-column a.entity-row > * {
+    margin-top:25px;
+}
+
+table.items-presenter th {
+    font-size:16pt;
+    font-weight:bold;
+    color:#484;
+}
+
+/* ---  --- */
+
+/* TODO revise! Maybe not needed anymore */
 a.item-ref:visited, a.item-ref:link {
     color:#484;
     font-size:16pt;
     font-weight:bold;
     text-decoration:underline;
 }
-
 a.item-ref:hover {
     color:#8a7;
 }
@@ -107,13 +167,6 @@ img.small-profile-pic {
     width:32px;
     height:32px;
     border-radius:3px;
-}
-
-img.small-item-pic {
-    width:100px;
-    height:80px;
-    object-fit:cover;
-    border-radius:5px;
 }
 
 .button {

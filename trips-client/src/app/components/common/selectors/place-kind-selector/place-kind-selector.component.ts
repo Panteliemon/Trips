@@ -92,6 +92,9 @@ export class PlaceKindSelectorComponent implements OnInit, OnChanges {
   @Input()
   isEditable: boolean = true;
 
+  @Input()
+  isShortView: boolean = false;
+
   viewModels: ChoiceViewModel[];
 
   private _selectedViewModel: ChoiceViewModel;
@@ -125,7 +128,7 @@ export class PlaceKindSelectorComponent implements OnInit, OnChanges {
 
   private initViewModels() {
     if (!this.viewModels) {
-      this.viewModels = placeSelectorViewModels;
+      this.viewModels = placeSelectorViewModels.map(vm => <ChoiceViewModel>Object.assign({}, vm));
     }
   }
 }

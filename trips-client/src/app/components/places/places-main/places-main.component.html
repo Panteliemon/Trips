@@ -11,12 +11,44 @@
             <app-places-ordering-selector [(value)]="sortingOrder"></app-places-ordering-selector>
         </div>
         <table class="items-presenter">
+            <thead>
+                <th></th>
+                <th class="name-column">Название</th>
+                <th>Тип</th>
+                <th>Дост.</th>
+                <th>Поп.</th>
+                <th>К.ст.</th>
+            </thead>
             <tr *ngFor="let place of places">
-                <td>
-                    <img class="small-item-pic" [src]="getPlacePicSrc(place)" />
+                <td class="entity-picture-column">
+                    <a class="cell-wrapper entity-row" routerLink="/place/{{place.id}}">
+                        <img [src]="getPlacePicSrc(place)" />
+                    </a>
                 </td>
-                <td>
-                    <a routerLink="/place/{{place.id}}" class="item-ref">{{getPlaceName(place.name)}}</a>
+                <td class="name-column">
+                    <a class="cell-wrapper entity-row" routerLink="/place/{{place.id}}">
+                        <p>{{getPlaceName(place.name)}}</p>
+                    </a>
+                </td>
+                <td class="enum-column">
+                    <a class="cell-wrapper entity-row" routerLink="/place/{{place.id}}">
+                        <app-place-kind-selector class="centered" [value]="place.kind" [isEditable]="false" [isShortView]="true"></app-place-kind-selector>
+                    </a>
+                </td>
+                <td class="enum-column">
+                    <a class="cell-wrapper entity-row" routerLink="/place/{{place.id}}">
+                        <app-place-accessibility-selector class="centered" [value]="place.accessibility" [isEditable]="false" [isShortView]="true"></app-place-accessibility-selector>
+                    </a>
+                </td>
+                <td class="enum-column">
+                    <a class="cell-wrapper entity-row" routerLink="/place/{{place.id}}">
+                        <app-place-popularity-selector class="centered" [value]="place.popularity" [isEditable]="false" [isShortView]="true"></app-place-popularity-selector>
+                    </a>
+                </td>
+                <td class="enum-column">
+                    <a class="cell-wrapper entity-row" routerLink="/place/{{place.id}}">
+                        <app-place-capacity-selector class="centered" [value]="place.capacity" [isEditable]="false" [isShortView]="true"></app-place-capacity-selector>
+                    </a>
                 </td>
             </tr>
         </table>
