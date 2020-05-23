@@ -1,11 +1,18 @@
-img.xb-stamp {
-    max-width:96px;
-    float:left;
+.xb-holder {
+    display:flex;
+    align-items: center;
 }
 
-.xb-description {
-    display:inline-block;
-    position:relative;
-    margin-top:30px;
-    margin-left:20px;
+.xb-holder > img {
+    width:96px;
+    object-fit:contain;
+    flex-grow:0;
+    flex-shrink:0;
+    margin-right:10px;
 }
+
+.xb-holder > p {
+    flex-grow:1;
+    vertical-align: middle;
+}
+

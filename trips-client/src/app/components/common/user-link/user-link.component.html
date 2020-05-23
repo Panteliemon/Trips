@@ -1,7 +1,7 @@
 <div class="user-link-container">
    <a class="inline-ref" *ngIf="user"
       routerLink="/user/{{user.id}}">
-      <img *ngIf="showProfilePicture" class="small-profile-pic shifted-down" [src]="userPicSrc(user.smallSizeProfilePicture)"/>
+      <img *ngIf="showProfilePicture" class="small-profile-pic shifted-down space-after" [src]="userPicSrc(user.smallSizeProfilePicture)"/>
       <span>{{user.name}}</span>
    </a>
 </div>

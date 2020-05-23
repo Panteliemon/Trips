@@ -1,89 +1,113 @@
 <div class="uniter">
     <section *ngIf="place">
-        <h2 class="allows-float-beside">{{getPlaceName()}}</h2>
-        <button class="button button-danger up-right-button" *ngIf="isEditMode" (click)="onDeleteClicked()">Удалить</button>
-        <button class="button up-right-button" *ngIf="isEditButtonVisible && (!isEditMode)" (click)="onEditClicked()">Редактировать</button>
-        <button class="button up-right-button" *ngIf="isEditMode" (click)="onEndEditClicked()">Режим просмотра</button>
-        <div id="placeAttributesDiv" class="flex-container">
-            <div class="title-picture-holder">
+        <div class="clearfix">
+            <h2 class="allows-float-beside">{{getPlaceName()}}</h2>
+            <button class="button button-danger up-right-button" *ngIf="isEditMode" (click)="onDeleteClicked()">
+                <i class="material-icons">delete_forever</i>
+                <span>Удалить</span>
+            </button>
+            <button class="button up-right-button" *ngIf="isEditButtonVisible && (!isEditMode)" (click)="onEditClicked()">
+                <i class="material-icons">edit</i>
+                <span>Редактировать</span>
+            </button>
+            <button class="button up-right-button" *ngIf="isEditMode" (click)="onEndEditClicked()">
+                <i class="material-icons">subject</i>
+                <span>Режим просмотра</span>
+            </button>
+        </div>
+        <div class="editor-wrapper">
+            <div class="editor-picture-panel">
                 <img class="title-picture centered" [src]="titlePicSrc" />
-                <br/>
-                <button *ngIf="isSelectTitlePicButtonVisible" class="button" (click)="onChangeTitlePicClicked()">Выбрать заглавную картинку...</button>
-                <p *ngIf="isSelectTitlePicLabelVisible">Добавьте изображения в галерею, чтобы установить заглавную картинку</p>
+                <button *ngIf="isSelectTitlePicButtonVisible" class="button button-pic-select" (click)="onChangeTitlePicClicked()">
+                    <i class="material-icons">search</i>
+                    <span>Выбрать заглавную картинку...</span>
+                </button>
                 <br />
-                <button *ngIf="isEditMode && place.titlePicture" class="button"
-                        (click)="onResetTitlePicClicked()">Сбросить картинку</button>
+                <p *ngIf="isSelectTitlePicLabelVisible" class="advice">
+                    <i class="material-icons">info</i>
+                    <span>Добавьте изображения в галерею, чтобы установить заглавную картинку</span>
+                </p>
+                <button *ngIf="isEditMode && place.titlePicture" class="button button-pic-select"
+                        (click)="onResetTitlePicClicked()">
+                    <i class="material-icons">block</i>
+                    <span>Сбросить картинку</span>
+                </button>
+
+                <div *ngIf="isXBApprovalCheckboxVisible" class="form-field-margin-above">
+                    <app-checkbox [(value)]="isXBApproved">Медаль "Одобрено XB"</app-checkbox>
+                </div>
+                <div *ngIf="(!isEditMode) && place.isXBApproved" class="form-field-margin-above xb-holder">
+                    <img src="/assets/xb-approval.png"/>
+                    <p>Данное место официально одобрено Bn-ым и Хетцерым!</p>
+                </div>
             </div>
-            <div class="fill-parent-horizontally">
-                <div *ngIf="isEditMode">
+            <div class="editor-main-panel">
+                <div *ngIf="isEditMode" class="form-field">
                     <label for="tbName">Название:</label>
                     <input type="text" #tbName id="tbName" [value]="place.name"
                            (blur)="setPlaceName(tbName.value)"
                            (keyup.enter)="setPlaceName(tbName.value)" />
                 </div>
 
-                <div>
+                <div class="form-field">
                     <p>Тип места:</p>
                     <app-place-kind-selector [(value)]="placeKind" [isEditable]="isEditMode"></app-place-kind-selector>
                 </div>
 
-                <div *ngIf="isEditMode">
-                    <label for="tbDescription">Описание</label>
+                <div *ngIf="isEditMode" class="form-field">
+                    <label for="tbDescription">Описание:</label>
                     <textarea id="tbDescription" class="description-field" [value]="place.description"
                               #tbDescription (blur)="setPlaceDescription(tbDescription.value)"></textarea>
                 </div>
-                <div *ngIf="(!isEditMode) && place.description">
+                <div *ngIf="(!isEditMode) && place.description" class="form-field">
                     <p>Описание:</p>
-                    <p>{{place.description}}</p>
-                    <br />
+                    <p class="preserve-linebreaks">{{place.description}}</p>
                 </div>
 
-                <div *ngIf="isEditMode">
+                <div *ngIf="isEditMode" class="form-field">
                     <label for="tbLocation">Расположение:</label>
                     <input type="text" #tbLocation id="tbLocation" [value]="place.location"
                            (blur)="setPlaceLocation(tbLocation.value)" (keyup.enter)="setPlaceLocation(tbLocation.value)" />
-                    <p>Для превращения в ссылку гугол вставьте координаты точки в десятичном формате</p>
+                    <p class="advice">
+                        <i class="material-icons">info</i>
+                        <span>Для превращения в ссылку гугол вставьте координаты точки в десятичном формате</span>
+                    </p>
                 </div>
-                <div *ngIf="(!isEditMode) && place.location">
-                    <p *ngIf="mapRef">Расположение: <a [href]="mapRef">{{place.location}}</a></p>
-                    <p *ngIf="!mapRef">Расположение: {{place.location}}</p>
+                <div *ngIf="(!isEditMode) && place.location" class="form-field">
+                    <p>Расположение:</p>
+                    <a *ngIf="mapRef" [href]="mapRef">{{place.location}}</a>
+                    <p *ngIf="!mapRef">{{place.location}}</p>
                 </div>
 
-                <div>
+                <div class="form-field">
                     <p>Доступность:</p>
                     <app-place-accessibility-selector [(value)]="placeAccessibility" [isEditable]="isEditMode"></app-place-accessibility-selector>
                 </div>
-                <div *ngIf="isNearestAccessibilityVisible">
+                <div *ngIf="isNearestAccessibilityVisible" class="form-field">
                     <p>Доступность к ближайшей точке:</p>
                     <app-place-accessibility-selector [(value)]="placeNearestAccessibility" [isEditable]="isEditMode"></app-place-accessibility-selector>
-                    <p class="red-text" *ngIf="placeAccessibility <= placeNearestAccessibility">"Ближайшая точка" по идее должна быть более доступна, чем само место</p>
+                    <p class="error" *ngIf="placeAccessibility <= placeNearestAccessibility">
+                        <i class="material-icons">error</i>
+                        <span>"Ближайшая точка" по идее должна быть более доступна, чем само место</span>
+                    </p>
                 </div>
-                <div>
+                <div class="form-field">
                     <p>Популярность:</p>
                     <app-place-popularity-selector [(value)]="placePopularity" [isEditable]="isEditMode"></app-place-popularity-selector>
                 </div>
-                <div>
+                <div class="form-field">
                     <p>Количество стоянок:</p>
                     <app-place-capacity-selector [(value)]="placeCapacity" [isEditable]="isEditMode"></app-place-capacity-selector>
                 </div>
 
-                <div *ngIf="isEditMode">
+                <div *ngIf="isEditMode" class="form-field">
                     <label for="tbDiscoveryDate">Дата открытия:</label>
                     <input #discoveryDate type="date" id="tbDiscoveryDate" [value]="placeDiscoveryDate"
                            (blur)="setPlaceDiscoveryDate(discoveryDate.value)"
                            (keyup.enter)="setPlaceDiscoveryDate(discoveryDate.value)" />
                 </div>
-                <div *ngIf="(!isEditMode) && placeDiscoveryDate">
+                <div *ngIf="(!isEditMode) && placeDiscoveryDate" class="form-field">
                     <p>Дата открытия: {{placeDiscoveryDate | adaptiveDate}}</p>
-                </div>
-
-                <div *ngIf="isXBApprovalCheckboxVisible">
-                    <input type="checkbox" id="cbIsXBApproved" [(ngModel)]="isXBApproved" />
-                    <label for="cbIsXBApproved">Одобрено XB</label>
-                </div>
-                <div *ngIf="(!isEditMode) && place.isXBApproved">
-                    <img src="/assets/xb-approval.png" class="xb-stamp" />
-                    <p class="xb-description">Данное место официально одобрено Bn-ым и Хетцерым!</p>
                 </div>
             </div>
         </div>
@@ -93,11 +117,18 @@
                      (fileSelected)="onGalleryAddFile($event)"
                      (reordered)="onGalleryReordered()"
                      (deleteConfirmed)="onGalleryDeleteConfirmed($event)"></app-gallery>
-        <p *ngIf="place.addedDate">Добавлено: {{place.addedDate|adaptiveDate}} участником <app-user-link [user]="place.addedBy"></app-user-link></p>
-        <p *ngIf="place.changedDate">Изменено: {{place.changedDate|adaptiveDate}} участником <app-user-link [user]="place.changedBy"></app-user-link></p>
+        <div *ngIf="place.addedDate" class="form-field form-field-margin-above">
+            <p>Добавлено:</p>
+            <p>{{place.addedDate|adaptiveDate}} участником <app-user-link [user]="place.addedBy"></app-user-link></p>
+        </div>
+        <div *ngIf="place.changedDate" class="form-field form-field-margin-above">
+            <p>Изменено:</p>
+            <p>{{place.changedDate|adaptiveDate}} участником <app-user-link [user]="place.changedBy"></app-user-link></p>
+        </div>
     </section>
-    <app-page404 *ngIf="isNotFound"></app-page404>
-    <div class="fog" *ngIf="isOverallLoaderVisible"></div>
-    <app-loader *ngIf="isOverallLoaderVisible"></app-loader>
+    <div class="fog" *ngIf="isOverallLoaderVisible">
+        <app-loader *ngIf="isOverallLoaderVisible" class="centered"></app-loader>
+    </div>
 </div>
+<app-page404 *ngIf="isNotFound"></app-page404>
 <app-from-gallery-picker #fromGalleryPicker></app-from-gallery-picker>

@@ -1,8 +1,25 @@
 <header>
-  Поездочки header
-  <button *ngIf="!user" class="button" (click)="onLoginButtonClicked()">Вход</button>
-  <app-user-link *ngIf="user" [user]="user" [showProfilePicture]="true" class="space-after"></app-user-link>
-  <button *ngIf="user" class="button" (click)="onLogoutButtonClicked()">Выход</button>
+  <div class="site-title-wrapper">
+    <a routerLink="/">
+      <img src="/assets/title.png" class="site-title" alt="Поездочки" />
+    </a>
+    <p class="site-annotation">{{annotation}}</p>
+  </div>
+  <div class="login-stuff">
+    <button *ngIf="!user" class="button" (click)="onLoginButtonClicked()">
+      <i class="material-icons">exit_to_app</i>
+      <span>Вход</span>
+    </button>
+    <div class="hello-user">
+      <span *ngIf="user" class="space-after">Привет,</span>
+      <app-user-link *ngIf="user" [user]="user" [showProfilePicture]="true" class="space-after"></app-user-link>
+      <span *ngIf="user" class="two-spaces-after">!</span>
+    </div>
+    <button *ngIf="user" class="button" (click)="onLogoutButtonClicked()">
+      <i class="material-icons">exit_to_app</i>
+      <span>Выход</span>
+    </button>
+  </div>
 </header>
 <nav>
   <a routerLink="/news" routerLinkActive="active"><div class="tall">НОВОСТИ</div></a>
@@ -20,7 +37,7 @@
   <router-outlet></router-outlet>
 </div>
 <footer>
-  footer
+  <p>© Bn Entertainment, 2020</p>
 </footer>
 <app-login-form [(isShown)]="isLoginFormShown"></app-login-form>
 <app-message-box></app-message-box>

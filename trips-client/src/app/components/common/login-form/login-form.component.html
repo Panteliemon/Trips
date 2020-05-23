@@ -3,16 +3,18 @@
     <div class="login-form">
         <div class="uniter">
             <div>
-                <div>
+                <div class="form-field">
                     <label for="userName">Имя</label>
                     <input id="userName" type="text" [(ngModel)]="userName" (keyup)="onTextFieldsKeyUp($event)" />
                 </div>
-                <div>
+                <div class="form-field">
                     <label for="password">Пароль</label>
                     <input id="password" type="password" [(ngModel)]="password" (keyup)="onTextFieldsKeyUp($event)" />
                 </div>
-                <button class="button" (click)="onEnterButtonClicked()">Вход</button>
-                <button class="button" (click)="closeButtonClicked()">Отмена</button>
+                <div class="even-buttons-holder margin-above">
+                    <button class="button" (click)="onEnterButtonClicked()">Вход</button>
+                    <button class="button" (click)="closeButtonClicked()">Отмена</button>
+                </div>
             </div>
             <div class="fog" *ngIf="isLoaderVisible"></div>
             <div *ngIf="isLoaderVisible">

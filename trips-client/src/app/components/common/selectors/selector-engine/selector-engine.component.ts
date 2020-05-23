@@ -6,7 +6,6 @@ export class ChoiceViewModel {
   smallText: string;
   showBigText: boolean;
   showSmallText: boolean;
-  iconSrc: string;
   description: string;
   // Appearance
   colorWhenSelected: string;

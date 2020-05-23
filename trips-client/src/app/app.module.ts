@@ -30,6 +30,7 @@ import { PlacePopularitySelectorComponent } from './components/common/selectors/
 import { PlaceCapacitySelectorComponent } from './components/common/selectors/place-capacity-selector/place-capacity-selector.component';
 import { FromGalleryPickerComponent } from './components/common/selectors/from-gallery-picker/from-gallery-picker.component';
 import { PlacesOrderingSelectorComponent } from './components/common/selectors/places-ordering-selector/places-ordering-selector.component';
+import { CheckboxComponent } from './components/common/checkbox/checkbox.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,8 @@ import { PlacesOrderingSelectorComponent } from './components/common/selectors/p
     PlacePopularitySelectorComponent,
     PlaceCapacitySelectorComponent,
     FromGalleryPickerComponent,
-    PlacesOrderingSelectorComponent
+    PlacesOrderingSelectorComponent,
+    CheckboxComponent
   ],
   imports: [
     BrowserModule,

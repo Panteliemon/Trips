@@ -1,0 +1,49 @@
+div.checkbox-wrapper {
+    display:flex;
+    align-items:center;
+}
+
+.clickable-area {
+    cursor:pointer;
+}
+
+.checkbox-checkplace {
+    width:1.2em;
+    height:1.2em;
+    border-style:solid;
+    border-width:2px;
+    border-color:#bc9;
+    margin-right:0.3em;
+    flex-grow:0;
+    flex-shrink:0;
+    position:relative;
+}
+
+.checkbox-checkmark {
+    position:absolute;
+    display:block;
+    height:0.5em;
+    width:0.75em;
+    left:0.1em;
+    top:0.15em;
+    border-left-style:solid;
+    border-left-width:3px;
+    border-left-color:black;
+    border-bottom-style:solid;
+    border-bottom-width:3px;
+    border-bottom-color:black;
+    transform:rotate(-45deg);
+}
+
+div.color-disabled {
+    color:#aaa;
+}
+
+span.color-disabled {
+    border-color:#aaa;
+}
+
+.checkbox-content {
+    flex-grow:1;
+    color:#484;
+}

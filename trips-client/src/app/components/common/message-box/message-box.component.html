@@ -1,13 +1,11 @@
-<div *ngIf="isShown">
-    <div class="modal-popup-background">
-    </div>
-    <div class="modal-popup">
+<div class="modal-popup-background" *ngIf="isShown">
+    <div id="messageBoxBody" class="centered-both">
         <img *ngIf="aboveHeaderPictureSrc" [src]="aboveHeaderPictureSrc" class="centered above-header-pic" />
         <h3 *ngIf="header" class="centered">{{header}}</h3>
         <div class="flex-container flex-items-vcenter">
             <img *ngIf="iconSrc" [src]="iconSrc" class="icon-holder" />
             <img *ngIf="largeIconSrc" [src]="largeIconSrc" class="large-icon-holder" />
-            <p class="message">{{message}}</p>
+            <p class="message preserve-linebreaks">{{message}}</p>
         </div>
         <div class="buttons-row">
             <div class="centered">

@@ -55,7 +55,7 @@ export class UserDetailsComponent implements OnInit {
     return this._newLogin;
   }
 
-  set newLogin(value) {
+  set newLogin(value: string) {
     this._newLogin = value;
     this.onNewLoginChanged();
   }
@@ -161,9 +161,9 @@ export class UserDetailsComponent implements OnInit {
     }
   }
 
-  onIsAdminClicked() {
+  onIsAdminCheckboxChanged() {
     if (this.user) {
-      let oldIsAdmin = this.user.isAdmin;
+      let oldIsAdmin = !this.user.isAdmin; // ¯\_(ツ)_/¯
       let message = oldIsAdmin ? "Вы должны понимать, что снятие одминства - это не хер собачий. Точно разжаловать до простого пользователя?"
                                : `При наделении пользователя админскими правами нужна гарантия того, что он не будет вахтёрить и коржовничать. Вручаем пользователю ${this.user.name} одминские права?`;
       this.messageService.showMessage(message, MessageButtons.yesNo, MessageIcon.seriously, "То, что ты говоришь - это очень серьёзно.").subscribe(result => {
@@ -228,6 +228,7 @@ export class UserDetailsComponent implements OnInit {
           // All ok, reread user
           this.usersService.getUserById(this.user.id).subscribe(user => {
             this.user = user;
+            this.authService.user.name = user.name; // just refresh name, that's it
             this.isOverallLoaderVisible = false;
             this.isChangeLoginExpanded = false;
             this.refreshAllVisibility();
