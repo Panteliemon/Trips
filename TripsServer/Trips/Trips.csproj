@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <SourceRevisionId>build$([System.DateTime]::Now.ToString("s"))</SourceRevisionId>
   </PropertyGroup>
 
   <ItemGroup>

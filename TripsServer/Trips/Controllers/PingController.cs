@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +25,38 @@ namespace Trips.Controllers
         {
             StringBuilder response = new StringBuilder();
             response.AppendLine("- General Kenobi!");
-            response.AppendLine("Api werks");
+
+            try
+            {
+                const string buildDatePrefix = "+build";
+
+                var currentAssembly = Assembly.GetExecutingAssembly();
+                var attribute = currentAssembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+                int index1 = attribute.InformationalVersion.IndexOf(buildDatePrefix);
+                if (index1 >= 0)
+                {
+                    string dateSubStr = attribute.InformationalVersion.Substring(index1 + buildDatePrefix.Length);
+                    response.AppendLine("Build " + dateSubStr);
+                }
+                else
+                {
+                    response.AppendLine("[!] Failed to get build date");
+                }
+            }
+            catch (Exception)
+            {
+                response.AppendLine("[x] Failed to get build date");
+            }
+
+            if (Program.ClientUrl.ToLower().Contains("localhost"))
+            {
+                response.AppendLine("[!] Client is running on localhost");
+            }
+
+            if (!Program.TripsConnectionString.ToLower().Contains("server="))
+            {
+                response.AppendLine("[!] TripsDB uses local DB");
+            }
 
             try
             {
@@ -33,7 +65,12 @@ namespace Trips.Controllers
             }
             catch (Exception ex)
             {
-                response.AppendLine("TripsDB doesn't work: " + ex.ToString());
+                response.AppendLine("[x] TripsDB doesn't work: " + ex.ToString());
+            }
+
+            if (!Program.PicsConnectionString.ToLower().Contains("server="))
+            {
+                response.AppendLine("[!] PicsDB uses local DB");
             }
 
             try
@@ -44,7 +81,7 @@ namespace Trips.Controllers
             }
             catch (Exception ex)
             {
-                response.AppendLine("PicsDB doesn't work: " + ex.ToString());
+                response.AppendLine("[x] PicsDB doesn't work: " + ex.ToString());
             }
 
             return Ok(response.ToString());
