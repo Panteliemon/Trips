@@ -14,6 +14,7 @@ namespace Trips.Dtos
         public DateTime? DiscoveryDate { get; set; }
         public PlaceAccessibility? Accessibility { get; set; }
         public PlacePopularity? Popularity { get; set; }
+        public PlaceCapacity? Capacity { get; set; }
         public Guid? TitlePictureSmallSizeId { get; set; }
     }
 }

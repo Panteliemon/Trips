@@ -1,4 +1,4 @@
-import { PlaceKind, PlaceAccessibility, PlacePopularity } from './place';
+import { PlaceKind, PlaceAccessibility, PlacePopularity, PlaceCapacity } from './place';
 
 export class PlaceHeader {
     id: number;
@@ -7,5 +7,6 @@ export class PlaceHeader {
     discoveryDate: Date;
     accessibility: PlaceAccessibility;
     popularity: PlacePopularity;
+    capacity: PlaceCapacity;
     titlePictureSmallSizeId: string;
 }
