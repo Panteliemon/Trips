@@ -1,17 +1,20 @@
 <section>
     <h2>Добавить участника</h2>
     <div class="uniter">
-        <div>
-            <div>
+        <div class="new-user-params">
+            <div class="form-field">
                 <label for="userName">Имя / Логин</label>
                 <input type="text" id="userName" required="required" [(ngModel)]="userName" />
-                <p *ngIf="isUserExistsVisible" class="red-text">Пользователь с таким именем уже есть</p>
+                <p *ngIf="isUserExistsVisible" class="error">
+                    <i class="material-icons">cancel</i>
+                    <span>Пользователь с таким именем уже есть</span>
+                </p>
             </div>
-            <div>
+            <div class="form-field">
                 <label for="password">Пароль</label>
                 <input type="password" id="password" [(ngModel)]="password" />
             </div>
-            <div>
+            <div class="form-field">
                 <label for="password2">Подтверждение пароля</label>
                 <input type="password" id="password2" [(ngModel)]="password2" />
             </div>

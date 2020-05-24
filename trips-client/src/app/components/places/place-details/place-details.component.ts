@@ -183,6 +183,11 @@ export class PlaceDetailsComponent implements OnInit {
   }
 
   onEditClicked() {
+    // Set "edit" parameter in url
+    if (!this.route.snapshot.paramMap.get("edit")) {
+      this.router.navigate([`/place/${this.place.id}`, {edit: true}]);
+    }
+
     this.isEditMode = true;
     this.refreshGalleryVisible();
     this.refreshSelectTitlePicVisible();
@@ -278,9 +283,13 @@ export class PlaceDetailsComponent implements OnInit {
 
   onResetTitlePicClicked() {
     if (this.place.titlePicture) {
-      this.place.titlePicture = null;
-      this.refreshTitlePicSrc();
-      this.initiatePartialSilentUpdate();
+      this.messageService.showMessage("Сбросить картинку?", MessageButtons.yesNo, MessageIcon.question).subscribe(result => {
+        if (result == MessageResult.yes) {
+          this.place.titlePicture = null;
+          this.refreshTitlePicSrc();
+          this.initiatePartialSilentUpdate();
+        }
+      });
     }
   }
 

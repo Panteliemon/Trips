@@ -11,7 +11,7 @@
                 <input type="text" id="tbSearchString" [(ngModel)]="searchString" />
             </div>
             <app-expander class="form-field-margin" title="Расширенный поиск" [(isExpanded)]="isAdvancedSearchExpanded">
-                <div class="form-field">
+                <div class="form-field" style="margin-bottom:0;">
                     <p>Тип места</p>
                     <app-place-kind-multi-selector [(selectedValues)]="placeKindFilter"></app-place-kind-multi-selector>
                 </div>

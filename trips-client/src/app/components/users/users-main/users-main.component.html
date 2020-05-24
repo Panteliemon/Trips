@@ -1,13 +1,20 @@
 <section>
     <h1 class="allows-float-beside">Участники</h1>
-    <a routerLink="/users/create" class="button up-right-button">Добавить участника</a>
-    <table *ngIf="users" class="items-presenter">
+    <a routerLink="/users/create" class="button up-right-button">
+        <i class="material-icons">person_add</i>
+        <span>Добавить участника</span>
+    </a>
+    <table *ngIf="users" class="items-presenter form-field-margin-above">
         <tr *ngFor="let user of users">
-            <td>
-                <img [src]="userPicSrc(user.smallSizeProfilePicture)" class="profile-pic" />
+            <td class="user-picture-column">
+                <a class="cell-wrapper user-row" routerLink="/user/{{user.id}}">
+                    <img [src]="userPicSrc(user.smallSizeProfilePicture)" class="profile-pic" />
+                </a>
             </td>
-            <td>
-                <a routerLink="/user/{{user.id}}" class="item-ref">{{user.name}}</a>
+            <td class="name-column">
+                <a class="cell-wrapper user-row" routerLink="/user/{{user.id}}">
+                    <p>{{user.name}}</p>
+                </a>
             </td>
         </tr>
     </table>

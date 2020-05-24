@@ -66,112 +66,16 @@ p.preserve-linebreaks {
     white-space: pre-wrap;
 }
 
-/* --- items-presenter --- */
-table.items-presenter {
-    width:100%;
-    border-collapse: collapse;
-}
-table.items-presenter tr {
-    border-top: 2px solid #bc9;
-    border-bottom: 2px solid #bc9;
-}
-table.items-presenter tr:hover {
-    background-color:#ddd;
-}
-table.items-presenter a.cell-wrapper {
-    display:block;
-}
-
-table.items-presenter a.entity-row {
-    height:90px;
-}
-table.items-presenter a.entity-row > img {
-    width:100px;
-    height:80px;
-    margin:5px;
-    object-fit:cover;
-    border-radius:5px;
-}
-
-table.items-presenter td.entity-picture-column {
-    width:110px;
-}
-
-table.items-presenter td.name-column {
-    width:auto;
-}
-
-table.items-presenter td.name-column a.cell-wrapper {
-    color:black;
-    font-weight:bold;
-    text-decoration:none;
-    padding-left:5px;
-}
-table.items-presenter td.name-column a.cell-wrapper > p {
-    font-size:16pt;
-}
-table.items-presenter th.name-column {
-    text-align: start;
-    padding-left:5px;
-}
-
-table.items-presenter td.name-column a.entity-row > p {
-    position:relative;
-    top:30px;
-}
-
-table.items-presenter td.enum-column {
-    width:80px;
-    position:relative;
-}
-table.items-presenter td.enum-column a.entity-row > * {
-    margin-top:25px;
-}
-
-table.items-presenter td.date-column {
-    width:120px;
-}
-table.items-presenter td.date-column a.cell-wrapper {
-    color:black;
-    font-weight:normal;
-    text-decoration:none;
-    position:relative;
-}
-
-table.items-presenter td.date-column a.entity-row > p {
-    position:relative;
-    top:35px;
-}
-
-table.items-presenter th {
-    font-size:16pt;
-    font-weight:bold;
-    color:#484;
-}
-
-/* ---  --- */
-
-/* TODO revise! Maybe not needed anymore */
-a.item-ref:visited, a.item-ref:link {
-    color:#484;
-    font-size:16pt;
-    font-weight:bold;
-    text-decoration:underline;
-}
-a.item-ref:hover {
-    color:#8a7;
-}
-
 a.inline-ref:visited, a.inline-ref:link {
     color:#484;
     font-weight:bold;
     text-decoration:underline;
 }
-
 a.inline-ref:hover {
     color:#8a7;
 }
 
+/* todo remove */
 img.profile-pic {
     width:64px;
     height:64px;
@@ -358,6 +262,110 @@ textarea.description-field {
     resize: vertical;
 }
 
+/* --- items-presenter --- */
+
+table.items-presenter {
+    width:100%;
+    border-collapse: collapse;
+}
+table.items-presenter tr {
+    border-top: 2px solid #bc9;
+    border-bottom: 2px solid #bc9;
+}
+table.items-presenter tr:hover {
+    background-color:#ddd;
+}
+table.items-presenter a.cell-wrapper {
+    display:block;
+}
+
+table.items-presenter a.entity-row {
+    height:90px;
+}
+table.items-presenter a.entity-row > img {
+    width:100px;
+    height:80px;
+    margin:5px;
+    object-fit:cover;
+    border-radius:5px;
+}
+
+table.items-presenter a.user-row {
+    height:74px;
+}
+table.items-presenter a.user-row > img {
+    width:64px;
+    height:64px;
+    border-radius:5px;
+    margin:5px;
+}
+
+table.items-presenter td.entity-picture-column {
+    width:110px;
+}
+
+table.items-presenter td.user-picture-column {
+    width:74px;
+}
+
+table.items-presenter td.name-column {
+    width:auto;
+}
+
+table.items-presenter td.name-column a.cell-wrapper {
+    color:black;
+    font-weight:bold;
+    text-decoration:none;
+    padding-left:5px;
+}
+table.items-presenter td.name-column a.cell-wrapper > p {
+    font-size:16pt;
+}
+table.items-presenter th.name-column {
+    text-align: start;
+    padding-left:5px;
+}
+
+table.items-presenter td.name-column a.entity-row > p {
+    position:relative;
+    top:30px;
+}
+
+table.items-presenter td.name-column a.user-row > p {
+    position:relative;
+    top:23px;
+}
+
+table.items-presenter td.enum-column {
+    width:80px;
+    position:relative;
+}
+table.items-presenter td.enum-column a.entity-row > * {
+    margin-top:25px;
+}
+
+table.items-presenter td.date-column {
+    width:120px;
+}
+table.items-presenter td.date-column a.cell-wrapper {
+    color:black;
+    font-weight:normal;
+    text-decoration:none;
+    position:relative;
+}
+
+table.items-presenter td.date-column a.entity-row > p {
+    position:relative;
+    top:35px;
+}
+
+table.items-presenter th {
+    font-size:16pt;
+    font-weight:bold;
+    color:#484;
+    padding-bottom:10px;
+}
+
 /*--- form-field ---*/
 
 div.form-field {
@@ -420,11 +428,6 @@ div.modal-popup-background {
     height: 100%;
     width: 100%;
     background-color: rgba(0, 0, 0, 0.25);
-}
-
-/* TODO seems it's obsolete. Justify/remove */
-.parameter-group {
-    margin:5px;
 }
 
 /*----- Editors -----*/
@@ -620,30 +623,24 @@ nav>a {
     background-color:#484;
     color:white;
     text-decoration: none;
+    /*font-weight:bold;
+    font-size: 16pt;*/
+    text-transform: uppercase;
     float:left;
-    padding:10px 10px 13px 10px;
+    padding:8px 8px 10px 8px;
     border-radius:5px 5px 0 0;
     margin-right:5px;
     margin-top:5px;
-}
-
-nav > a:visited, nav > a:link {
-    background-color:#484;
 }
 
 nav > a:hover {
     background-color:#cda;
     color: black;
 }
-
 nav > a.active {
     background-color:white;
     color: black;
-}
-
-nav > a > div.tall {
-    font-size:12pt;
-    transform: ScaleY(2);
+    outline:none;
 }
 
 div.content-presenter {

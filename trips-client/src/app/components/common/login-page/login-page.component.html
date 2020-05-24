@@ -1,18 +1,22 @@
 <div class="uniter">
     <div>
         <div class="centered">
-            <p>
-                Для просмотра страницы <em>{{returnUrl}}</em> надо бы войти на сайт.
+            <img id="imgNothingToSeeHere" src="/assets/nothingToSeeHere.jpg" class="centered" />
+            <p class="advice form-field-margin">
+                <i class="material-icons">info</i>
+                <span>Для просмотра страницы <em>{{returnUrl}}</em> надо бы войти на сайт.</span>
             </p>
-            <div>
+            <div class="form-field">
                 <label for="tbUserName">Имя</label>
                 <input type="text" id="tbUserName" [(ngModel)]="userName" (keyup)="onTextFieldsKeyUp($event)"/>
             </div>
-            <div>
+            <div class="form-field">
                 <label for="tbPassword">Пароль</label>
                 <input type="password" id="tbPassword" [(ngModel)]="password" (keyup)="onTextFieldsKeyUp($event)" />
             </div>
-            <button class="button button-std" (click)="onEnterButtonClicked()">Войти</button>
+            <div>
+                <button class="button button-std centered" (click)="onEnterButtonClicked()">Войти</button>
+            </div>
         </div>
     </div>
     <div class="fog" *ngIf="isLoaderVisible"></div>
