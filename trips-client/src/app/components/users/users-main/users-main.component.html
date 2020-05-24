@@ -5,14 +5,14 @@
         <span>Добавить участника</span>
     </a>
     <table *ngIf="users" class="items-presenter form-field-margin-above">
-        <tr *ngFor="let user of users">
+        <tr *ngFor="let user of users" class="user-row">
             <td class="user-picture-column">
-                <a class="cell-wrapper user-row" routerLink="/user/{{user.id}}">
-                    <img [src]="userPicSrc(user.smallSizeProfilePicture)" class="profile-pic" />
+                <a class="cell-wrapper" routerLink="/user/{{user.id}}">
+                    <img [src]="userPicSrc(user.smallSizeProfilePicture)" />
                 </a>
             </td>
             <td class="name-column">
-                <a class="cell-wrapper user-row" routerLink="/user/{{user.id}}">
+                <a class="cell-wrapper" routerLink="/user/{{user.id}}">
                     <p>{{user.name}}</p>
                 </a>
             </td>

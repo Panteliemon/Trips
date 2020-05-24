@@ -31,41 +31,41 @@
                 <th>К.ст.</th>-->
                 <th>Дата О.</th>
             </thead>
-            <tr *ngFor="let place of places">
+            <tr *ngFor="let place of places" class="entity-row">
                 <td class="entity-picture-column">
-                    <a class="cell-wrapper entity-row" routerLink="/place/{{place.id}}">
+                    <a class="cell-wrapper" routerLink="/place/{{place.id}}">
                         <img [src]="getPlacePicSrc(place)" />
                     </a>
                 </td>
                 <td class="name-column">
-                    <a class="cell-wrapper entity-row" routerLink="/place/{{place.id}}">
+                    <a class="cell-wrapper" routerLink="/place/{{place.id}}">
                         <p>{{getPlaceName(place.name)}}</p>
                     </a>
                 </td>
                 <td class="enum-column">
-                    <a class="cell-wrapper entity-row" routerLink="/place/{{place.id}}">
+                    <a class="cell-wrapper" routerLink="/place/{{place.id}}">
                         <app-place-kind-selector class="centered" [value]="place.kind" [isEditable]="false" [isShortView]="true"></app-place-kind-selector>
                     </a>
                 </td>
                 <!--
                 <td class="enum-column">
-                    <a class="cell-wrapper entity-row" routerLink="/place/{{place.id}}">
+                    <a class="cell-wrapper" routerLink="/place/{{place.id}}">
                         <app-place-accessibility-selector class="centered" [value]="place.accessibility" [isEditable]="false" [isShortView]="true"></app-place-accessibility-selector>
                     </a>
                 </td>
                 <td class="enum-column">
-                    <a class="cell-wrapper entity-row" routerLink="/place/{{place.id}}">
+                    <a class="cell-wrapper" routerLink="/place/{{place.id}}">
                         <app-place-popularity-selector class="centered" [value]="place.popularity" [isEditable]="false" [isShortView]="true"></app-place-popularity-selector>
                     </a>
                 </td>
                 <td class="enum-column">
-                    <a class="cell-wrapper entity-row" routerLink="/place/{{place.id}}">
+                    <a class="cell-wrapper" routerLink="/place/{{place.id}}">
                         <app-place-capacity-selector class="centered" [value]="place.capacity" [isEditable]="false" [isShortView]="true"></app-place-capacity-selector>
                     </a>
                 </td>
                 -->
                 <td class="date-column">
-                    <a class="cell-wrapper entity-row" routerLink="/place/{{place.id}}">
+                    <a class="cell-wrapper" routerLink="/place/{{place.id}}">
                         <p *ngIf="place.discoveryDate" class="centered">{{place.discoveryDate | adaptiveDate}}</p>
                     </a>
                 </td>
