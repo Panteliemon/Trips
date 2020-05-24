@@ -7,7 +7,7 @@ import { MessageService, MessageIcon, MessageButtons, MessageResult } from 'src/
 @Component({
   selector: 'app-gallery',
   templateUrl: './gallery.component.html',
-  styleUrls: ['./gallery.component.css']
+  styleUrls: ['./gallery.component.less']
 })
 export class GalleryComponent implements OnInit, OnChanges {
   @Input()

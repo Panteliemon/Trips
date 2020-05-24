@@ -40,7 +40,7 @@ class InnerChoiceViewModel {
 @Component({
   selector: 'app-selector-engine',
   templateUrl: './selector-engine.component.html',
-  styleUrls: ['./selector-engine.component.css']
+  styleUrls: ['./selector-engine.component.less']
 })
 export class SelectorEngineComponent implements OnInit, OnChanges {
   @Input()

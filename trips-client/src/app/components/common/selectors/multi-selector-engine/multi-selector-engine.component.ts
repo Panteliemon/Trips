@@ -20,7 +20,7 @@ class InnerChoiceViewModel {
 @Component({
   selector: 'app-multi-selector-engine',
   templateUrl: './multi-selector-engine.component.html',
-  styleUrls: ['./multi-selector-engine.component.css']
+  styleUrls: ['./multi-selector-engine.component.less']
 })
 export class MultiSelectorEngineComponent implements OnInit, OnChanges {
   @Input()
