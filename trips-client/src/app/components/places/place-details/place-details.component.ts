@@ -26,7 +26,10 @@ export class PlaceDetailsComponent implements OnInit {
   mapRef: string;
 
   isEditButtonVisible: boolean;
+  isAccessibilityVisible: boolean;
   isNearestAccessibilityVisible: boolean;
+  isPopularityVisible: boolean;
+  isCapacityVisible: boolean;
   isGalleryVisible: boolean;
   isSelectTitlePicButtonVisible: boolean;
   isSelectTitlePicLabelVisible: boolean;
@@ -51,6 +54,7 @@ export class PlaceDetailsComponent implements OnInit {
   }
   set placeKind(value: PlaceKind) {
     this.place.kind = value;
+    this.refreshSelectorsVisible();
     this.initiatePartialSilentUpdate();
   }
 
@@ -62,7 +66,7 @@ export class PlaceDetailsComponent implements OnInit {
     if (this.place.nearestAccessibility > this.place.accessibility) {
       this.place.nearestAccessibility = this.place.accessibility;
     }
-    this.refreshNearestAccessibilityVisible();
+    this.refreshSelectorsVisible();
     this.initiatePartialSilentUpdate();
   }
 
@@ -159,7 +163,7 @@ export class PlaceDetailsComponent implements OnInit {
         this.isNotFound = true;
       }
       this.refreshTitlePicSrc();
-      this.refreshNearestAccessibilityVisible();
+      this.refreshSelectorsVisible();
       this.refreshGalleryVisible();
       this.updateMapRef();
       this.isOverallLoaderVisible = false;
@@ -366,8 +370,11 @@ export class PlaceDetailsComponent implements OnInit {
     }
   }
 
-  private refreshNearestAccessibilityVisible() {
-    this.isNearestAccessibilityVisible = (this.place) && (this.place.accessibility) && (this.place.accessibility >= PlaceAccessibility.TRACTORONLY);
+  private refreshSelectorsVisible() {
+    this.isAccessibilityVisible = this.place && this.placesService.isAccessibilityApplicable(this.place.kind);
+    this.isNearestAccessibilityVisible = this.isAccessibilityVisible && (this.place.accessibility) && (this.place.accessibility >= PlaceAccessibility.TRACTORONLY);
+    this.isPopularityVisible = this.place && this.placesService.isPopularityApplicable(this.place.kind);
+    this.isCapacityVisible = this.place && this.placesService.isCapacityApplicable(this.place.kind);
   }
 
   private refreshGalleryVisible() {

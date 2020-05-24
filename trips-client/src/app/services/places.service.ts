@@ -188,4 +188,16 @@ export class PlacesService {
 
     return result;
   }
+
+  isAccessibilityApplicable(placeKind: PlaceKind): boolean {
+    return placeKind != PlaceKind.TOWN;
+  }
+
+  isPopularityApplicable(placeKind: PlaceKind): boolean {
+    return placeKind != PlaceKind.TOWN;
+  }
+
+  isCapacityApplicable(placeKind: PlaceKind): boolean {
+    return (placeKind == null) || (placeKind == PlaceKind.LAKE) || (placeKind == PlaceKind.DAM) || (placeKind == PlaceKind.RIVER);
+  }
 }

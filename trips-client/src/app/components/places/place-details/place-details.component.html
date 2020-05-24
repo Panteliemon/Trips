@@ -79,7 +79,7 @@
                     <p *ngIf="!mapRef">{{place.location}}</p>
                 </div>
 
-                <div class="form-field">
+                <div *ngIf="isAccessibilityVisible" class="form-field">
                     <p>Доступность:</p>
                     <app-place-accessibility-selector [(value)]="placeAccessibility" [isEditable]="isEditMode"></app-place-accessibility-selector>
                 </div>
@@ -91,11 +91,11 @@
                         <span>"Ближайшая точка" по идее должна быть более доступна, чем само место</span>
                     </p>
                 </div>
-                <div class="form-field">
+                <div *ngIf="isPopularityVisible" class="form-field">
                     <p>Популярность:</p>
                     <app-place-popularity-selector [(value)]="placePopularity" [isEditable]="isEditMode"></app-place-popularity-selector>
                 </div>
-                <div class="form-field">
+                <div *ngIf="isCapacityVisible" class="form-field">
                     <p>Количество стоянок:</p>
                     <app-place-capacity-selector [(value)]="placeCapacity" [isEditable]="isEditMode"></app-place-capacity-selector>
                 </div>

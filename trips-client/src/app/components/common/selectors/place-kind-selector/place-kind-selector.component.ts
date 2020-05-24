@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
 import { PlaceKind } from 'src/app/models/place';
-import { ChoiceViewModel, SEL_GRAY, SEL_NOT_SELECTED, SEL_WHITE, SEL_BLUE, SEL_BLACK, SEL_ORANGE } from '../selector-engine/selector-engine.component';
+import { ChoiceViewModel, SEL_GRAY, SEL_NOT_SELECTED, SEL_WHITE, SEL_BLUE, SEL_BLACK, SEL_ORANGE, SEL_YELLOW, SEL_DARKGREEN } from '../selector-engine/selector-engine.component';
 
 let placeSelectorViewModels: ChoiceViewModel[] = [
   {
@@ -73,6 +73,30 @@ let placeSelectorViewModels: ChoiceViewModel[] = [
     colorWhenSelected: SEL_WHITE,
     colorWhenNotSelected: SEL_WHITE,
     backgroundColorWhenSelected: SEL_ORANGE,
+    backgroundColorWhenNotSelected: SEL_NOT_SELECTED
+  },
+  {
+    associatedValue: PlaceKind.TOURISTATTRACTION,
+    bigText: "Д",
+    smallText: "Достопримечательность",
+    showBigText: true,
+    showSmallText: true,
+    description: "",
+    colorWhenSelected: SEL_WHITE,
+    colorWhenNotSelected: SEL_WHITE,
+    backgroundColorWhenSelected: SEL_YELLOW,
+    backgroundColorWhenNotSelected: SEL_NOT_SELECTED
+  },
+  {
+    associatedValue: PlaceKind.ABANDONED,
+    bigText: "З",
+    smallText: "Заброшенное",
+    showBigText: true,
+    showSmallText: true,
+    description: "",
+    colorWhenSelected: SEL_WHITE,
+    colorWhenNotSelected: SEL_WHITE,
+    backgroundColorWhenSelected: SEL_DARKGREEN,
     backgroundColorWhenNotSelected: SEL_NOT_SELECTED
   }
 ];

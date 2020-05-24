@@ -11,6 +11,8 @@ namespace Trips.Entities
         Dam = 2,
         River = 3,
         Town = 4,
-        Ruins = 5
+        Ruins = 5,
+        TouristAttraction = 6,
+        Abandoned = 7
     }
 }

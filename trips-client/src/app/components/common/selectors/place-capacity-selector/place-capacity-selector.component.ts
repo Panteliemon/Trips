@@ -16,6 +16,18 @@ let placeCapacityViewModels: ChoiceViewModel[] = [
     backgroundColorWhenNotSelected: SEL_NOT_SELECTED
   },
   {
+    associatedValue: PlaceCapacity.ZERO,
+    bigText: "0",
+    smallText: "",
+    showBigText: true,
+    showSmallText: false,
+    description: "Нет",
+    colorWhenSelected: SEL_WHITE,
+    colorWhenNotSelected: SEL_WHITE,
+    backgroundColorWhenSelected: SEL_RED,
+    backgroundColorWhenNotSelected: SEL_NOT_SELECTED
+  },
+  {
     associatedValue: PlaceCapacity.SINGLE,
     bigText: "1",
     smallText: "",

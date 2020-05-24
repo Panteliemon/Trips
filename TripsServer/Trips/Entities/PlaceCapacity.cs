@@ -7,6 +7,7 @@ namespace Trips.Entities
 {
     public enum PlaceCapacity
     {
+        Zero = 0,
         Single = 1,
         Several = 2,
         Numerous = 3

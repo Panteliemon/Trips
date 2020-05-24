@@ -7,7 +7,9 @@ export enum PlaceKind {
     DAM = 2,
     RIVER = 3,
     TOWN = 4,
-    RUINS = 5
+    RUINS = 5,
+    TOURISTATTRACTION = 6,
+    ABANDONED = 7
 }
 
 export enum PlaceAccessibility {
@@ -26,6 +28,7 @@ export enum PlacePopularity {
 }
 
 export enum PlaceCapacity {
+    ZERO = 0,
     SINGLE = 1,
     SEVERAL = 2,
     NUMEROUS = 3

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { ChoiceViewModel } from '../multi-selector-engine/multi-selector-engine.component';
-import { SEL_WHITE, SEL_GRAY, SEL_NOT_SELECTED, SEL_BLUE, SEL_BLACK, SEL_ORANGE } from '../selector-engine/selector-engine.component';
+import { SEL_WHITE, SEL_GRAY, SEL_NOT_SELECTED, SEL_BLUE, SEL_BLACK, SEL_ORANGE, SEL_YELLOW, SEL_DARKGREEN } from '../selector-engine/selector-engine.component';
 import { PlaceKind } from 'src/app/models/place';
 
 let placeMultiSelectorViewModels: ChoiceViewModel[] = [
@@ -62,6 +62,26 @@ let placeMultiSelectorViewModels: ChoiceViewModel[] = [
     colorWhenSelected: SEL_WHITE,
     colorWhenNotSelected: SEL_WHITE,
     backgroundColorWhenSelected: SEL_ORANGE,
+    backgroundColorWhenNotSelected: SEL_NOT_SELECTED
+  },
+  {
+    associatedValue: PlaceKind.TOURISTATTRACTION,
+    bigText: "Д",
+    smallText: "Достопримечательность",
+    tooltip: "",
+    colorWhenSelected: SEL_WHITE,
+    colorWhenNotSelected: SEL_WHITE,
+    backgroundColorWhenSelected: SEL_YELLOW,
+    backgroundColorWhenNotSelected: SEL_NOT_SELECTED
+  },
+  {
+    associatedValue: PlaceKind.ABANDONED,
+    bigText: "З",
+    smallText: "Заброшенное",
+    tooltip: "",
+    colorWhenSelected: SEL_WHITE,
+    colorWhenNotSelected: SEL_WHITE,
+    backgroundColorWhenSelected: SEL_DARKGREEN,
     backgroundColorWhenNotSelected: SEL_NOT_SELECTED
   }
 ];
