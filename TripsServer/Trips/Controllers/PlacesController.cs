@@ -27,13 +27,31 @@ namespace Trips.Controllers
 
         [HttpGet]
         [Route("places")]
-        public async Task<IList<PlaceHeaderDto>> GetPlacesList(string order, int? take, int? skip, string search)
+        public async Task<IList<PlaceHeaderDto>> GetPlacesList(string order, int? take, int? skip, string search, string kind)
         {
             var query = DbContext.Places.AsQueryable();
 
             if (!string.IsNullOrEmpty(search))
             {
                 query = query.Where(p => p.Name.ToLower().Contains(search.ToLower()));
+            }
+
+            if (!string.IsNullOrEmpty(kind))
+            {
+                string[] filterParts = kind.ToLower().Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(s => s.Trim()).ToArray();
+                var enumMembers = ((PlaceKind[])Enum.GetValues(typeof(PlaceKind)))
+                    .Select(pk => new { Value = pk, Str = pk.ToString().ToLower() });
+                
+                List<PlaceKind?> placeKindsForFilter = enumMembers
+                    .Where(em => filterParts.Contains(em.Str))
+                    .Select(em => (PlaceKind?)em.Value).ToList();
+                if (filterParts.Contains("null"))
+                {
+                    placeKindsForFilter.Add(null);
+                }
+
+                query = query.Where(p => placeKindsForFilter.Contains(p.Kind));
             }
 
             if (order?.ToLower() == "date")
