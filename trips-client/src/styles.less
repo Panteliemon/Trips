@@ -100,13 +100,16 @@ img.small-profile-pic {
 .button:disabled {
     color:@theme-color-light;
 }
-.button:hover:enabled {
+.button:hover:enabled, a.button:hover {
     background-color:@color-dark-hover;
     color:@color-text-on-dark-hover;
 }
 .button:active:enabled {
     background-color:@color-dark-pressed;
     color:@color-text-on-dark-pressed;
+}
+.button:focus {
+    outline:none;
 }
 
 .button > i {
@@ -134,7 +137,7 @@ img.small-profile-pic {
 .button-danger:disabled {
     color:@color-danger-hover;
 }
-.button-danger:hover:enabled {
+.button-danger:hover:enabled, a.button-danger:hover {
     background-color:@color-danger-hover;
     color:@color-text-on-danger-hover;
 }
@@ -625,6 +628,9 @@ nav > a:hover {
 nav > a.active {
     background-color:@color-page;
     color: black;
+    outline:none;
+}
+nav > a:focus {
     outline:none;
 }
 
