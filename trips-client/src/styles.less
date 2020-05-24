@@ -1,5 +1,7 @@
 /* You can add global styles to this file, and also import other style files */ /* I know I can */
 
+@import "colors.less";
+
 /*==========================================================================================================*/
 /*                                        1. PREDEFINED APPEARANCE                                          */
 /*==========================================================================================================*/
@@ -10,7 +12,8 @@
 }
 
 body {
-    background-color: #bc9;
+    background-color: @theme-color-light;
+    color: @color-text-on-page;
     padding:0 10px;
 }
 
@@ -37,7 +40,7 @@ p {
 }
 
 input[type="text"], input[type="password"], input[type="date"], textarea {
-    border: 2px solid #bc9;
+    border: 2px solid @theme-color-light;
 }
 
 input[type="text"], input[type="password"], textarea {
@@ -45,17 +48,17 @@ input[type="text"], input[type="password"], textarea {
 }
 
 input:invalid {
-    background-color:#faa;
-    border:2px solid red;
+    background-color:@color-danger-hover;
+    border:2px solid @color-danger;
 }
 
 fieldset {
-    border: 2px solid #bc9;
+    border: 2px solid @theme-color-light;
     margin:0;
 }
 
 fieldset > legend {
-    color: #484;
+    color: @theme-color-dark;
 }
 
 app-checkbox {
@@ -71,12 +74,12 @@ p.preserve-linebreaks {
 }
 
 a.inline-ref:visited, a.inline-ref:link {
-    color:#484;
+    color:@theme-color-dark;
     font-weight:bold;
     text-decoration:underline;
 }
 a.inline-ref:hover {
-    color:#8a7;
+    color:@color-dark-text-hover;
 }
 
 img.small-profile-pic {
@@ -87,28 +90,23 @@ img.small-profile-pic {
 
 .button {
     display:inline-block;
-    background-color:#484;
-    color:white;
+    background-color:@theme-color-dark;
+    color:@color-text-on-dark;
     border:none;
     padding:5px;
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 12pt;
     text-decoration: none;
     cursor:pointer;
 }
-
 .button:disabled {
-    color:#bc9;
+    color:@theme-color-light;
 }
-
 .button:hover:enabled {
-    background-color:#cda;
-    color: black;
+    background-color:@color-dark-hover;
+    color:@color-text-on-dark-hover;
 }
-
 .button:active:enabled {
-    background-color:white;
-    color: black;
+    background-color:@color-dark-pressed;
+    color:@color-text-on-dark-pressed;
 }
 
 .button > i {
@@ -130,27 +128,27 @@ img.small-profile-pic {
 }
 
 .button-danger {
-    background-color:red;
-    color:white;
+    background-color:@color-danger;
+    color:@color-text-on-danger;
 }
 .button-danger:disabled {
-    color:#f99;
+    color:@color-danger-hover;
 }
 .button-danger:hover:enabled {
-    background-color:#f99;
-    color:black;
+    background-color:@color-danger-hover;
+    color:@color-text-on-danger-hover;
 }
 .button-danger:active:enabled {
-    background-color:white;
-    color:black;
+    background-color:@color-danger-pressed;
+    color:@color-text-on-danger-pressed;
 }
 
 .error {
-    color:red;
+    color:@color-danger;
 }
 
 .advice {
-    color:#848;
+    color:@theme-color-complementary;
 }
 
 .advice > i, .error > i {
@@ -166,7 +164,7 @@ img.small-profile-pic {
 .big-gray-text {
     font-size: 24pt;
     font-weight: bold;
-    color:#bbb;
+    color:@color-background-text;
 }
 
 .hidden {
@@ -256,16 +254,16 @@ table.items-presenter {
     border-collapse: collapse;
 }
 table.items-presenter tr {
-    border-top: 2px solid #bc9;
-    border-bottom: 2px solid #bc9;
+    border-top: 2px solid @theme-color-light;
+    border-bottom: 2px solid @theme-color-light;
 }
 table.items-presenter tr:hover {
-    background-color:#ddd;
+    background-color:@color-page-hover;
 }
 table.items-presenter th {
     font-size:16pt;
     font-weight:bold;
-    color:#484;
+    color:@theme-color-dark;
     padding-bottom:10px;
 }
 
@@ -307,7 +305,7 @@ table.items-presenter td.name-column {
     width:auto;
 }
 table.items-presenter td.name-column a.cell-wrapper {
-    color:black;
+    color:@color-text-on-page;
     font-weight:bold;
     text-decoration:none;
     padding-left:5px;
@@ -341,7 +339,7 @@ table.items-presenter td.date-column {
     width:120px;
 }
 table.items-presenter td.date-column a.cell-wrapper {
-    color:black;
+    color:@color-text-on-page;
     font-weight:normal;
     text-decoration:none;
     position:relative;
@@ -359,7 +357,7 @@ div.form-field {
 }
 
 div.form-field > label, div.form-field > p:first-child {
-    color:#484;
+    color:@theme-color-dark;
     display:block;
     margin-bottom:2px;
 }
@@ -456,7 +454,7 @@ img.title-picture {
         max-width:500px;
         min-width:200px;
         padding-right:10px;
-        border-right: 2px solid #bc9;
+        border-right: 2px solid @theme-color-light;
     }
 
     div.editor-picture-panel-narrow {
@@ -464,7 +462,7 @@ img.title-picture {
         max-width:300px;
         min-width:200px;
         padding-right:10px;
-        border-right: 2px solid #bc9;
+        border-right: 2px solid @theme-color-light;
     }
     
     div.editor-main-panel {
@@ -514,7 +512,7 @@ img.profile-editor-pic {
 div.picker-popup {
     display:flex;
     flex-direction:column;
-    background-color:white;
+    background-color:@color-page;
     position:relative;
     top: 50%;
     left: 50%;
@@ -537,7 +535,7 @@ div.picker-popup {
 .gal-miniatures {
     overflow-x: auto;
     white-space: nowrap;
-    border-bottom: 2px solid #bc9;
+    border-bottom: 2px solid @theme-color-light;
     min-height:200px;
     position:relative;
 }
@@ -548,8 +546,8 @@ div.picker-popup {
     width:188px;
     margin:5px 0 0 5px;
     position:relative;
-    border:2px solid #bc9;
-    background-color:white;
+    border:2px solid @theme-color-light;
+    background-color:@color-page;
     cursor:pointer;
 }
 
@@ -558,7 +556,7 @@ div.picker-popup {
 }
 
 .gal-miniature-holder:hover {
-    border-color:#484;
+    border-color:@theme-color-dark;
 }
 
 .gal-miniature-img {
@@ -567,8 +565,8 @@ div.picker-popup {
 }
 
 .gal-selected {
-    border-color:#484;
-    background-color: #bc9;
+    border-color:@theme-color-dark;
+    background-color: @theme-color-light;
 }
 
 /*----------------------------------- Selectors (shared) -------------------------------------*/
@@ -591,9 +589,9 @@ span.selector-small-text {
     position:absolute;
     top:35px;
     left:-5px;
-    border: 1px solid #bc9;
-    color:#484;
-    background-color:white;
+    border: 1px solid @theme-color-light;
+    color:@theme-color-dark;
+    background-color:@color-tooltip-background;
     white-space: nowrap;
     padding:5px;
     display:none; /* specify when tooltip is shown in specific component's css */
@@ -607,8 +605,8 @@ nav {
 
 nav>a {
     display:block;
-    background-color:#484;
-    color:white;
+    background-color:@theme-color-dark;
+    color:@color-text-on-dark;
     text-decoration: none;
     /*font-weight:bold;
     font-size: 16pt;*/
@@ -621,18 +619,18 @@ nav>a {
 }
 
 nav > a:hover {
-    background-color:#cda;
+    background-color:@color-dark-hover;
     color: black;
 }
 nav > a.active {
-    background-color:white;
+    background-color:@color-page;
     color: black;
     outline:none;
 }
 
 div.content-presenter {
     clear:both;
-    background-color:white;
+    background-color:@color-page;
     margin:5px 0 5px 0;
     padding:10px;
 }
@@ -640,7 +638,7 @@ div.content-presenter {
 div.login-stuff {
     float:right;
     margin:10px;
-    background-color:#bc9;
+    background-color:@theme-color-light;
     padding:10px;
 }
 
@@ -650,7 +648,7 @@ div.login-form {
     top:20px;
     min-width:300px;
     padding: 20px;
-    background: white;
+    background: @color-page;
 }
 
 header {
@@ -668,7 +666,7 @@ img.site-title {
 }
 
 p.site-annotation {
-    color:white;
+    color:@color-text-on-dark;
     margin-left:120px;
     margin-top:-10px;
 }

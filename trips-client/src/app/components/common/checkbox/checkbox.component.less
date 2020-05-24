@@ -1,3 +1,5 @@
+@import "../../../../colors.less";
+
 div.checkbox-wrapper {
     display:flex;
     align-items:center;
@@ -12,7 +14,7 @@ div.checkbox-wrapper {
     height:1.2em;
     border-style:solid;
     border-width:2px;
-    border-color:#bc9;
+    border-color:@theme-color-light;
     margin-right:0.3em;
     flex-grow:0;
     flex-shrink:0;
@@ -28,22 +30,22 @@ div.checkbox-wrapper {
     top:0.15em;
     border-left-style:solid;
     border-left-width:3px;
-    border-left-color:black;
+    border-left-color:@color-text-on-page;
     border-bottom-style:solid;
     border-bottom-width:3px;
-    border-bottom-color:black;
+    border-bottom-color:@color-text-on-page;
     transform:rotate(-45deg);
 }
 
 div.color-disabled {
-    color:#aaa;
+    color:@color-disabled-on-page;
 }
 
 span.color-disabled {
-    border-color:#aaa;
+    border-color:@color-disabled-on-page;
 }
 
 .checkbox-content {
     flex-grow:1;
-    color:#484;
+    color:@theme-color-dark;
 }

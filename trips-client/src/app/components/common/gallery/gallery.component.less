@@ -1,9 +1,11 @@
+@import "../../../../colors.less";
+
 #galBorder {
-    border: 3px solid #bc9;
+    border: 3px solid @theme-color-light;
 }
 
 #galButtons {
-    border-bottom: 2px solid #bc9;
+    border-bottom: 2px solid @theme-color-light;
 }
 
 .gal-button-left {
@@ -22,7 +24,7 @@
 
 .navigation-button {
     display: block;
-    background-color: white;
+    background-color:@color-page;
     border:none;
     cursor:pointer;
     position:absolute;
@@ -31,7 +33,7 @@
 }
 
 .navigation-button:hover {
-    background-color: #ddd;
+    background-color:@color-page-hover;
 }
 
 #navLeft {
