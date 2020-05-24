@@ -107,7 +107,8 @@
                            (keyup.enter)="setPlaceDiscoveryDate(discoveryDate.value)" />
                 </div>
                 <div *ngIf="(!isEditMode) && placeDiscoveryDate" class="form-field">
-                    <p>Дата открытия: {{placeDiscoveryDate | adaptiveDate}}</p>
+                    <p>Дата открытия:</p>
+                    <p>{{placeDiscoveryDate | adaptiveDate}}</p>
                 </div>
             </div>
         </div>

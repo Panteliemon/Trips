@@ -1,0 +1,11 @@
+<div class="form-field-margin">
+    <button class="button button-wide" (click)="expandButtonClicked()">
+        <span>{{title}}</span>
+        <i *ngIf="!isExpanded" class="material-icons">keyboard_arrow_down</i>
+        <i *ngIf="isExpanded" class="material-icons">keyboard_arrow_up</i>
+    </button>
+    <fieldset *ngIf="isExpanded" class="button-margin-above">
+        <legend>{{title}}</legend>
+        <ng-content></ng-content>
+    </fieldset>
+</div>

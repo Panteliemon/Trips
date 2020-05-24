@@ -128,6 +128,21 @@ table.items-presenter td.enum-column a.entity-row > * {
     margin-top:25px;
 }
 
+table.items-presenter td.date-column {
+    width:120px;
+}
+table.items-presenter td.date-column a.cell-wrapper {
+    color:black;
+    font-weight:normal;
+    text-decoration:none;
+    position:relative;
+}
+
+table.items-presenter td.date-column a.entity-row > p {
+    position:relative;
+    top:35px;
+}
+
 table.items-presenter th {
     font-size:16pt;
     font-weight:bold;
@@ -564,6 +579,34 @@ div.picker-popup {
 .gal-selected {
     border-color:#484;
     background-color: #bc9;
+}
+
+/*----- Selectors (shared) -----*/
+
+span.selector-big-text {
+    display:block;
+    float:left;
+    font-size:20pt;
+}
+
+span.selector-small-text {
+    display:block;
+    float:left;
+    position:relative;
+    top:8px;
+    font-size:12pt;
+}
+
+.selector-tooltip {
+    position:absolute;
+    top:35px;
+    left:-5px;
+    border: 1px solid #bc9;
+    color:#484;
+    background-color:white;
+    white-space: nowrap;
+    padding:5px;
+    display:none; /* specify when tooltip is shown in specific component's css */
 }
 
 /*----- Main page -----*/

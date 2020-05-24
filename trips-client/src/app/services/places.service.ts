@@ -4,7 +4,7 @@ import { PlaceHeader } from '../models/place-header';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { API_BASE_PATH } from './api';
-import { Place } from '../models/place';
+import { Place, PlaceKind } from '../models/place';
 import { Picture } from '../models/picture';
 import { VisitForPlace } from '../models/visit-for-place';
 import { MessageIcon } from './message.service';
@@ -18,7 +18,8 @@ export class PlacesService {
 
   // order = "date" to order by date; default order is alphabetical
   // search - substring to search for in place's name. No case sensitive.
-  getPlacesList(order: string|null, take: number|null, skip: number|null, search: string|null): Observable<PlaceHeader[]> {
+  getPlacesList(order: string|null, take: number|null, skip: number|null,
+                search: string|null, kind: PlaceKind[] = null): Observable<PlaceHeader[]> {
     let params = new HttpParams();
     if (order) {
       params = params.set('order', order);
@@ -31,6 +32,9 @@ export class PlacesService {
     }
     if (search) {
       params = params.set('search', search);
+    }
+    if (kind && (kind.length > 0)) {
+      params = params.set('kind', this.getKindFilterStr(kind));
     }
 
     return this.http.get<PlaceHeader[]>(`${API_BASE_PATH}/places`, { params: params });
@@ -154,5 +158,34 @@ export class PlacesService {
     } else {
       return "/assets/no-pic-place.png";
     }
+  }
+
+  getKindFilterStr(placeKinds: PlaceKind[]): string {
+    return placeKinds.map(value => {
+      if (value === null) {
+        return "null";
+      } else {
+        return PlaceKind[value].toLowerCase();
+      }
+    }).join("|");
+  }
+
+  parseKindFilterStr(str: string): PlaceKind[] {
+    let params = str.toLowerCase().split('|').map(s => s.trim());
+
+    let result: PlaceKind[] = [];
+    for (let value in PlaceKind) {
+      let numericValue = Number(value);
+      if (!isNaN(numericValue)
+          && params.find(p => p == PlaceKind[value].toLowerCase())) {
+        result.push(numericValue);
+      }
+    }
+
+    if (params.find(p => p == "null")) {
+      result.unshift(null);
+    }
+
+    return result;
   }
 }

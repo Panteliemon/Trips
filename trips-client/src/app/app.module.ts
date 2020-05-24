@@ -31,6 +31,9 @@ import { PlaceCapacitySelectorComponent } from './components/common/selectors/pl
 import { FromGalleryPickerComponent } from './components/common/selectors/from-gallery-picker/from-gallery-picker.component';
 import { PlacesOrderingSelectorComponent } from './components/common/selectors/places-ordering-selector/places-ordering-selector.component';
 import { CheckboxComponent } from './components/common/checkbox/checkbox.component';
+import { MultiSelectorEngineComponent } from './components/common/selectors/multi-selector-engine/multi-selector-engine.component';
+import { PlaceKindMultiSelectorComponent } from './components/common/selectors/place-kind-multi-selector/place-kind-multi-selector.component';
+import { ExpanderComponent } from './components/common/expander/expander.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +62,10 @@ import { CheckboxComponent } from './components/common/checkbox/checkbox.compone
     PlaceCapacitySelectorComponent,
     FromGalleryPickerComponent,
     PlacesOrderingSelectorComponent,
-    CheckboxComponent
+    CheckboxComponent,
+    MultiSelectorEngineComponent,
+    PlaceKindMultiSelectorComponent,
+    ExpanderComponent
   ],
   imports: [
     BrowserModule,

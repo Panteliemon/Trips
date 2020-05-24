@@ -15,26 +15,11 @@ div.selector-option {
     height:40px;
     min-width:40px;
     padding:0 10px;
-    z-index:0;
 }
 
 div.selector-option-editable {
     cursor: pointer;
     margin:2px;
-}
-
-span.selector-big-text {
-    display:block;
-    float:left;
-    font-size:20pt;
-}
-
-span.selector-small-text {
-    display:block;
-    float:left;
-    position:relative;
-    top:8px;
-    font-size:12pt;
 }
 
 p.selector-description-inline {
@@ -49,17 +34,6 @@ p.selector-description-inline {
     margin:2px 10px 2px 10px;
 }
 
-.selector-tooltip {
-    position:absolute;
-    top:35px;
-    left:-5px;
-    border: 1px solid #bc9;
-    color:#484;
-    background-color:white;
-    white-space: nowrap;
-    padding:5px;
-    display:none;
-}
 div.selector-option:hover .selector-tooltip {
     display:block;
 }

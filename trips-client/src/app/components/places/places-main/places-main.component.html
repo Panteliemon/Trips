@@ -1,23 +1,35 @@
 <div class="uniter">
     <section>
         <h1 class="allows-float-beside">Места</h1>
-        <button *ngIf="isAddNewPlaceVisible" class="button up-right-button" (click)="onAddNewPlaceClicked()">Добавить место</button>
+        <button *ngIf="isAddNewPlaceVisible" class="button up-right-button" (click)="onAddNewPlaceClicked()">
+            <i class="material-icons">add</i>
+            <span>Добавить место</span>
+        </button>
         <div>
-            <label for="tbSearchString">Поиск по имени:</label>
-            <input type="text" id="tbSearchString" [(ngModel)]="searchString" />
-        </div>
-        <div>
-            <p>Упорядочить</p>
-            <app-places-ordering-selector [(value)]="sortingOrder"></app-places-ordering-selector>
+            <div class="form-field">
+                <label for="tbSearchString">Поиск по имени:</label>
+                <input type="text" id="tbSearchString" [(ngModel)]="searchString" />
+            </div>
+            <app-expander class="form-field-margin" title="Расширенный поиск" [(isExpanded)]="isAdvancedSearchExpanded">
+                <div class="form-field">
+                    <p>Тип места</p>
+                    <app-place-kind-multi-selector [(selectedValues)]="placeKindFilter"></app-place-kind-multi-selector>
+                </div>
+            </app-expander>
+            <div class="form-field">
+                <p>Упорядочить</p>
+                <app-places-ordering-selector [(value)]="sortingOrder"></app-places-ordering-selector>
+            </div>
         </div>
         <table class="items-presenter">
             <thead>
                 <th></th>
                 <th class="name-column">Название</th>
                 <th>Тип</th>
-                <th>Дост.</th>
+                <!--<th>Дост.</th>
                 <th>Поп.</th>
-                <th>К.ст.</th>
+                <th>К.ст.</th>-->
+                <th>Дата О.</th>
             </thead>
             <tr *ngFor="let place of places">
                 <td class="entity-picture-column">
@@ -35,6 +47,7 @@
                         <app-place-kind-selector class="centered" [value]="place.kind" [isEditable]="false" [isShortView]="true"></app-place-kind-selector>
                     </a>
                 </td>
+                <!--
                 <td class="enum-column">
                     <a class="cell-wrapper entity-row" routerLink="/place/{{place.id}}">
                         <app-place-accessibility-selector class="centered" [value]="place.accessibility" [isEditable]="false" [isShortView]="true"></app-place-accessibility-selector>
@@ -48,6 +61,12 @@
                 <td class="enum-column">
                     <a class="cell-wrapper entity-row" routerLink="/place/{{place.id}}">
                         <app-place-capacity-selector class="centered" [value]="place.capacity" [isEditable]="false" [isShortView]="true"></app-place-capacity-selector>
+                    </a>
+                </td>
+                -->
+                <td class="date-column">
+                    <a class="cell-wrapper entity-row" routerLink="/place/{{place.id}}">
+                        <p *ngIf="place.discoveryDate" class="centered">{{place.discoveryDate | adaptiveDate}}</p>
                     </a>
                 </td>
             </tr>

@@ -1,15 +1,14 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { ChoiceViewModel } from '../multi-selector-engine/multi-selector-engine.component';
+import { SEL_WHITE, SEL_GRAY, SEL_NOT_SELECTED, SEL_BLUE, SEL_BLACK, SEL_ORANGE } from '../selector-engine/selector-engine.component';
 import { PlaceKind } from 'src/app/models/place';
-import { ChoiceViewModel, SEL_GRAY, SEL_NOT_SELECTED, SEL_WHITE, SEL_BLUE, SEL_BLACK, SEL_ORANGE } from '../selector-engine/selector-engine.component';
 
-let placeSelectorViewModels: ChoiceViewModel[] = [
+let placeMultiSelectorViewModels: ChoiceViewModel[] = [
   {
     associatedValue: null,
     bigText: "N/A",
     smallText: "",
-    showBigText: true,
-    showSmallText: false,
-    description: "",
+    tooltip: "",
     colorWhenSelected: SEL_WHITE,
     colorWhenNotSelected: SEL_WHITE,
     backgroundColorWhenSelected: SEL_GRAY,
@@ -19,9 +18,7 @@ let placeSelectorViewModels: ChoiceViewModel[] = [
     associatedValue: PlaceKind.LAKE,
     bigText: "О",
     smallText: "Озеро",
-    showBigText: true,
-    showSmallText: true,
-    description: "",
+    tooltip: "",
     colorWhenSelected: SEL_WHITE,
     colorWhenNotSelected: SEL_WHITE,
     backgroundColorWhenSelected: SEL_BLUE,
@@ -31,9 +28,7 @@ let placeSelectorViewModels: ChoiceViewModel[] = [
     associatedValue: PlaceKind.DAM,
     bigText: "В",
     smallText: "Водохранилище",
-    showBigText: true,
-    showSmallText: true,
-    description: "",
+    tooltip: "",
     colorWhenSelected: SEL_WHITE,
     colorWhenNotSelected: SEL_WHITE,
     backgroundColorWhenSelected: SEL_BLUE,
@@ -43,9 +38,7 @@ let placeSelectorViewModels: ChoiceViewModel[] = [
     associatedValue: PlaceKind.RIVER,
     bigText: "Р",
     smallText: "Река",
-    showBigText: true,
-    showSmallText: true,
-    description: "",
+    tooltip: "",
     colorWhenSelected: SEL_WHITE,
     colorWhenNotSelected: SEL_WHITE,
     backgroundColorWhenSelected: SEL_BLUE,
@@ -55,9 +48,7 @@ let placeSelectorViewModels: ChoiceViewModel[] = [
     associatedValue: PlaceKind.TOWN,
     bigText: "Г",
     smallText: "Город",
-    showBigText: true,
-    showSmallText: true,
-    description: "",
+    tooltip: "",
     colorWhenSelected: SEL_WHITE,
     colorWhenNotSelected: SEL_WHITE,
     backgroundColorWhenSelected: SEL_BLACK,
@@ -67,9 +58,7 @@ let placeSelectorViewModels: ChoiceViewModel[] = [
     associatedValue: PlaceKind.RUINS,
     bigText: "Р",
     smallText: "Руины",
-    showBigText: true,
-    showSmallText: true,
-    description: "",
+    tooltip: "",
     colorWhenSelected: SEL_WHITE,
     colorWhenNotSelected: SEL_WHITE,
     backgroundColorWhenSelected: SEL_ORANGE,
@@ -78,33 +67,20 @@ let placeSelectorViewModels: ChoiceViewModel[] = [
 ];
 
 @Component({
-  selector: 'app-place-kind-selector',
-  templateUrl: './place-kind-selector.component.html',
-  styleUrls: ['./place-kind-selector.component.css']
+  selector: 'app-place-kind-multi-selector',
+  templateUrl: './place-kind-multi-selector.component.html',
+  styleUrls: ['./place-kind-multi-selector.component.css']
 })
-export class PlaceKindSelectorComponent implements OnInit, OnChanges {
+export class PlaceKindMultiSelectorComponent implements OnInit, OnChanges {
   @Input()
-  value: PlaceKind;
+  selectedValues: PlaceKind[];
   @Output()
-  valueChange = new EventEmitter<PlaceKind>();
+  selectedValuesChange = new EventEmitter<PlaceKind[]>();
 
   @Input()
   isEditable: boolean = true;
-
-  @Input()
-  isShortView: boolean = false;
-
+  
   viewModels: ChoiceViewModel[];
-
-  private _selectedViewModel: ChoiceViewModel;
-  get selectedViewModel(): ChoiceViewModel {
-    return this._selectedViewModel;
-  }
-  set selectedViewModel(value: ChoiceViewModel) {
-    this._selectedViewModel = value;
-    this.value = value.associatedValue;
-    this.valueChange.emit(value.associatedValue);
-  }
 
   constructor() { }
 
@@ -113,21 +89,18 @@ export class PlaceKindSelectorComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes["value"]) {
+    if (changes["selectedValues"]) {
       this.initViewModels();
-      let index = this.viewModels.findIndex(vm => vm.associatedValue == this.value);
-      if (index >= 0) {
-        // Don't set via public property: public property is for setting from UI
-        this._selectedViewModel = this.viewModels[index];
-      } else {
-        this._selectedViewModel = this.viewModels[0];
-      }
     }
+  }
+
+  onSelectedValuesChanged() {
+    this.selectedValuesChange.emit(this.selectedValues);
   }
 
   private initViewModels() {
     if (!this.viewModels) {
-      this.viewModels = placeSelectorViewModels.map(vm => <ChoiceViewModel>Object.assign({}, vm));
+      this.viewModels = placeMultiSelectorViewModels.map(vm => <ChoiceViewModel>Object.assign({}, vm));
     }
   }
 }

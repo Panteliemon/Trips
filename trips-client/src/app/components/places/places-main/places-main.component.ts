@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { PlacesService } from 'src/app/services/places.service';
-import { MessageService, MessageButtons, MessageIcon } from 'src/app/services/message.service';
+import { MessageService, MessageButtons, MessageIcon, MessageResult } from 'src/app/services/message.service';
 import { PlaceHeader } from 'src/app/models/place-header';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { PlaceKind } from 'src/app/models/place';
 
 const LOAD_PORTION = 20;
 
@@ -17,6 +18,7 @@ export class PlacesMainComponent implements OnInit {
   private _searchStringInputCounter: number = 0;
   private _fetchResetCounter: number = 0;
   private _sortingOrder: string;
+  private _placeKindFilter: PlaceKind[] = [];
 
   places: PlaceHeader[] = [];
 
@@ -39,9 +41,20 @@ export class PlacesMainComponent implements OnInit {
   }
   set sortingOrder(value: string) {
     this._sortingOrder = value;
-    this.router.navigate(["/places", { order: this._sortingOrder }]);
+    this.renavigateWithParams();
     this.startFetchPlacesWithCurrentSettings();
   }
+
+  get placeKindFilter(): PlaceKind[] {
+    return this._placeKindFilter;
+  }
+  set placeKindFilter(value: PlaceKind[]) {
+    this._placeKindFilter = value;
+    this.renavigateWithParams();
+    this.startFetchPlacesWithCurrentSettings();
+  }
+
+  isAdvancedSearchExpanded: boolean;
 
   isOverallLoaderVisible: boolean;
   isPlacesLoaderVisible: boolean;
@@ -58,19 +71,27 @@ export class PlacesMainComponent implements OnInit {
     } else {
       this._sortingOrder = "name";
     }
+    if (this.activatedRoute.snapshot.paramMap.get("kind")) {
+      this._placeKindFilter = this.placesService.parseKindFilterStr(this.activatedRoute.snapshot.paramMap.get("kind"));
+      this.isAdvancedSearchExpanded = true;
+    }
     this.startFetchPlacesWithCurrentSettings();
     this.isAddNewPlaceVisible = this.authService.user?.canEditGeography;
   }
 
   onAddNewPlaceClicked() {
-    this.isOverallLoaderVisible = true;
-    this.placesService.createPlace().subscribe(place => {
-      this.isOverallLoaderVisible = false;
-      this.router.navigate([`/place/${place.id}`, { edit: true }]);
-    }, error => {
-      this.messageService.showMessage(this.placesService.getServerErrorText(error), MessageButtons.ok, MessageIcon.error);
-      this.isOverallLoaderVisible = false;
-    })
+    this.messageService.showMessage("Создать новое место?", MessageButtons.yesNo, MessageIcon.question).subscribe(result => {
+      if (result == MessageResult.yes) {
+        this.isOverallLoaderVisible = true;
+        this.placesService.createPlace().subscribe(place => {
+          this.isOverallLoaderVisible = false;
+          this.router.navigate([`/place/${place.id}`, { edit: true }]);
+        }, error => {
+          this.messageService.showMessage(this.placesService.getServerErrorText(error), MessageButtons.ok, MessageIcon.error);
+          this.isOverallLoaderVisible = false;
+        })
+      }
+    });
   }
 
   onLoadMorePlacesClicked() {
@@ -97,9 +118,10 @@ export class PlacesMainComponent implements OnInit {
     let fetchResetCounterWhenStarted = this._fetchResetCounter;
     this.isLoadMorePlacesVisible = false;
     this.isPlacesLoaderVisible = true;
+
     // Always take LOAD_PORTION+1 places, but show only LOAD_PORTION, so the extra 1 place
     // is needed to detect if we reached the end.
-    this.placesService.getPlacesList(this.sortingOrder, LOAD_PORTION + 1, this.places.length, this.searchString).subscribe(result => {
+    this.placesService.getPlacesList(this.sortingOrder, LOAD_PORTION + 1, this.places.length, this.searchString, this._placeKindFilter).subscribe(result => {
       if (this._fetchResetCounter == fetchResetCounterWhenStarted) {
         this.onPlacesArrived(result);
       } else {
@@ -132,5 +154,15 @@ export class PlacesMainComponent implements OnInit {
       // And show button that there are more
       this.isLoadMorePlacesVisible = true;
     }
+  }
+
+  private renavigateWithParams() {
+    let parametersObj = <any>{};
+    parametersObj.order = this._sortingOrder;
+    if (this._placeKindFilter && (this._placeKindFilter.length > 0)) {
+      parametersObj.kind = this.placesService.getKindFilterStr(this._placeKindFilter);
+    }
+
+    this.router.navigate(["/places", parametersObj]);
   }
 }

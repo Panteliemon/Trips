@@ -1,7 +1,7 @@
 <div id="galBorder">
     <div id="galButtons" class="clearfix" *ngIf="isEditable">
         <button class="button gal-button-left" (click)="inputFile.click()">
-            <i class="material-icons">file_upload</i>
+            <i class="material-icons">add</i>
             <span>Загрузить изображение</span>
         </button>
         <input type="file" #inputFile style="display:none;" (change)="onFileSelected(inputFile.files)" />
