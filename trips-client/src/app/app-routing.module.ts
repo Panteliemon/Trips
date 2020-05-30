@@ -12,6 +12,7 @@ import { UserDetailsComponent } from './components/users/user-details/user-detai
 import { Page404Component } from './components/common/page404/page404.component';
 import { UserCreateComponent } from './components/users/user-create/user-create.component';
 import { LoginPageComponent } from './components/common/login-page/login-page.component';
+import { ServiceComponent } from './components/service/service.component';
 
 import { AuthGuard } from './services/auth.guard';
 
@@ -25,6 +26,7 @@ const routes: Routes = [
   { path: "users", component: UsersMainComponent, canActivate: [AuthGuard] },
   { path: "users/create", component: UserCreateComponent, canActivate: [AuthGuard] },
   { path: "user/:id", component: UserDetailsComponent, canActivate: [AuthGuard] },
+  { path: "service", component: ServiceComponent, canActivate: [AuthGuard] },
   { path: "login", component: LoginPageComponent },
   { path: "", redirectTo: "/news", pathMatch: "full" },
   { path: "**", component: Page404Component }

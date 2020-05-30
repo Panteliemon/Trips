@@ -1,0 +1,102 @@
+<h1>
+    <i class="material-icons">build</i>
+    Сервисные операции
+</h1>
+<p class="advice"><span>Скрытый функционал для одминов</span></p>
+<div class="uniter">
+    <div>
+        <table class="items-presenter margin-above" *ngIf="areSettingsVisible && serviceOperations && (!selectedOperation)">
+            <thead>
+                <th class="name-column">
+                    Выберите операцию
+                </th>
+            </thead>
+            <tr *ngFor="let operation of serviceOperations" class="selectable-row"
+                (click)="selectOperation(operation)">
+                <td class="name-column">
+                    {{operation.name}}
+                </td>
+            </tr>
+        </table>
+        <fieldset *ngIf="areSettingsVisible && selectedOperation" class="margin-above">
+            <legend>Выбранная операция</legend>
+
+            <div class="form-field">
+                <p>Название:</p>
+                <p>{{selectedOperation.name}}</p>
+            </div>
+            <div class="form-field">
+                <p>Описание:</p>
+                <p class="preserve-linebreaks">{{selectedOperation.description}}</p>
+            </div>
+            <div class="form-field">
+                <p>Последний раз запущена:</p>
+                <p *ngIf="selectedOperation.lastStarted">{{selectedOperation.lastStarted | adaptiveDate:false}}</p>
+                <p *ngIf="!selectedOperation.lastStarted">Никогда</p>
+            </div>
+            <div class="form-field" *ngIf="selectedOperation.lastEnded">
+                <p>Последний раз завершена:</p>
+                <p>{{selectedOperation.lastEnded | adaptiveDate:false}}</p>
+            </div>
+            <div class="form-field" *ngIf="selectedOperation.lastEnded">
+                <p>Код завершения:</p>
+                <p>{{selectedOperation.lastResult}}</p>
+            </div>
+
+            <div>
+                <button class="button button-std two-spaces-after" (click)="launchClicked()">Запустить</button>
+                <button class="button button-std" (click)="selectOperation(null)">Отмена</button>
+            </div>
+        </fieldset>
+        <fieldset class="form-field-margin-above" *ngIf="currentOperationStatus">
+            <legend>{{currentOperationCaption}}</legend>
+
+            <div class="form-field">
+                <p>Название:</p>
+                <p>{{currentOperationStatus.name}}</p>
+            </div>
+            <div class="form-field">
+                <p>Описание:</p>
+                <p class="preserve-linebreaks">{{currentOperationStatus.description}}</p>
+            </div>
+            <div class="form-field">
+                <p>Запущена:</p>
+                <p>{{currentOperationStatus.startTime | adaptiveDate:false}}</p>
+            </div>
+            <div class="form-field" *ngIf="!currentOperationStatus.finishTime">
+                <p>Прогресс:</p>
+                <app-progress-bar [total]="currentOperationStatus.total" [done]="currentOperationStatus.done"></app-progress-bar>
+            </div>
+            <div class="form-field" *ngIf="currentOperationStatus.finishTime">
+                <p>Завершена:</p>
+                <p>{{currentOperationStatus.finishTime | adaptiveDate:false}}</p>
+            </div>
+            <div class="form-field" *ngIf="currentOperationStatus.finishTime">
+                <p>Код завершения:</p>
+                <p>{{currentOperationStatus.result}}</p>
+            </div>
+
+            <div class="form-field" *ngIf="isLogVisible">
+                <p>Лог операции:</p>
+                <p class="error" *ngIf="isCurrentTabLog">
+                    <i class="material-icons">warning</i>
+                    <span>Лог доступен только на текущей вкладке. Не закрывайте и не обновляйте, если вам нужен лог.</span>
+                </p>
+                <p class="advice" *ngIf="!isCurrentTabLog">
+                    <i class="material-icons">warning</i>
+                    <span>Лог операции недоступен, поскольку данная операция не была запущена на текущей вкладке</span>
+                </p>
+                <p #operationLog class="operation-log" *ngIf="isCurrentTabLog"></p>
+            </div>
+
+            <div *ngIf="!currentOperationStatus.finishTime">
+                <button class="button button-std"
+                        (click)="cancelCurrentOperationClicked()">Прервать</button>
+            </div>
+        </fieldset>
+        <div *ngIf="(!areSettingsVisible) && (!currentOperationStatus)" style="height:200px;">
+        </div>
+    </div>
+    <div class="fog" *ngIf="isOverallLoaderVisible"></div>
+    <app-loader *ngIf="isOverallLoaderVisible"></app-loader>
+</div>

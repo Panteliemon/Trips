@@ -34,6 +34,8 @@ import { CheckboxComponent } from './components/common/checkbox/checkbox.compone
 import { MultiSelectorEngineComponent } from './components/common/selectors/multi-selector-engine/multi-selector-engine.component';
 import { PlaceKindMultiSelectorComponent } from './components/common/selectors/place-kind-multi-selector/place-kind-multi-selector.component';
 import { ExpanderComponent } from './components/common/expander/expander.component';
+import { ServiceComponent } from './components/service/service.component';
+import { ProgressBarComponent } from './components/common/progress-bar/progress-bar.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +67,9 @@ import { ExpanderComponent } from './components/common/expander/expander.compone
     CheckboxComponent,
     MultiSelectorEngineComponent,
     PlaceKindMultiSelectorComponent,
-    ExpanderComponent
+    ExpanderComponent,
+    ServiceComponent,
+    ProgressBarComponent
   ],
   imports: [
     BrowserModule,

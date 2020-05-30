@@ -11,6 +11,7 @@ namespace Trips.Entities
         public User Owner { get; set; }
         public string Name { get; set; }
         public string OfficialName { get; set; }
+        public string Description { get; set; }
         public string LicenseNumber { get; set; }
         public int? YearOfManufacture { get; set; }
         public PlaceAccessibility? AcceptableAccessibility { get; set; }

@@ -45,6 +45,8 @@ namespace Trips.Entities
             modelBuilder.Entity<Picture>().HasOne(p => p.Gallery).WithMany(g => g.Pictures)
                 .HasForeignKey(p => p.GalleryId).OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<Picture>().HasIndex(p => new { p.GalleryId, p.Index });
+
+            modelBuilder.Entity<ServiceOperationHistory>().HasIndex(h => new { h.Key, h.Ended });
         }
 
         public DbSet<Place> Places { get; set; }
@@ -56,5 +58,6 @@ namespace Trips.Entities
         public DbSet<News> News { get; set; }
         public DbSet<Gallery> Galleries { get; set; }
         public DbSet<Picture> Pictures { get; set; }
+        public DbSet<ServiceOperationHistory> ServiceOperationsHistory { get; set; }
     }
 }

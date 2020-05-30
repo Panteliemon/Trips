@@ -1,0 +1,22 @@
+@import "../../../../colors.less";
+
+.progress-border {
+    border:2px solid @theme-color-light;
+    height:27px;
+    padding:2px;
+    position:relative;
+}
+
+.progress-line {
+    background-color: @theme-color-dark;
+    height:100%
+}
+
+.progress-value {
+    color: @color-text-on-page;
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    margin:0;
+    top:0;
+}
