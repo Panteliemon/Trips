@@ -130,5 +130,18 @@ export function createGoogleRefFromLocation(locationValue: string): string {
 }
 
 export function getPictureUrl(id: string, format: PicFormat) {
-  return PICS_BASE_PATH + "/" + id;
+  return PICS_BASE_PATH + "/" + id + getFileExtensionFor(format);
+}
+
+function getFileExtensionFor(format: PicFormat) {
+  switch (format) {
+    case PicFormat.JPEG:
+      return ".jpg";
+    case PicFormat.PNG:
+      return ".png";
+    case PicFormat.BMP:
+      return ".bmp"; 
+  }
+
+  return "";
 }

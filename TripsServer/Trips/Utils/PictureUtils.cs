@@ -83,6 +83,28 @@ namespace Trips.Utils
             return null;
         }
 
+        /// <summary>
+        /// File extension not case sensitive, but with leading period
+        /// </summary>
+        public static string GetMimeTypeFor(string fileExtension)
+        {
+            string lowerExtension = fileExtension.ToLower();
+            if (lowerExtension == ".jpg")
+            {
+                return "image/jpeg";
+            }
+            else if (lowerExtension == ".png")
+            {
+                return "image/png";
+            }
+            else if (lowerExtension == ".bmp")
+            {
+                return "image/bmp";
+            }
+
+            return null;
+        }
+
         public static bool TryParseMimeType(string mimeType, out PicFormat result)
         {
             if (mimeType == "image/jpeg")

@@ -121,15 +121,14 @@ namespace Trips
 
             Encryption.Configure(keys);
 
-            //if (dbConfig.UseRemote)
-            //{
-                // TODO change to Amazon storage after The Event
-                PictureStorage = new DatabasePictureStorage();
-            //}
-            //else
-            //{
-            //    PictureStorage = new LocalFSPictureStorage(dbConfig.PicsStorageFolder);
-            //}
+            if (dbConfig.UseRemote)
+            {
+                PictureStorage = new AmazonS3PictureStorage(keys);
+            }
+            else
+            {
+                PictureStorage = new LocalFSPictureStorage(dbConfig.PicsStorageFolder);
+            }
 
             _configured = true;
         }
