@@ -12,8 +12,6 @@ namespace Trips.PictureStorages
     /// </summary>
     public class LocalFSPictureStorage : IPictureStorage
     {
-        private string _root;
-
         public LocalFSPictureStorage(string rootFolder)
         {
             if (!Directory.Exists(rootFolder))
@@ -21,14 +19,16 @@ namespace Trips.PictureStorages
                 throw new ArgumentException($"Folder {rootFolder} does not exist");
             }
 
-            _root = rootFolder;
+            RootFolder = rootFolder;
         }
+
+        public string RootFolder { get; }
 
         public async Task UploadPictures(params PictureData[] picturesData)
         {
             foreach (PictureData pic in picturesData)
             {
-                string fileName = Path.Combine(_root,
+                string fileName = Path.Combine(RootFolder,
                     pic.Id.ToString().ToLower() + PictureUtils.GetFileExtensionFor(pic.Format));
                 await File.WriteAllBytesAsync(fileName, pic.Data);
             }
@@ -40,7 +40,7 @@ namespace Trips.PictureStorages
             {
                 foreach (Guid id in pictureIds)
                 {
-                    var foundFiles = Directory.GetFiles(_root, id.ToString() + '*');
+                    var foundFiles = Directory.GetFiles(RootFolder, id.ToString() + '*');
                     foreach (string fileName in foundFiles)
                     {
                         File.Delete(fileName);
