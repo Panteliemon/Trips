@@ -175,7 +175,8 @@ namespace Trips.Service
                 {
                     TripsContext dbContext = GetTripsContext();
                     string keyForQuery = operation.Key;
-                    var onceRunRecord = dbContext.ServiceOperationsHistory.FirstOrDefault(h => h.Key == keyForQuery);
+                    var onceRunRecord = dbContext.ServiceOperationsHistory
+                        .FirstOrDefault(h => (h.Key == keyForQuery) && (h.Result == ServiceOperationResult.Succeed));
                     if (onceRunRecord != null)
                     {
                         return new StartResult(StartResultCode.RepeatForbidden);
@@ -287,6 +288,7 @@ namespace Trips.Service
         {
             ServiceOperations.Clear();
             ServiceOperations.Add(new EmptyServiceOperation());
+            ServiceOperations.Add(new FillPictureFormatServiceOperation());
         }
 
         private TripsContext GetTripsContext()
@@ -309,6 +311,7 @@ namespace Trips.Service
             {
                 // That's ok, just canceled in other way than returning Canceled directly
                 result = ServiceOperationResult.Canceled;
+                ReportWarning(null, "OPERATION CANCELED"); // report only if canceled by exception
             }
             catch (Exception ex)
             {

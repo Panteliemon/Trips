@@ -141,10 +141,12 @@ export class ServiceComponent implements OnInit, OnDestroy {
 
         // Check if was in finished state until new data arrived
         let wasFinished = false;
+        let lastOperationId: number = null;
         if (this.currentOperationStatus) {
           wasFinished = !!this.currentOperationStatus.finishTime;
+          lastOperationId = this.currentOperationStatus.operationId;
         }
-
+        
         this.currentOperationStatus = status;
         this.refreshSettingsVisible();
 
@@ -154,7 +156,10 @@ export class ServiceComponent implements OnInit, OnDestroy {
           if (this.currentOperationStatus.finishTime) {
             this.currentOperationCaption = "Последняя операция, выполненная на сервере";
             // If finished right now, then update the list, so we can see actual start/finish time in it
-            if (!wasFinished) {
+            if ((!wasFinished)
+                // Sometimes operation completes so fast that we never detect it was running.
+                // We can detect however that operation id changed while both old and new operations are in "finished" state
+                || (this.currentOperationStatus.operationId != lastOperationId)) {
               this.onOperationFinished();
 
               if (this.isCurrentTabLog) {
