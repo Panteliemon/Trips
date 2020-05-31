@@ -26,6 +26,11 @@ namespace Trips
             @"https://poezdo4ki.azurewebsites.net";
 #endif
 
+        /// <summary>
+        /// This property disables all writing operations in the app. Change to true if needed and rebuild.
+        /// </summary>
+        public static bool IsLocked => false;
+
         public static IPictureStorage PictureStorage { get; private set; }
 
         // TODO edit dbconfig.xml to change the value
@@ -116,7 +121,15 @@ namespace Trips
 
             Encryption.Configure(keys);
 
-            PictureStorage = new DatabasePictureStorage();
+            //if (dbConfig.UseRemote)
+            //{
+                // TODO change to Amazon storage after The Event
+                PictureStorage = new DatabasePictureStorage();
+            //}
+            //else
+            //{
+            //    PictureStorage = new LocalFSPictureStorage(dbConfig.PicsStorageFolder);
+            //}
 
             _configured = true;
         }

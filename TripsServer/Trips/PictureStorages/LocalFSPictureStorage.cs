@@ -7,6 +7,9 @@ using Trips.Utils;
 
 namespace Trips.PictureStorages
 {
+    /// <summary>
+    /// Storage that stores uploaded pictures in some local machine's folder
+    /// </summary>
     public class LocalFSPictureStorage : IPictureStorage
     {
         private string _root;

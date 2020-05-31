@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using Trips.Entities;
 using Trips.Entities.Pics;
+using Trips.PictureStorages;
 
 namespace Trips.Controllers
 {
@@ -48,6 +49,11 @@ namespace Trips.Controllers
                 response.AppendLine("[x] Failed to get build date");
             }
 
+            if (Program.IsLocked)
+            {
+                response.AppendLine("[THE APP IS RUNNING IN READONLY MODE!]");
+            }
+
             if (Program.ClientUrl.ToLower().Contains("localhost"))
             {
                 response.AppendLine("[!] Client is running on localhost");
@@ -82,6 +88,23 @@ namespace Trips.Controllers
             catch (Exception ex)
             {
                 response.AppendLine("[x] PicsDB doesn't work: " + ex.ToString());
+            }
+
+            if (Program.PictureStorage is DatabasePictureStorage)
+            {
+                response.AppendLine("The app is using DATABASE for picture storage");
+            }
+            else if (Program.PictureStorage is LocalFSPictureStorage)
+            {
+                response.AppendLine("The app is using LOCAL PC FOLDER for picture storage");
+            }
+            else if (Program.PictureStorage is AmazonS3PictureStorage)
+            {
+                response.AppendLine("The app is using S3 CLOUD for picture storage");
+            }
+            else
+            {
+                response.AppendLine("[x] App's picture storage not recognized");
             }
 
             return Ok(response.ToString());

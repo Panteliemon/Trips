@@ -7,6 +7,9 @@ using Trips.Entities.Pics;
 
 namespace Trips.PictureStorages
 {
+    /// <summary>
+    /// Storage that stored pictures in a database with dbcontext PicsContext
+    /// </summary>
     public class DatabasePictureStorage : IPictureStorage
     {
         public async Task UploadPictures(params PictureData[] picturesData)

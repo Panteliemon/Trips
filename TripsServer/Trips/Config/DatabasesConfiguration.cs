@@ -33,6 +33,8 @@ namespace Trips.Config
         public string LocalTripsPath { get; set; }
         public string LocalPicsPath { get; set; }
 
+        public string PicsStorageFolder { get; set; }
+
         public static DatabasesConfiguration Load()
         {
             XmlSerializer serializer = new XmlSerializer(typeof(DatabasesConfiguration));
@@ -58,6 +60,7 @@ namespace Trips.Config
             example.LocalTripsTemplate = "Data Source={0};AttachDbFilename=\"{1}\";Initial Catalog=TripsDB;Integrated Security=True";
             example.LocalPicsPath = @"c:\your_local_dbfile.mdf";
             example.LocalPicsTemplate = "Data Source={0};AttachDbFilename=\"{1}\";Initial Catalog=PicsDB;Integrated Security=True";
+            example.PicsStorageFolder = @"c:\pics_storage_folder";
 
             XmlSerializer serializer = new XmlSerializer(typeof(DatabasesConfiguration));
             using (StreamWriter sw = new StreamWriter(

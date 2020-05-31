@@ -127,6 +127,10 @@ export class PlacesService {
       return "Вы не авторизованы";
     } else if (error.status == 403) {
       return "Нет прав для осуществления операции.";
+    } else if (error.status == 423) {
+      return "Данное действие нельзя произвести по техническим причинам.\r\nНа время проведения важных работ сайт переведен админом в режим только чтение.";
+    } else if (error.status == 0) {
+      return "Сервер не отвечает";
     }
 
     return "Communication error";

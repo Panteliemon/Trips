@@ -15,6 +15,8 @@ namespace Trips.Config
         public string AppDefaultUserPassword { get; set; }
         public string TripsUserPassword { get; set; }
         public string TripsAdminPassword { get; set; }
+        public string AmazonAccessKey { get; set; }
+        public string AmazonSecretKey { get; set; }
 
         public static Keys Load()
         {
@@ -35,6 +37,8 @@ namespace Trips.Config
             example.AppDefaultUserPassword = "123";
             example.TripsUserPassword = "123";
             example.TripsAdminPassword = "123";
+            example.AmazonAccessKey = "AAAAAAAAAA";
+            example.AmazonSecretKey = "aaaaa/aaaaa/aaaaa";
             XmlSerializer serializer = new XmlSerializer(typeof(Keys));
             using(StreamWriter sw = new StreamWriter(
                 new FileStream("keys.example.xml", FileMode.Create, FileAccess.Write), Encoding.Unicode))

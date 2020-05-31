@@ -105,6 +105,12 @@ namespace Trips.Controllers
         [Route("places")]
         public async Task<PlaceDto> CreatePlace()
         {
+            if (Program.IsLocked)
+            {
+                Response.StatusCode = StatusCodes.Status423Locked;
+                return null;
+            }
+
             // Check permissions
             User currentUser = await GetCurrentUserAsync();
             if ((currentUser == null) || (!currentUser.CanEditGeography))
@@ -141,6 +147,11 @@ namespace Trips.Controllers
             if (placeDto == null)
             {
                 return BadRequest("MISSING_PARAMS");
+            }
+
+            if (Program.IsLocked)
+            {
+                return StatusCode(StatusCodes.Status423Locked);
             }
 
             // Check permissions
@@ -228,6 +239,11 @@ namespace Trips.Controllers
         [Route("place/{id}")]
         public async Task<IActionResult> DeletePlace(int id, [FromQuery] bool? deleteVisits)
         {
+            if (Program.IsLocked)
+            {
+                return StatusCode(StatusCodes.Status423Locked);
+            }
+
             // Check permissions
             User currentUser = await GetCurrentUserAsync();
             if ((currentUser == null) || (!currentUser.CanEditGeography))
@@ -293,6 +309,11 @@ namespace Trips.Controllers
         [Route("place/{id}/gallery")]
         public async Task<IActionResult> UploadPicture(int id)
         {
+            if (Program.IsLocked)
+            {
+                return StatusCode(StatusCodes.Status423Locked);
+            }
+
             // Check permissions
             User currentUser = await GetCurrentUserAsync();
             if ((currentUser == null) || (!currentUser.CanEditGeography))
@@ -424,6 +445,11 @@ namespace Trips.Controllers
         [Route("place/{placeId}/gallery/{pictureSmallSizeId}")]
         public async Task<IActionResult> DeletePicture(int placeId, string pictureSmallSizeId)
         {
+            if (Program.IsLocked)
+            {
+                return StatusCode(StatusCodes.Status423Locked);
+            }
+
             // Check permissions
             User currentUser = await GetCurrentUserAsync();
             if ((currentUser == null) || (!currentUser.CanEditGeography))

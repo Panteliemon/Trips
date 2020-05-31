@@ -60,6 +60,11 @@ namespace Trips.Controllers
         [Route("user/new")]
         public async Task<IActionResult> AddUser([FromForm] string userName, [FromForm] string userPassword)
         {
+            if (Program.IsLocked)
+            {
+                return StatusCode(StatusCodes.Status423Locked);
+            }
+
             // Check user rights
             User currentUser = await GetCurrentUserAsync();
             if (currentUser == null)
@@ -104,6 +109,11 @@ namespace Trips.Controllers
         [Route("user/update")]
         public async Task<IActionResult> UpdateUser(UserDto userDto)
         {
+            if (Program.IsLocked)
+            {
+                return StatusCode(StatusCodes.Status423Locked);
+            }
+
             User currentUser = await GetCurrentUserAsync();
             if (currentUser == null)
             {
@@ -187,6 +197,11 @@ namespace Trips.Controllers
         [Route("user/{id}/changepassword")]
         public async Task<IActionResult> ChangeUserPassword(int id, [FromForm] string oldPassword, [FromForm] string newPassword)
         {
+            if (Program.IsLocked)
+            {
+                return StatusCode(StatusCodes.Status423Locked);
+            }
+
             User currentUser = await GetCurrentUserAsync();
             if (currentUser == null)
             {
@@ -227,6 +242,11 @@ namespace Trips.Controllers
         [Route("user/{id}/resetpassword")]
         public async Task<IActionResult> ResetUserPassword(int id, [FromForm] string newPassword)
         {
+            if (Program.IsLocked)
+            {
+                return StatusCode(StatusCodes.Status423Locked);
+            }
+
             User currentUser = await GetCurrentUserAsync();
             if (currentUser == null)
             {
@@ -260,6 +280,11 @@ namespace Trips.Controllers
         [Route("user/{id}/uploadprofilepic")]
         public async Task<IActionResult> ChangeProfilePicture(int id)
         {
+            if (Program.IsLocked)
+            {
+                return StatusCode(StatusCodes.Status423Locked);
+            }
+
             User currentUser = await GetCurrentUserAsync();
             if (currentUser == null)
             {
@@ -337,6 +362,11 @@ namespace Trips.Controllers
         [Route("user/{id}/resetprofilepic")]
         public async Task<IActionResult> ResetProfilePicture(int id)
         {
+            if (Program.IsLocked)
+            {
+                return StatusCode(StatusCodes.Status423Locked);
+            }
+
             User currentUser = await GetCurrentUserAsync();
             if (currentUser == null)
             {
@@ -374,6 +404,11 @@ namespace Trips.Controllers
         [Route("user/{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
+            if (Program.IsLocked)
+            {
+                return StatusCode(StatusCodes.Status423Locked);
+            }
+
             User currentUser = GetCurrentUser();
             if (currentUser == null)
             {
