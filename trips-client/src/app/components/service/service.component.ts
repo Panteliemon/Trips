@@ -222,9 +222,9 @@ export class ServiceComponent implements OnInit, OnDestroy {
 
   private queryLog() {
     this.srv.takeLatestOutput().subscribe(result => {
-      if (result !== null) {
+      if (result) {
         if (this.currentOperationLog && (this.currentOperationLog.length > 0)) {
-          this.currentOperationLog += "\r\n" + result;
+          this.currentOperationLog += result;
         } else {
           this.currentOperationLog = result;
         }

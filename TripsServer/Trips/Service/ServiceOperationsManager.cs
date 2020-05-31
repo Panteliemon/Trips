@@ -137,6 +137,7 @@ namespace Trips.Service
         private long _currentOperationDone;
         private StringBuilder _currentOperationOutput;
         private StringBuilder _currentOperationLatestOutput;
+        private bool _isCurrentOperationOutputEmpty; // to distinguish empty stringbuilder and stringbuilder containing ""
 
         private Thread _currentOperationThread;
         private CancellationTokenSource _currentOperationCts;
@@ -196,6 +197,7 @@ namespace Trips.Service
                 _currentOperationDone = 0;
                 _currentOperationOutput = new StringBuilder();
                 _currentOperationLatestOutput = new StringBuilder();
+                _isCurrentOperationOutputEmpty = true;
                 _currentOperationThread = new Thread(OperationThreadProc);
                 _currentOperationCts = new CancellationTokenSource();
 
@@ -385,8 +387,9 @@ namespace Trips.Service
         {
             lock (_locker)
             {
-                UnlockedAppendLine(_currentOperationOutput, str);
-                UnlockedAppendLine(_currentOperationLatestOutput, str);
+                UnlockedAppendLine(_currentOperationOutput, str, _isCurrentOperationOutputEmpty);
+                UnlockedAppendLine(_currentOperationLatestOutput, str, _isCurrentOperationOutputEmpty);
+                _isCurrentOperationOutputEmpty = false;
             }
         }
 
@@ -428,9 +431,9 @@ namespace Trips.Service
             }
         }
 
-        private void UnlockedAppendLine(StringBuilder sb, string str)
+        private void UnlockedAppendLine(StringBuilder sb, string str, bool isFirstLine)
         {
-            if (sb.Length > 0)
+            if (!isFirstLine)
             {
                 sb.AppendLine();
             }

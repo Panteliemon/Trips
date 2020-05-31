@@ -38,9 +38,18 @@ namespace Trips.Service.ServiceOperations
 
                 if (i == 1)
                 {
+                    progress.LogMessage("");
                     progress.LogMessage("Message");
                     progress.LogWarning("Warning");
                     progress.LogError("Error");
+                }
+                else if (i == 2)
+                {
+                    progress.LogMessage("");
+                }
+                else if (i == 3)
+                {
+                    progress.LogMessage("Message 2");
                 }
             }
 
