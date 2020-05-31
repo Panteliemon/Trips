@@ -105,6 +105,24 @@ namespace Trips.Utils
             return false;
         }
 
+        /// <summary>
+        /// Returns extension with leading dot; returns empty string if not supported.
+        /// </summary>
+        public static string GetFileExtensionFor(PicFormat supportedFormat)
+        {
+            switch (supportedFormat)
+            {
+                case PicFormat.Jpeg:
+                    return ".jpg";
+                case PicFormat.Png:
+                    return ".png";
+                case PicFormat.Bmp:
+                    return ".bmp";
+            }
+
+            return null;
+        }
+
         public static async Task<ProfilePictureProcessResult> PrepareProfilePicture(PicFormat sourcePicFormat, byte[] sourceImageData)
         {
             return await Task.Run(() =>
