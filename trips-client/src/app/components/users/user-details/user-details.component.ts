@@ -353,7 +353,7 @@ export class UserDetailsComponent implements OnInit {
 
   private refreshAllVisibility() {
     if (this.user) {
-      this.imgSrc = userPicSrc(this.user.profilePicture);
+      this.imgSrc = userPicSrc(this.user.profilePicture, this.user.profilePictureFormat);
       if (this.user.profilePicture) {
         this.imgAlt = this.user.name;
         this.isResetProfilePicButtonVisible = (this.authService.user?.isAdmin) || (this.authService.user?.id == this.user.id);

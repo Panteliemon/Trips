@@ -7,7 +7,7 @@
                 [class.gal-selected]="picture == selectedPicture"
                 (click)="onClick(picture)"
                 (dblclick)="onSelectClicked()">
-                <img [src]="getImageSrc(picture.smallSizeId)"
+                <img [src]="getPictureUrl(picture.smallSizeId, picture.format)"
                      class="gal-miniature-img centered-both" />
             </div>
         </div>

@@ -15,6 +15,7 @@ namespace Trips.Dtos
         public PlaceAccessibility? Accessibility { get; set; }
         public PlacePopularity? Popularity { get; set; }
         public PlaceCapacity? Capacity { get; set; }
+        public PicFormat? TitlePictureFormat { get; set; }
         public Guid? TitlePictureSmallSizeId { get; set; }
     }
 }

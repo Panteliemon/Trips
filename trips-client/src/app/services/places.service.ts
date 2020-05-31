@@ -8,6 +8,7 @@ import { Place, PlaceKind } from '../models/place';
 import { Picture } from '../models/picture';
 import { VisitForPlace } from '../models/visit-for-place';
 import { MessageIcon } from './message.service';
+import { getPictureUrl } from '../stringUtils';
 
 @Injectable({
   providedIn: 'root'
@@ -154,7 +155,7 @@ export class PlacesService {
 
   getMiniaturePicSrc(place: PlaceHeader) {
     if (place?.titlePictureSmallSizeId) {
-      return API_BASE_PATH + "/pics/" + place.titlePictureSmallSizeId;
+      return getPictureUrl(place.titlePictureSmallSizeId, place.titlePictureFormat);
     } else {
       return "/assets/no-pic-place.png";
     }

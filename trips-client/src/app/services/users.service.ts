@@ -5,11 +5,12 @@ import { User } from "../models/user";
 import { HttpClient, HttpHeaders, HttpEventType } from '@angular/common/http';
 import { UploadProgress } from './upload-progress';
 import { UserHeader } from '../models/user-header';
-import { isAllSpaces } from '../stringUtils';
+import { isAllSpaces, getPictureUrl } from '../stringUtils';
+import { PicFormat } from '../models/picture';
 
-export function userPicSrc(pictureId: string) {
+export function userPicSrc(pictureId: string, format: PicFormat) {
   if (pictureId) {
-      return API_BASE_PATH + "/pics/" + pictureId;
+      return getPictureUrl(pictureId, format);
   } else {
       return "/assets/no-pic-user.png";
   }

@@ -1,3 +1,6 @@
+import { PicFormat } from './models/picture';
+import { PICS_BASE_PATH } from './services/api';
+
 export function isAllSpaces(str: string): boolean {
   let allSpaces: boolean = true;
   for (let i=0; i<str.length; i++) {
@@ -124,4 +127,8 @@ export function createGoogleRefFromLocation(locationValue: string): string {
   }
 
   return null;
+}
+
+export function getPictureUrl(id: string, format: PicFormat) {
+  return PICS_BASE_PATH + "/" + id;
 }

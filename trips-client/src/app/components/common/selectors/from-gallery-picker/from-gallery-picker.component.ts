@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Gallery } from 'src/app/models/gallery';
 import { Picture } from 'src/app/models/picture';
-import { API_BASE_PATH } from 'src/app/services/api';
+import { getPictureUrl } from 'src/app/stringUtils';
 
 @Component({
   selector: 'app-from-gallery-picker',
@@ -48,9 +48,7 @@ export class FromGalleryPickerComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  getImageSrc(pictureId: string): string {
-    return API_BASE_PATH + "/pics/" + pictureId;
-  }
+  getPictureUrl = getPictureUrl;
 
   onClick(picture: Picture) {
     this.selectedPicture = picture;

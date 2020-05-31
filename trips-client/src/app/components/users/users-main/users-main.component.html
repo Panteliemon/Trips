@@ -8,7 +8,7 @@
         <tr *ngFor="let user of users" class="user-row">
             <td class="user-picture-column">
                 <a class="cell-wrapper" routerLink="/user/{{user.id}}">
-                    <img [src]="userPicSrc(user.smallSizeProfilePicture)" />
+                    <img [src]="userPicSrc(user.smallSizeProfilePicture, user.profilePictureFormat)" />
                 </a>
             </td>
             <td class="name-column">

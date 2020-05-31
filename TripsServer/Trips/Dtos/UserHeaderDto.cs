@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Trips.Entities;
 
 namespace Trips.Dtos
 {
@@ -14,5 +15,6 @@ namespace Trips.Dtos
         public int Id { get; set; }
         public string Name { get; set; }
         public Guid? SmallSizeProfilePicture { get; set; }
+        public PicFormat? ProfilePictureFormat { get; set; }
     }
 }

@@ -23,7 +23,7 @@
              class="gal-miniature-holder" (click)="onMiniatureSelected(picture.smallSizeId)"
              [class.gal-selected]="picture.smallSizeId == selectedImageSmallSizeId"
              [class.gal-last-miniature-holder]="i == gallery.pictures.length-1">
-            <img [src]="getImageSrc(picture.smallSizeId)"
+            <img [src]="getPictureUrl(picture.smallSizeId, picture.format)"
                  class="gal-miniature-img centered-both" />
         </div>
         <p class="big-gray-text centered-both" *ngIf="gallery.pictures.length == 0">Нет изображений</p>
@@ -39,8 +39,8 @@
         </button>
         <div *ngIf="selectedImage" id="centralPictureArea">
             <div id="centralImageWrapper">
-                <a [href]="getImageSrc(selectedImage.largeSizeId)">
-                    <img id="centralImage" class="centered-both" [src]="getImageSrc(selectedImage.mediumSizeId)" />
+                <a [href]="getPictureUrl(selectedImage.largeSizeId, selectedImage.format)">
+                    <img id="centralImage" class="centered-both" [src]="getPictureUrl(selectedImage.mediumSizeId, selectedImage.format)" />
                 </a>
             </div>
             <div id="divMeta">

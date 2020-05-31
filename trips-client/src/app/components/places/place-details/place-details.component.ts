@@ -5,9 +5,8 @@ import { PlacesService } from 'src/app/services/places.service';
 import { MessageService, MessageButtons, MessageIcon, MessageResult } from 'src/app/services/message.service';
 import { GalleryComponent } from '../../common/gallery/gallery.component';
 import { AuthService } from 'src/app/services/auth.service';
-import { API_BASE_PATH } from 'src/app/services/api';
 import { FromGalleryPickerComponent } from '../../common/selectors/from-gallery-picker/from-gallery-picker.component';
-import { dateToInputString, inputStringToDate, possibleStringToDate, createGoogleRefFromLocation } from 'src/app/stringUtils';
+import { dateToInputString, inputStringToDate, possibleStringToDate, createGoogleRefFromLocation, getPictureUrl } from 'src/app/stringUtils';
 
 @Component({
   selector: 'app-place-details',
@@ -364,7 +363,7 @@ export class PlaceDetailsComponent implements OnInit {
 
   private refreshTitlePicSrc() {
     if (this.place?.titlePicture) {
-      this.titlePicSrc = API_BASE_PATH + "/pics/" + this.place.titlePicture.mediumSizeId;
+      this.titlePicSrc = getPictureUrl(this.place.titlePicture.mediumSizeId, this.place.titlePicture.format);
     } else {
       this.titlePicSrc = "/assets/no-pic-place.png";
     }

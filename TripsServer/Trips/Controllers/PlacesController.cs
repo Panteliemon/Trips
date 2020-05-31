@@ -378,6 +378,7 @@ namespace Trips.Controllers
                     pictureEntry.GalleryId = galleryData.GalleryId;
                     pictureEntry.Index = galleryData.LastPictureIndex.HasValue
                         ? galleryData.LastPictureIndex.Value + 1 : 1; // Indexes in gallery start from 1.
+                    pictureEntry.Format = format;
                     pictureEntry.SmallSizeId = smallSize.Id;
                     pictureEntry.MediumSizeId = mediumSize.Id;
                     pictureEntry.LargeSizeId = largeSize.Id;

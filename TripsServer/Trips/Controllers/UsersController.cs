@@ -315,6 +315,7 @@ namespace Trips.Controllers
 
                         user.ProfilePicture = mainPic.Id;
                         user.SmallSizeProfilePicture = smallPic.Id;
+                        user.ProfilePictureFormat = format;
                         await DbContext.SaveChangesAsync();
 
                         return Ok();
@@ -361,6 +362,7 @@ namespace Trips.Controllers
 
                     user.ProfilePicture = null;
                     user.SmallSizeProfilePicture = null;
+                    user.ProfilePictureFormat = null;
                     await DbContext.SaveChangesAsync();
                 }
 
