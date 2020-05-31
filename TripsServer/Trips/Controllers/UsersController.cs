@@ -178,13 +178,6 @@ namespace Trips.Controllers
 
                 await DbContext.SaveChangesAsync();
 
-                // Conversion operation: happens only for users that set their profile picture
-                // before small size profile pictures were introduced. Not happens for new users.
-                if (user.ProfilePicture.HasValue && (!user.SmallSizeProfilePicture.HasValue))
-                {
-                    await CreateSmallSizeProfilePicture(user);
-                }
-
                 return Ok();
             }
         }
@@ -312,31 +305,17 @@ namespace Trips.Controllers
                         // Resize/crop the image.
                         var pictureResult = await PictureUtils.PrepareProfilePicture(format, buffer);
 
-                        // Time to change
-                        await Task.Run(() =>
-                        {
-                            PicsContext picsContext = new PicsContext();
-                            // Erase previous pictures, if there are any
-                            EntityUtils.DeleteUserPictureData(user, picsContext);
+                        // Time to change.
+                        // Erase previous pictures, if there are any
+                        await EntityUtils.DeleteUserPictureData(user, Program.PictureStorage);
 
-                            PicData mainPic = new PicData();
-                            mainPic.Id = Guid.NewGuid();
-                            mainPic.Format = format;
-                            mainPic.Data = pictureResult.MainData;
-                            picsContext.PicData.Add(mainPic);
+                        PictureData mainPic = new PictureData(Guid.NewGuid(), format, pictureResult.MainData);
+                        PictureData smallPic = new PictureData(Guid.NewGuid(), format, pictureResult.SmallSizeData);
+                        await Program.PictureStorage.UploadPictures(mainPic, smallPic);
 
-                            PicData smallPic = new PicData();
-                            smallPic.Id = Guid.NewGuid();
-                            smallPic.Format = format;
-                            smallPic.Data = pictureResult.SmallSizeData;
-                            picsContext.PicData.Add(smallPic);
-
-                            picsContext.SaveChanges();
-
-                            user.ProfilePicture = mainPic.Id;
-                            user.SmallSizeProfilePicture = smallPic.Id;
-                            DbContext.SaveChanges();
-                        });
+                        user.ProfilePicture = mainPic.Id;
+                        user.SmallSizeProfilePicture = smallPic.Id;
+                        await DbContext.SaveChangesAsync();
 
                         return Ok();
                     }
@@ -378,12 +357,7 @@ namespace Trips.Controllers
                         return Forbid();
                     }
 
-                    await Task.Run(() =>
-                    {
-                        PicsContext picsContext = new PicsContext();
-                        EntityUtils.DeleteUserPictureData(user, picsContext);
-                        picsContext.SaveChanges();
-                    });
+                    await EntityUtils.DeleteUserPictureData(user, Program.PictureStorage);
 
                     user.ProfilePicture = null;
                     user.SmallSizeProfilePicture = null;
@@ -398,43 +372,38 @@ namespace Trips.Controllers
         [Route("user/{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            return await Task.Run<IActionResult>(() =>
+            User currentUser = GetCurrentUser();
+            if (currentUser == null)
             {
-                User currentUser = GetCurrentUser();
-                if (currentUser == null)
+                return Unauthorized();
+            }
+
+            if (!currentUser.IsAdmin)
+            {
+                return Forbid();
+            }
+
+            User user = await DbContext.Users.Where(u => u.Id == id).FirstOrDefaultAsync();
+            if (user != null)
+            {
+                // Don't allow self-deletion
+                if (user.Id == currentUser.Id)
                 {
-                    return Unauthorized();
+                    return BadRequest("DELETE_SELF");
                 }
 
-                if (!currentUser.IsAdmin)
+                // Remove profile pic from pictures storage
+                if (user.ProfilePicture.HasValue || user.SmallSizeProfilePicture.HasValue)
                 {
-                    return Forbid();
+                    await EntityUtils.DeleteUserPictureData(user, Program.PictureStorage);
                 }
 
-                User user = DbContext.Users.FirstOrDefault(u => u.Id == id);
-                if (user != null)
-                {
-                    // Don't allow self-deletion
-                    if (user.Id == currentUser.Id)
-                    {
-                        return BadRequest("DELETE_SELF");
-                    }
+                DbContext.Remove(user);
+                await DbContext.SaveChangesAsync();
+                return Ok();
+            }
 
-                    // Remove profile pic from pictures database
-                    if (user.ProfilePicture.HasValue || user.SmallSizeProfilePicture.HasValue)
-                    {
-                        PicsContext picsContext = new PicsContext();
-                        EntityUtils.DeleteUserPictureData(user, picsContext);
-                        picsContext.SaveChanges();
-                    }
-
-                    DbContext.Remove(user);
-                    DbContext.SaveChanges();
-                    return Ok();
-                }
-
-                return NotFound();
-            });
+            return NotFound();
         }
 
         private static bool IsValidUserName(string userName)
@@ -445,31 +414,6 @@ namespace Trips.Controllers
         private static bool IsValidPassword(string password)
         {
             return (!string.IsNullOrWhiteSpace(password)) && (password.Length >= 6);
-        }
-
-        /// <summary>
-        /// Only for users that have ordinary profile picture and don't have min size version.
-        /// Perform all necessary checks outside!
-        /// </summary>
-        private async Task CreateSmallSizeProfilePicture(User user)
-        {
-            PicsContext picsContext = new PicsContext();
-            PicData existingPic = await picsContext.PicData.Where(pd => pd.Id == user.ProfilePicture.Value).FirstOrDefaultAsync();
-            if (existingPic != null)
-            {
-                var processed = await PictureUtils.PrepareProfilePicture(existingPic.Format, existingPic.Data);
-
-                PicData smallSizePic = new PicData();
-                smallSizePic.Id = Guid.NewGuid();
-                smallSizePic.Format = existingPic.Format;
-                smallSizePic.Data = processed.SmallSizeData;
-                picsContext.PicData.Add(smallSizePic);
-
-                await picsContext.SaveChangesAsync();
-
-                user.SmallSizeProfilePicture = smallSizePic.Id;
-                await DbContext.SaveChangesAsync();
-            }
         }
     }
 }

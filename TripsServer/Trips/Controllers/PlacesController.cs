@@ -259,10 +259,8 @@ namespace Trips.Controllers
                     await DbContext.Entry(visit).Reference(v => v.Gallery).LoadAsync();
                     await DbContext.Entry(visit.Gallery).Collection(g => g.Pictures).LoadAsync();
 
-                    // Clear PicsDB data for visit's gallery
-                    PicsContext picsContext = new PicsContext();
-                    EntityUtils.DeleteAllPicturesData(visit.Gallery, picsContext);
-                    await picsContext.SaveChangesAsync();
+                    // Clear pictures data for visit's gallery
+                    await EntityUtils.DeleteAllPicturesData(visit.Gallery, Program.PictureStorage);
 
                     // Now mark visit and it's gallery for deletion
                     DbContext.Entry(visit.Gallery).State = EntityState.Deleted;
@@ -273,10 +271,8 @@ namespace Trips.Controllers
                 await DbContext.SaveChangesAsync();
             }
 
-            // Clear PicsDB data for our gallery
-            PicsContext picsContext2 = new PicsContext();
-            EntityUtils.DeleteAllPicturesData(place.Gallery, picsContext2);
-            await picsContext2.SaveChangesAsync();
+            // Clear pictures data for our gallery
+            await EntityUtils.DeleteAllPicturesData(place.Gallery, Program.PictureStorage);
 
             // Finally, delete the place with its gallery
             DbContext.Entry(place.Gallery).State = EntityState.Deleted;
@@ -356,45 +352,35 @@ namespace Trips.Controllers
                             return BadRequest("CROOKED_PICTURE");
                     }
 
-                    // Insert data into Pics DB
-                    PicsContext picsDb = new PicsContext();
+                    // Insert data into the storage
+                    List<PictureData> picturesToInsert = new List<PictureData>();
+                    PictureData largeSize = new PictureData(Guid.NewGuid(), format, pictureData.LargeSizeData);
+                    picturesToInsert.Add(largeSize);
 
-                    PicData largeSizeEntry = new PicData();
-                    largeSizeEntry.Id = Guid.NewGuid();
-                    largeSizeEntry.Format = format;
-                    largeSizeEntry.Data = pictureData.LargeSizeData;
-                    await picsDb.AddAsync(largeSizeEntry);
-
-                    PicData mediumSizeEntry = largeSizeEntry;
+                    PictureData mediumSize = largeSize;
                     if (pictureData.MediumSizeData != pictureData.LargeSizeData)
                     {
-                        mediumSizeEntry = new PicData();
-                        mediumSizeEntry.Id = Guid.NewGuid();
-                        mediumSizeEntry.Format = format;
-                        mediumSizeEntry.Data = pictureData.MediumSizeData;
-                        await picsDb.AddAsync(mediumSizeEntry);
+                        mediumSize = new PictureData(Guid.NewGuid(), format, pictureData.MediumSizeData);
+                        picturesToInsert.Add(mediumSize);
                     }
 
-                    PicData smallSizeEntry = mediumSizeEntry;
+                    PictureData smallSize = mediumSize;
                     if (pictureData.SmallSizeData != pictureData.MediumSizeData)
                     {
-                        smallSizeEntry = new PicData();
-                        smallSizeEntry.Id = Guid.NewGuid();
-                        smallSizeEntry.Format = format;
-                        smallSizeEntry.Data = pictureData.SmallSizeData;
-                        await picsDb.AddAsync(smallSizeEntry);
+                        smallSize = new PictureData(Guid.NewGuid(), format, pictureData.SmallSizeData);
+                        picturesToInsert.Add(smallSize);
                     }
 
-                    await picsDb.SaveChangesAsync();
+                    await Program.PictureStorage.UploadPictures(picturesToInsert.ToArray());
 
                     // Insert picture data into Trips DB
                     Picture pictureEntry = new Picture();
                     pictureEntry.GalleryId = galleryData.GalleryId;
                     pictureEntry.Index = galleryData.LastPictureIndex.HasValue
                         ? galleryData.LastPictureIndex.Value + 1 : 1; // Indexes in gallery start from 1.
-                    pictureEntry.SmallSizeId = smallSizeEntry.Id;
-                    pictureEntry.MediumSizeId = mediumSizeEntry.Id;
-                    pictureEntry.LargeSizeId = largeSizeEntry.Id;
+                    pictureEntry.SmallSizeId = smallSize.Id;
+                    pictureEntry.MediumSizeId = mediumSize.Id;
+                    pictureEntry.LargeSizeId = largeSize.Id;
                     pictureEntry.DateTaken = pictureData.DateTaken;
                     pictureEntry.DateUploaded = DateTime.Now;
                     pictureEntry.UploadedBy = currentUser;
@@ -462,10 +448,8 @@ namespace Trips.Controllers
                     return NotFound();
                 }
 
-                // Delete picture data from Pics DB
-                PicsContext picsDb = new PicsContext();
-                EntityUtils.DeletePictureData(pictureEntry, picsDb);
-                await picsDb.SaveChangesAsync();
+                // Delete picture data from storage
+                await EntityUtils.DeletePictureData(pictureEntry, Program.PictureStorage);
 
                 // Delete from the main DB
                 DbContext.Entry(pictureEntry).State = EntityState.Deleted;

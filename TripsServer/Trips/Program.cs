@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Trips.Config;
+using Trips.PictureStorages;
 using Trips.Utils;
 
 namespace Trips
@@ -24,6 +25,8 @@ namespace Trips
 #else
             @"https://poezdo4ki.azurewebsites.net";
 #endif
+
+        public static IPictureStorage PictureStorage { get; private set; }
 
         // TODO edit dbconfig.xml to change the value
         public static string TripsConnectionString
@@ -112,6 +115,8 @@ namespace Trips
             }
 
             Encryption.Configure(keys);
+
+            PictureStorage = new DatabasePictureStorage();
 
             _configured = true;
         }

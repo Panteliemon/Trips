@@ -42,71 +42,86 @@ namespace Trips.Utils
         }
 
         /// <summary>
-        /// Deletes records from <paramref name="picsContext"/>, which correspond to
-        /// <paramref name="pictureEntry"/> entity. Does NOT save changes in the picsContext.
+        /// Deletes data of pictures, belonging to <paramref name="pictureEntry"/>, from storage.
         /// </summary>
         /// <param name="pictureEntry"></param>
-        /// <param name="picsContext"></param>
-        public static void DeletePictureData(Picture pictureEntry, PicsContext picsContext)
+        /// <param name="storage"></param>
+        /// <returns></returns>
+        public static async Task DeletePictureData(Picture pictureEntry, IPictureStorage storage)
         {
             if (pictureEntry != null)
             {
-                PicData smallSizeData = new PicData() { Id = pictureEntry.SmallSizeId };
-                picsContext.Entry(smallSizeData).State = EntityState.Deleted;
-
-                if (pictureEntry.MediumSizeId != pictureEntry.SmallSizeId)
-                {
-                    PicData mediumSizeData = new PicData() { Id = pictureEntry.MediumSizeId };
-                    picsContext.Entry(mediumSizeData).State = EntityState.Deleted;
-                }
-
-                if ((pictureEntry.LargeSizeId != pictureEntry.SmallSizeId)
-                    && (pictureEntry.LargeSizeId != pictureEntry.MediumSizeId))
-                {
-                    PicData largeSizeData = new PicData() { Id = pictureEntry.LargeSizeId };
-                    picsContext.Entry(largeSizeData).State = EntityState.Deleted;
-                }
+                List<Guid> pictureIds = new List<Guid>();
+                CollectPictureIds(pictureEntry, pictureIds);
+                await storage.DeletePictures(pictureIds);
             }
         }
 
         /// <summary>
-        /// Deletes records from <paramref name="picsContext"/>, which are referenced to
-        /// from the <paramref name="user"/>'s profile picture. Does NOT save changes in the picsContext.
+        /// Deletes data of pictures, belonging to <paramref name="user"/>, from storage.
         /// </summary>
         /// <param name="user"></param>
-        /// <param name="picsContext"></param>
-        public static void DeleteUserPictureData(User user, PicsContext picsContext)
+        /// <param name="storage"></param>
+        /// <returns></returns>
+        public static async Task DeleteUserPictureData(User user, IPictureStorage storage)
         {
             if (user != null)
             {
+                List<Guid> pictureIds = new List<Guid>();
                 if (user.ProfilePicture != null)
                 {
-                    PicData picData = new PicData() { Id = user.ProfilePicture.Value };
-                    picsContext.Entry(picData).State = EntityState.Deleted;
+                    pictureIds.Add(user.ProfilePicture.Value);
                 }
 
                 if ((user.SmallSizeProfilePicture != null)
                     && (user.SmallSizeProfilePicture != user.ProfilePicture))
                 {
-                    PicData picData = new PicData() { Id = user.SmallSizeProfilePicture.Value };
-                    picsContext.Entry(picData).State = EntityState.Deleted;
+                    pictureIds.Add(user.SmallSizeProfilePicture.Value);
                 }
+
+                await storage.DeletePictures(pictureIds);
             }
         }
 
         /// <summary>
-        /// Deletes records from <paramref name="picsContext"/> for each picture entry from
-        /// <paramref name="gallery"/>. Does NOT save changes in the picsContext.
+        /// Deletes data of all pictures, belonging to <paramref name="gallery"/>, from storage.
+        /// Doesn't remove pictures entities from the gallery entity.
         /// </summary>
         /// <param name="gallery"></param>
-        /// <param name="picsContext"></param>
-        public static void DeleteAllPicturesData(Gallery gallery, PicsContext picsContext)
+        /// <param name="storage"></param>
+        /// <returns></returns>
+        public static async Task DeleteAllPicturesData(Gallery gallery, IPictureStorage storage)
         {
             if ((gallery != null) && (gallery.Pictures != null))
             {
+                List<Guid> pictureIds = new List<Guid>();
                 foreach (var picture in gallery.Pictures)
                 {
-                    DeletePictureData(picture, picsContext);
+                    CollectPictureIds(picture, pictureIds);
+                }
+
+                await storage.DeletePictures(pictureIds);
+            }
+        }
+
+        /// <summary>
+        /// Capture distinct ids to the list.
+        /// </summary>
+        private static void CollectPictureIds(Picture pictureEntry, List<Guid> receiver)
+        {
+            if (pictureEntry != null)
+            {
+                receiver.Add(pictureEntry.SmallSizeId);
+
+                if (pictureEntry.MediumSizeId != pictureEntry.SmallSizeId)
+                {
+                    receiver.Add(pictureEntry.MediumSizeId);
+                }
+
+                if ((pictureEntry.LargeSizeId != pictureEntry.SmallSizeId)
+                    && (pictureEntry.LargeSizeId != pictureEntry.MediumSizeId))
+                {
+                    receiver.Add(pictureEntry.LargeSizeId);
                 }
             }
         }
