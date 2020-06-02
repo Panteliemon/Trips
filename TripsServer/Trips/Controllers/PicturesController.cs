@@ -67,15 +67,15 @@ namespace Trips.Controllers
         private void SplitToIdAndExtension(string fileName, out string id, out string extension)
         {
             int periodIndex = fileName.LastIndexOf('.');
-            if (fileName.LastIndexOf('.') >= 0)
+            if (periodIndex >= 0)
             {
                 id = fileName.Substring(0, periodIndex);
                 extension = fileName.Substring(periodIndex);
             }
             else
             {
-                id = fileName.Substring(0, periodIndex);
-                extension = fileName.Substring(periodIndex);
+                id = fileName;
+                extension = string.Empty;
             }
         }
     }
