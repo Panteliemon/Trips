@@ -513,7 +513,7 @@ namespace Trips.Controllers
                                         {
                                             TripId = v.Trip.Id,
                                             TripDate = v.Trip.Date,
-                                            Participants = v.Trip.Users.Select(u => u.User)
+                                            Participants = v.Trip.Participants.Select(u => u.User)
                                         });
             if (skip.HasValue)
             {

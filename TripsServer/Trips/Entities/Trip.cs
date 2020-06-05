@@ -11,9 +11,10 @@ namespace Trips.Entities
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime? Date { get; set; }
+        public Picture TitlePicture { get; set; }
         public Gallery Gallery { get; set; }
 
-        public ICollection<UsersToTrips> Users { get; set; }
+        public ICollection<UsersToTrips> Participants { get; set; }
         public ICollection<VehiclesToTrips> Vehicles { get; set; }
         public ICollection<Visit> Visits { get; set; }
     }

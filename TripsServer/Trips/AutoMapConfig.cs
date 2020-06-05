@@ -20,6 +20,14 @@ namespace Trips
 
             CreateMap<Place, PlaceDto>();
             CreateMap<Place, PlaceHeaderDto>();
+
+            CreateMap<Visit, VisitDto>();
+            CreateMap<Trip, TripDto>().ForMember(
+                dest => dest.Participants, opt => opt.MapFrom(trip => trip.Participants.Select(utt => utt.User))
+            );
+            CreateMap<Trip, TripHeaderDto>().ForMember(
+                dest => dest.Participants, opt => opt.MapFrom(trip => trip.Participants.Select(utt => utt.User))
+            );
         }
     }
 }

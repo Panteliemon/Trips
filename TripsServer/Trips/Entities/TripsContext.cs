@@ -26,7 +26,7 @@ namespace Trips.Entities
             modelBuilder.Entity<UsersToTrips>().HasOne(utt => utt.User)
                 .WithMany(u => u.Trips).HasForeignKey(utt2 => utt2.UserId);
             modelBuilder.Entity<UsersToTrips>().HasOne(utt => utt.Trip)
-                .WithMany(t => t.Users).HasForeignKey(utt2 => utt2.TripId);
+                .WithMany(t => t.Participants).HasForeignKey(utt2 => utt2.TripId);
 
             // Vehicles to Trips many-to-many
             modelBuilder.Entity<VehiclesToTrips>().HasKey(vtt => new { vtt.TripId, vtt.VehicleId });

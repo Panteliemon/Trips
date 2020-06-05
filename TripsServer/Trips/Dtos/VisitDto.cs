@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Trips.Entities
+namespace Trips.Dtos
 {
-    public class Visit
+    public class VisitDto
     {
         public int Id { get; set; }
-        public Trip Trip { get; set; }
-        public Place Place { get; set; }         
-        public Gallery Gallery { get; set; }
+        public PlaceHeaderDto Place { get; set; }
+        public GalleryDto Gallery { get; set; }
 
         public bool WithKebab { get; set; }
         public bool WithNightStay { get; set; }

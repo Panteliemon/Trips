@@ -17,6 +17,8 @@
     <Compile Remove="Migrations\20200418214656_PicturesTable2.Designer.cs" />
     <Compile Remove="Migrations\20200428171857_PlaceAccessibility.cs" />
     <Compile Remove="Migrations\20200428171857_PlaceAccessibility.Designer.cs" />
+    <Compile Remove="Migrations\20200605202347_TripTitlePic.cs" />
+    <Compile Remove="Migrations\20200605202347_TripTitlePic.Designer.cs" />
     <Compile Remove="Migrations\Pics\20200418094613_Miniatures.cs" />
     <Compile Remove="Migrations\Pics\20200418094613_Miniatures.Designer.cs" />
   </ItemGroup>
@@ -47,7 +49,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.3" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0007" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.5.0" />
   </ItemGroup>
