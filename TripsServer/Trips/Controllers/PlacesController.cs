@@ -223,8 +223,8 @@ namespace Trips.Controllers
                 }
             }
 
-            // 4. ---------- Reorder pictures in the gallery
-            EntityUtils.ReorderPicturesInTheGallery(place.Gallery, placeDto.Gallery);
+            // 4. ---------- Changes in the gallery
+            EntityUtils.ApplyChangesToGallery(place.Gallery, placeDto.Gallery);
 
             // 5. ---------- Changed By
             place.ChangedBy = currentUser;
@@ -278,7 +278,7 @@ namespace Trips.Controllers
                     // Clear pictures data for visit's gallery
                     await EntityUtils.DeleteAllPicturesData(visit.Gallery, Program.PictureStorage);
 
-                    // Now mark visit and it's gallery for deletion
+                    // Now mark visit and its gallery for deletion
                     DbContext.Entry(visit.Gallery).State = EntityState.Deleted;
                     DbContext.Entry(visit).State = EntityState.Deleted;
                 }
@@ -329,111 +329,21 @@ namespace Trips.Controllers
                     GalleryId = p.Gallery.Id,
                     LastPictureIndex = p.Gallery.Pictures.Max(p => (int?)p.Index)
                 }).FirstOrDefaultAsync();
-
             if (galleryData == null)
             {
                 return NotFound();
             }
 
-            try
+            return await UploadPictureHandler(galleryData.GalleryId, galleryData.LastPictureIndex, currentUser, async (changedDate) =>
             {
-                if (Request.Form.Files.Count == 0)
+                // Update place's changed date
+                Place place = await DbContext.Places.Where(p => p.Id == id).FirstOrDefaultAsync();
+                if (place != null)
                 {
-                    return BadRequest("NO_FILE");
+                    place.ChangedDate = changedDate;
+                    place.ChangedBy = currentUser;
                 }
-
-                IFormFile file = Request.Form.Files[0];
-                if (file.Length > 0)
-                {
-                    if (file.Length > PictureUtils.MAX_FILESIZE)
-                    {
-                        return BadRequest("FILE_TOO_LARGE");
-                    }
-
-                    if (!PictureUtils.TryParseMimeType(file.ContentType, out PicFormat format))
-                    {
-                        return BadRequest($"FILE_NOT_SUPPORTED");
-                    }
-
-                    // Upload
-                    byte[] buffer = new byte[file.Length];
-                    using (var stream = file.OpenReadStream())
-                    {
-                        await stream.ReadAsync(buffer, 0, buffer.Length);
-                    }
-
-                    // Process picture
-                    var pictureData = await PictureUtils.PrepareGalleryPicture(format, buffer);
-                    
-                    switch (pictureData.Status)
-                    {
-                        case PictureUtils.GalleryStatus.SmallPicture:
-                            return BadRequest("SMALL_PICTURE");
-                        case PictureUtils.GalleryStatus.BadProportion:
-                            return BadRequest("CROOKED_PICTURE");
-                    }
-
-                    // Insert data into the storage
-                    List<PictureData> picturesToInsert = new List<PictureData>();
-                    PictureData largeSize = new PictureData(Guid.NewGuid(), format, pictureData.LargeSizeData);
-                    picturesToInsert.Add(largeSize);
-
-                    PictureData mediumSize = largeSize;
-                    if (pictureData.MediumSizeData != pictureData.LargeSizeData)
-                    {
-                        mediumSize = new PictureData(Guid.NewGuid(), format, pictureData.MediumSizeData);
-                        picturesToInsert.Add(mediumSize);
-                    }
-
-                    PictureData smallSize = mediumSize;
-                    if (pictureData.SmallSizeData != pictureData.MediumSizeData)
-                    {
-                        smallSize = new PictureData(Guid.NewGuid(), format, pictureData.SmallSizeData);
-                        picturesToInsert.Add(smallSize);
-                    }
-
-                    await Program.PictureStorage.UploadPictures(picturesToInsert.ToArray());
-
-                    // Insert picture data into Trips DB
-                    Picture pictureEntry = new Picture();
-                    pictureEntry.GalleryId = galleryData.GalleryId;
-                    pictureEntry.Index = galleryData.LastPictureIndex.HasValue
-                        ? galleryData.LastPictureIndex.Value + 1 : 1; // Indexes in gallery start from 1.
-                    pictureEntry.Format = format;
-                    pictureEntry.SmallSizeId = smallSize.Id;
-                    pictureEntry.MediumSizeId = mediumSize.Id;
-                    pictureEntry.LargeSizeId = largeSize.Id;
-                    pictureEntry.DateTaken = pictureData.DateTaken;
-                    pictureEntry.DateUploaded = DateTime.Now;
-                    pictureEntry.UploadedBy = currentUser;
-                    pictureEntry.Height = pictureData.Height;
-                    pictureEntry.Width = pictureData.Width;
-
-                    await DbContext.Pictures.AddAsync(pictureEntry);
-
-                    // Update place's changed date
-                    Place place = await DbContext.Places.Where(p => p.Id == id).FirstOrDefaultAsync();
-                    if (place != null)
-                    {
-                        place.ChangedDate = pictureEntry.DateUploaded;
-                        place.ChangedBy = currentUser;
-                    }
-
-                    await DbContext.SaveChangesAsync();
-
-                    // OK so return DTO for what has been inserted
-                    PictureDto picDto = Mapper.Map<PictureDto>(pictureEntry);
-                    return Ok(picDto);
-                }
-                else
-                {
-                    return BadRequest("FILE_EMPTY");
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            });
         }
 
         /// <summary>

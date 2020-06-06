@@ -15,26 +15,26 @@ namespace Trips.Utils
     public static class EntityUtils
     {
         /// <summary>
-        /// Refreshes picture indexes in the entity according to desired order from DTO.
-        /// Matches by small size id, of course. Parameters can be null.
+        /// Sets picture indexes and descriptions according to values from dto.
+        /// Matches entities by small size id, of course. Parameters can be null.
         /// </summary>
-        /// <param name="galleryFromDb">Mind that pictures should be loaded from db
-        /// for correct work.</param>
-        /// <param name="desiredOrder"></param>
-        public static void ReorderPicturesInTheGallery(Gallery galleryFromDb, GalleryDto desiredOrder)
+        /// <param name="galleryFromDb">Pictures should be loaded from DB</param>
+        /// <param name="galleryDto"></param>
+        public static void ApplyChangesToGallery(Gallery galleryFromDb, GalleryDto galleryDto)
         {
-            if ((galleryFromDb != null) && (galleryFromDb.Pictures != null)
-                && (desiredOrder != null) && (desiredOrder.Pictures != null))
+            if ((galleryFromDb != null) && (galleryDto != null)
+                && (galleryFromDb.Pictures != null) && (galleryDto.Pictures != null))
             {
-                for (int i = 0; i < desiredOrder.Pictures.Count; i++)
+                for (int i = 0; i < galleryDto.Pictures.Count; i++)
                 {
-                    Guid currentPictureSmallSizeId = desiredOrder.Pictures[i].SmallSizeId;
+                    Guid currentPictureSmallSizeId = galleryDto.Pictures[i].SmallSizeId;
                     Picture correspondingEntity = galleryFromDb.Pictures.FirstOrDefault(
                         p => p.SmallSizeId == currentPictureSmallSizeId
                     );
 
                     if (correspondingEntity != null)
                     {
+                        correspondingEntity.Description = galleryDto.Pictures[i].Description;
                         correspondingEntity.Index = i + 1;
                     }
                 }
