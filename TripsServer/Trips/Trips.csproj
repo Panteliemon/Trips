@@ -31,6 +31,14 @@
     <Compile Remove="Migrations\20200606094929_AddedCangdByFK.Designer.cs" />
     <Compile Remove="Migrations\20200606094958_AddedChangedByFK.cs" />
     <Compile Remove="Migrations\20200606094958_AddedChangedByFK.Designer.cs" />
+    <Compile Remove="Migrations\20200606102649_PicUplaedByFK.cs" />
+    <Compile Remove="Migrations\20200606102649_PicUplaedByFK.Designer.cs" />
+    <Compile Remove="Migrations\20200606102742_PicUploadedByFK.cs" />
+    <Compile Remove="Migrations\20200606102742_PicUploadedByFK.Designer.cs" />
+    <Compile Remove="Migrations\20200606103301_FKUploA.cs" />
+    <Compile Remove="Migrations\20200606103301_FKUploA.Designer.cs" />
+    <Compile Remove="Migrations\20200606103513_UlaedByFK.cs" />
+    <Compile Remove="Migrations\20200606103513_UlaedByFK.Designer.cs" />
     <Compile Remove="Migrations\Pics\20200418094613_Miniatures.cs" />
     <Compile Remove="Migrations\Pics\20200418094613_Miniatures.Designer.cs" />
   </ItemGroup>

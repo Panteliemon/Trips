@@ -435,8 +435,56 @@ namespace Trips.Controllers
                     await EntityUtils.DeleteUserPictureData(user, Program.PictureStorage);
                 }
 
+                // MS SQL doesn't support on delete set null for multiple columns referencing one parent table.
+                // All manually!
+                await DbContext.Entry(user).Collection(u => u.PostedNews).LoadAsync();
+                await DbContext.Entry(user).Collection(u => u.EditedNews).LoadAsync();
+                foreach (News n in user.PostedNews)
+                {
+                    n.PostedBy = null;
+                }
+                foreach (News n in user.EditedNews)
+                {
+                    n.EditedBy = null;
+                }
+
+                await DbContext.Entry(user).Collection(u => u.AddedPlaces).LoadAsync();
+                await DbContext.Entry(user).Collection(u => u.ChangedPlaces).LoadAsync();
+                foreach (Place p in user.AddedPlaces)
+                {
+                    p.AddedBy = null;
+                }
+                foreach (Place p in user.ChangedPlaces)
+                {
+                    p.ChangedBy = null;
+                }
+
+                await DbContext.Entry(user).Collection(u => u.AddedRegions).LoadAsync();
+                await DbContext.Entry(user).Collection(u => u.ChangedRegions).LoadAsync();
+                foreach (Region r in user.AddedRegions)
+                {
+                    r.AddedBy = null;
+                }
+                foreach (Region r in user.ChangedRegions)
+                {
+                    r.ChangedBy = null;
+                }
+
+                await DbContext.Entry(user).Collection(u => u.AddedTrips).LoadAsync();
+                await DbContext.Entry(user).Collection(u => u.ChangedTrips).LoadAsync();
+                foreach (Trip t in user.AddedTrips)
+                {
+                    t.AddedBy = null;
+                }
+                foreach (Trip t in user.ChangedTrips)
+                {
+                    t.ChangedBy = null;
+                }
+
                 DbContext.Remove(user);
+
                 await DbContext.SaveChangesAsync();
+
                 return Ok();
             }
 
