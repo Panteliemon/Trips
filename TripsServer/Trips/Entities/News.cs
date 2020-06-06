@@ -13,8 +13,8 @@ namespace Trips.Entities
         public string Text { get; set; }
 
         public User PostedBy { get; set; }
-        
         public DateTime? PostedDate { get; set; }
+        public User EditedBy { get; set; }
         public DateTime? EditedDate { get; set; }
 
         public Picture TitlePicture { get; set; }

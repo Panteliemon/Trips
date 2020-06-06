@@ -14,6 +14,11 @@ namespace Trips.Dtos
         public PictureDto TitlePicture { get; set; }
         public GalleryDto Gallery { get; set; }
 
+        public UserHeaderDto AddedBy { get; set; }
+        public DateTime? AddedDate { get; set; }
+        public UserHeaderDto ChangedBy { get; set; }
+        public DateTime? ChangedDate { get; set; }
+
         public List<UserHeaderDto> Participants { get; set; }
         // TODO Vehicles
         public List<VisitDto> Visits { get; set; }

@@ -19,6 +19,18 @@
     <Compile Remove="Migrations\20200428171857_PlaceAccessibility.Designer.cs" />
     <Compile Remove="Migrations\20200605202347_TripTitlePic.cs" />
     <Compile Remove="Migrations\20200605202347_TripTitlePic.Designer.cs" />
+    <Compile Remove="Migrations\20200606091319_Consolidation.cs" />
+    <Compile Remove="Migrations\20200606091319_Consolidation.Designer.cs" />
+    <Compile Remove="Migrations\20200606092439_Consolidation.cs" />
+    <Compile Remove="Migrations\20200606092439_Consolidation.Designer.cs" />
+    <Compile Remove="Migrations\20200606093406_Consolidation.cs" />
+    <Compile Remove="Migrations\20200606093406_Consolidation.Designer.cs" />
+    <Compile Remove="Migrations\20200606094716_AddedByChangedByNull.cs" />
+    <Compile Remove="Migrations\20200606094716_AddedByChangedByNull.Designer.cs" />
+    <Compile Remove="Migrations\20200606094929_AddedCangdByFK.cs" />
+    <Compile Remove="Migrations\20200606094929_AddedCangdByFK.Designer.cs" />
+    <Compile Remove="Migrations\20200606094958_AddedChangedByFK.cs" />
+    <Compile Remove="Migrations\20200606094958_AddedChangedByFK.Designer.cs" />
     <Compile Remove="Migrations\Pics\20200418094613_Miniatures.cs" />
     <Compile Remove="Migrations\Pics\20200418094613_Miniatures.Designer.cs" />
   </ItemGroup>

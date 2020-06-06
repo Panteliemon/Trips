@@ -11,6 +11,7 @@ namespace Trips.Entities
         Visit = 2,
         Trip = 3,
         News = 4,
-        Vehicle = 5
+        Vehicle = 5,
+        Region = 6
     }
 }

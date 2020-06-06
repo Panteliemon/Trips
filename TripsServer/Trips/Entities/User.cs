@@ -24,10 +24,13 @@ namespace Trips.Entities
 
         public ICollection<UsersToTrips> Trips { get; set; }
         public ICollection<News> PostedNews { get; set; }
+        public ICollection<News> EditedNews { get; set; }
         public ICollection<Place> AddedPlaces { get; set; }
         public ICollection<Place> ChangedPlaces { get; set; }
         public ICollection<Region> AddedRegions { get; set; }
         public ICollection<Region> ChangedRegions { get; set; }
+        public ICollection<Trip> AddedTrips { get; set; }
+        public ICollection<Trip> ChangedTrips { get; set; }
         public ICollection<Vehicle> Vehicles { get; set; }
         public ICollection<Picture> UploadedPics { get; set; }
     }
