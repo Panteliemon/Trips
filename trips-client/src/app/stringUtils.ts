@@ -13,6 +13,18 @@ export function isAllSpaces(str: string): boolean {
   return allSpaces;
 }
 
+export function dateToQueryParamString(date: string|Date): string {
+  if (date) {
+    if (typeof date == "string") {
+      return dateToQueryParamStringCore(new Date(date));
+    } else {
+      return dateToQueryParamStringCore(date);
+    }
+  } else {
+    return "";
+  }
+}
+
 export function dateToInputString(date: string|Date): string {
   if (date) {
     if (typeof date == "string") {
@@ -23,6 +35,10 @@ export function dateToInputString(date: string|Date): string {
   } else {
     return "";
   }
+}
+
+function dateToQueryParamStringCore(date: Date) {
+  return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
 }
 
 function dateToInputStringCore(date: Date) {

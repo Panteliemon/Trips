@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpEventType } from '@angular/common/http';
 import { PlaceHeader } from '../models/place-header';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { API_BASE_PATH } from './api';
 import { Place, PlaceKind } from '../models/place';
 import { Picture } from '../models/picture';
