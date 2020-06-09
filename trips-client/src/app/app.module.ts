@@ -21,7 +21,7 @@ import { AuthInterceptor } from './services/auth.interceptor';
 import { LoginPageComponent } from './components/common/login-page/login-page.component';
 import { GalleryComponent } from './components/common/gallery/gallery.component';
 import { PlaceDetailsComponent } from './components/places/place-details/place-details.component';
-import { AdaptiveDatePipe } from './services/adaptive-date.pipe';
+import { AdaptiveDatePipe } from './pipes/adaptive-date.pipe';
 import { UserLinkComponent } from './components/common/user-link/user-link.component';
 import { SelectorEngineComponent } from './components/common/selectors/selector-engine/selector-engine.component';
 import { PlaceKindSelectorComponent } from './components/common/selectors/place-kind-selector/place-kind-selector.component';
@@ -36,6 +36,8 @@ import { PlaceKindMultiSelectorComponent } from './components/common/selectors/p
 import { ExpanderComponent } from './components/common/expander/expander.component';
 import { ServiceComponent } from './components/service/service.component';
 import { ProgressBarComponent } from './components/common/progress-bar/progress-bar.component';
+//import { TripDetailsComponent } from './components/trips/trip-details/trip-details.component';
+//import { PlacePickerComponent } from './components/common/selectors/place-picker/place-picker.component';
 
 @NgModule({
   declarations: [
@@ -69,7 +71,9 @@ import { ProgressBarComponent } from './components/common/progress-bar/progress-
     PlaceKindMultiSelectorComponent,
     ExpanderComponent,
     ServiceComponent,
-    ProgressBarComponent
+    ProgressBarComponent,
+    //TripDetailsComponent,
+    //PlacePickerComponent
   ],
   imports: [
     BrowserModule,
