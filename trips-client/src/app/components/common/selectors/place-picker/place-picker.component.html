@@ -1,0 +1,39 @@
+<div *ngIf="isVisible" class="modal-popup-background">
+    <div class="picker-popup picker-popup-fixed-height">
+        <h3 class="pickermargin">{{caption}}</h3>
+        <div class="form-field pickermargin">
+            <label for="tbSearchString">Поиск по имени:</label>
+            <input type="text" id="tbSearchString" [(ngModel)]="searchString" />
+        </div>
+        <div class="picker-table-holder">
+            <table class="items-presenter" *ngIf="(places) && (places.length > 0)">
+                <thead>
+                    <th></th>
+                    <th class="name-column">Название</th>
+                    <th>Тип</th>
+                </thead>
+                <tr *ngFor="let place of places" class="entity-row selectable-row picker-row" (click)="placeClicked(place)">
+                    <td class="entity-picture-column">
+                        <img [src]="getPictureSrc(place)" />
+                    </td>
+                    <td class="name-column">
+                        <span>{{getPlaceName(place)}}</span>
+                        <a routerLink="/place/{{place.id}}" class="inline-ref">
+                            <i class="material-icons">link</i>
+                        </a>
+                    </td>
+                    <td class="enum-column">
+                        <app-place-kind-selector class="centered" [value]="place.kind"
+                                                 [isEditable]="false" [isShortView]="true" [isTooltipToLeft]="true"></app-place-kind-selector>
+                    </td>
+                </tr>
+            </table>
+            <p *ngIf="(!isLoading) && (places) && (places.length == 0)"
+               class="big-gray-text centered-both">Ничего не найдено</p>
+            <app-loader *ngIf="isLoading"></app-loader>
+        </div>
+        <div>
+            <button class="button button-std pickerbutton-right" (click)="cancelClicked()">Отмена</button>
+        </div>
+    </div>
+</div>

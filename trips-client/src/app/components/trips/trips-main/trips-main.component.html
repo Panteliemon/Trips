@@ -1,3 +1,55 @@
 <section>
-    <h1>trips</h1>
+    <div class="uniter">
+        <div>
+            <h1 class="allows-float-beside">Поездочки</h1>
+            <button class="button up-right-button" *ngIf="isAddButtonVisible" (click)="addButtonClicked()">
+                <i class="material-icons">add</i>
+                <span>Добавить</span>
+            </button>
+            <div>
+                <div class="form-field">
+                    <label for="tbSearchString">Поиск по названию:</label>
+                    <input type="text" id="tbSearchString" [(ngModel)]="searchString" />
+                </div>
+                <app-expander class="form-field-margin" title="Расширенный поиск" [(isExpanded)]="isAdvancedSearchExpanded">
+                    ХУЙ
+                </app-expander>
+            </div>
+            <table class="items-presenter">
+                <thead>
+                    <th></th>
+                    <th>Дата</th>
+                    <th class="name-column">Название</th>
+                    <th>Участники</th>
+                </thead>
+                <tr *ngFor="let trip of trips" class="entity-row selectable-row">
+                    <td class="entity-picture-column">
+                        <a class="cell-wrapper" routerLink="/trip/{{trip.id}}">
+                            <img [src]="getMiniaturePicSrc(trip)" />
+                        </a>
+                    </td>
+                    <td class="date-column">
+                        <a class="cell-wrapper" routerLink="/trip/{{trip.id}}">
+                            <p *ngIf="trip.date" class="centered">{{trip.date | tripsDate}}</p>
+                        </a>
+                    </td>
+                    <td class="name-column">
+                        <a class="cell-wrapper" routerLink="/trip/{{trip.id}}">
+                            <p>{{trip.title}}</p>
+                        </a>
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+            </table>
+            <app-loader *ngIf="isListLoaderVisible"></app-loader>
+            <button *ngIf="isLoadMoreButtonVisible" class="button button-std form-field-margin-above"
+                    (click)="loadMoreButtonClicked()">Загрузить ещё</button>
+        </div>
+        <div class="fog" *ngIf="isOverallLoaderVisible">
+            <app-loader class="centered"></app-loader>
+        </div>
+    </div>
 </section>
+<app-place-picker #placePicker></app-place-picker>

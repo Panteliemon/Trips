@@ -7,6 +7,7 @@ import { Trip } from '../models/trip';
 import { Picture } from '../models/picture';
 import { dateToQueryParamString } from '../stringUtils';
 import { API_BASE_PATH } from './api';
+import { MessageIcon } from './message.service';
 
 @Injectable({
   providedIn: 'root'
@@ -93,5 +94,71 @@ export class TripsService {
 
   deleteVisitPicture(tripId: number, visitId: number, pictureSmallSizeId: string): Observable<any> {
     return this.http.delete(`${API_BASE_PATH}/trip/${tripId}/visit/${visitId}/gallery/${pictureSmallSizeId}`);
+  }
+
+  //-------------------------------------
+
+  getDisplayableTripTitle(trip: Trip) {
+    if (trip.title) {
+      return trip.title;
+    } else {
+      return "< без названия >"
+    }
+  }
+
+  getServerErrorText(error: any): string {
+    if (error.error) {
+      if (typeof error.error == "string") {
+        return this.getBadRequestErrorText(error.error);
+      } else if (error.error.errors && error.error.errors.id && Array.isArray(error.error.errors.id)) {
+        return error.error.errors.id.join("\r\n");
+      }
+    }
+
+    if (error.status == 404) {
+      return "Не найдено в БД. Возможно, кто-то параллельно уже удолил.";
+    } else if (error.status == 401) {
+      return "Вы не авторизованы";
+    } else if (error.status == 403) {
+      return "Нет прав для осуществления операции.";
+    } else if (error.status == 423) {
+      return "Данное действие нельзя произвести по техническим причинам.\r\nНа время проведения важных работ сайт переведен админом в режим только чтение.";
+    } else if (error.status == 0) {
+      return "Сервер не отвечает";
+    }
+
+    return "Communism error";
+  }
+
+  getServerErrorIcon(error: any): MessageIcon {
+    if (error.error) {
+      if (typeof error.error == "string") {
+        if ((error.error == "SMALL_PICTURE")
+            || (error.error == "CROOKED_PICTURE")) {
+          return MessageIcon.smallImage;
+        }
+      }
+    }
+
+    return MessageIcon.error;
+  }
+
+  private getBadRequestErrorText(badRequestErrorCode: string): string {
+    switch (badRequestErrorCode) {
+      case "MISSING_PARAMS":
+        return "Не переданы обязательные параметры запроса надлежащим образом (ошибка в программе)";
+      case "NO_FILE":
+        return "Не указан файл";
+      case "FILE_EMPTY":
+        return "Файл - пустой";
+      case "FILE_TOO_LARGE":
+        return "Файл слишком большой. Максимальный разрешённый размер - 16 МБ.";
+      case "FILE_NOT_SUPPORTED":
+        return "Формат файла не поддерживается.";
+      case "SMALL_PICTURE":
+        return "Слишком крохотная картинка для галереи. Почти как мой член. У-тю-тю-тю-тю! Минимум надо 200x200 пикселей.";
+      case "CROOKED_PICTURE":
+        return "Потребность в картинках с несуразными пропорциями ширины/высоты реально составляет ноль штук.";
+    }
   }
 }

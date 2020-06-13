@@ -260,8 +260,8 @@ table.items-presenter tr {
     border-top: 2px solid @theme-color-light;
     border-bottom: 2px solid @theme-color-light;
 }
-table.items-presenter tr:hover {
-    background-color:@color-page-hover;
+table.items-presenter td {
+    padding: 0px;
 }
 table.items-presenter th {
     font-size:16pt;
@@ -275,6 +275,7 @@ table.items-presenter a.cell-wrapper {
 }
 
 /*----- Rows (set height and useful stuff) -----*/
+/* Setup row's height. Row can be either "entity" or "user" */
 table.items-presenter tr.entity-row a.cell-wrapper {
     height:90px;
 }
@@ -282,8 +283,16 @@ table.items-presenter tr.user-row a.cell-wrapper {
     height:74px;
 }
 
+/* Setup row's behavior. Behaviors can be combined. */
 table.items-presenter tr.selectable-row {
     cursor:pointer;
+}
+table.items-presenter tr.selectable-row:hover {
+    background-color:@color-page-hover;
+}
+
+table.items-presenter tr.picker-row {
+    line-height:0%; /* Otherwise rows are ALWAYS taller than needed (this happens only when no a.cell-wrapper is used) */
 }
 
 /*----- Columns (set width and other useful staff) -----*/
@@ -310,10 +319,11 @@ table.items-presenter tr.user-row td.user-picture-column img {
 
 table.items-presenter td.name-column {
     width:auto;
+    font-weight:bold; /* for pickers */
 }
 table.items-presenter td.name-column a.cell-wrapper {
     color:@color-text-on-page;
-    font-weight:bold;
+    font-weight:bold; /* for lists, since <a> overrides everything */
     text-decoration:none;
     padding-left:5px;
 }
@@ -332,6 +342,19 @@ table.items-presenter tr.entity-row td.name-column a.cell-wrapper > p {
 table.items-presenter tr.user-row td.name-column a.cell-wrapper > p {
     position:relative;
     top:23px;
+}
+
+/* if no cellwrapper is used */
+table.items-presenter tr.picker-row td.name-column span {
+    font-size:16pt;
+    margin-left:5px;
+    margin-right:5px;
+    position:relative;
+    top:-3px;
+}
+table.items-presenter tr.picker-row td.name-column a {
+    position:relative;
+    top:3px;
 }
 
 table.items-presenter td.enum-column {
@@ -357,6 +380,10 @@ table.items-presenter tr.entity-row td.date-column a.cell-wrapper > p {
     top:35px;
 }
 
+table.items-presenter td.delete-button-column {
+    width:39px; /* makes it line up with Edit button (so far) */
+}
+
 /*----------------------------------- form-field -------------------------------------*/
 
 div.form-field {
@@ -366,6 +393,10 @@ div.form-field {
 div.form-field > label, div.form-field > p:first-child {
     color:@theme-color-dark;
     display:block;
+    margin-bottom:2px;
+}
+div.form-field > h3 {
+    color:@theme-color-dark;
     margin-bottom:2px;
 }
 
@@ -506,10 +537,8 @@ img.profile-editor-pic {
     left:50%;
     transform:translateX(-50%);
 }
-
 @media only screen and (min-width: 768px) {
     img.profile-editor-pic {
-        width:100%;
         object-fit:scale-down;
         left:unset;
         transform:unset;
@@ -526,8 +555,18 @@ div.picker-popup {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    max-width:75%;
+    max-width:95%;
     max-height:75%
+}
+@media only screen and (min-width: 768px) {
+    div.picker-popup {
+        max-width:75%;
+    }    
+}
+
+
+div.picker-popup-fixed-height {
+    height:75%;
 }
 
 .pickermargin {
@@ -537,6 +576,12 @@ div.picker-popup {
 .pickerbutton-right {
     float:right;
     margin:10px 10px 10px 0;
+}
+
+div.picker-table-holder {
+    flex-grow:1;
+    overflow-y:auto;
+    margin: 10px;
 }
 
 /*----------------------------------- Gallery (shared) -------------------------------------*/
@@ -604,6 +649,15 @@ span.selector-small-text {
     white-space: nowrap;
     padding:5px;
     display:none; /* specify when tooltip is shown in specific component's css */
+}
+
+.selector-tooltip-left {
+    left: unset;
+    right: 5px;
+}
+
+.selector-button-tooltip {
+    top: 33px;
 }
 
 /*----------------------------------- Main page -------------------------------------*/

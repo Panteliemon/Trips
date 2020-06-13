@@ -1,0 +1,30 @@
+<div *ngIf="isVisible" class="modal-popup-background">
+    <div class="picker-popup">
+        <h3 class="pickermargin">{{caption}}</h3>
+        <div class="picker-table-holder">
+            <table class="items-presenter" *ngIf="(!isLoaderVisible) && (users) && (users.length > 0)">
+                <thead>
+                    <th></th>
+                    <th class="name-column">Имя</th>
+                </thead>
+                <tr class="user-row selectable-row picker-row" *ngFor="let user of users"
+                    (click)="userRowClicked(user)">
+                    <td class="user-picture-column">
+                        <img [src]="userPicSrc(user.smallSizeProfilePicture, user.profilePictureFormat)" />
+                    </td>
+                    <td class="name-column">
+                        <span>{{user.name}}</span>
+                        <a routerLink="/user/{{user.id}}" class="inline-ref">
+                            <i class="material-icons">link</i>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+            <p class="big-gray-text centered" *ngIf="(!isLoaderVisible) && (users) && (users.length == 0)">Ничего не найдено</p>
+            <app-loader *ngIf="isLoaderVisible"></app-loader>
+        </div>
+        <div>
+            <button class="button button-std pickerbutton-right" (click)="cancelClicked()">Отмена</button>
+        </div>
+    </div>
+</div>

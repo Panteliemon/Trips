@@ -37,12 +37,39 @@ export function dateToInputString(date: string|Date): string {
   }
 }
 
+export function dateToUIString(date: Date, withTime: boolean): string {
+  if (withTime) {
+    return `${date.getDate().toString().padStart(2, '0')}/${getShortMonth(date.getMonth())}/${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+  } else {
+    return `${date.getDate().toString().padStart(2, '0')}/${getShortMonth(date.getMonth())}/${date.getFullYear()}`;
+  }
+}
+
 function dateToQueryParamStringCore(date: Date) {
   return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
 }
 
 function dateToInputStringCore(date: Date) {
   return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
+}
+
+function getShortMonth(month: number): string {
+  switch (month) {
+    case 0: return "Янв";
+    case 1: return "Фев";
+    case 2: return "Мар";
+    case 3: return "Апр";
+    case 4: return "Май";
+    case 5: return "Июн";
+    case 6: return "Июл";
+    case 7: return "Авг";
+    case 8: return "Сен";
+    case 9: return "Окт";
+    case 10: return "Нов";
+    case 11: return "Дек";
+  }
+
+  return null;
 }
 
 export function inputStringToDate(str: string): Date {

@@ -36,8 +36,12 @@ import { PlaceKindMultiSelectorComponent } from './components/common/selectors/p
 import { ExpanderComponent } from './components/common/expander/expander.component';
 import { ServiceComponent } from './components/service/service.component';
 import { ProgressBarComponent } from './components/common/progress-bar/progress-bar.component';
-//import { TripDetailsComponent } from './components/trips/trip-details/trip-details.component';
-//import { PlacePickerComponent } from './components/common/selectors/place-picker/place-picker.component';
+import { TripDetailsComponent } from './components/trips/trip-details/trip-details.component';
+import { PlacePickerComponent } from './components/common/selectors/place-picker/place-picker.component';
+import { TripsDatePipe } from './pipes/trips-date.pipe';
+import { TripsDateTimePipe } from './pipes/trips-date-time.pipe';
+import { UsersMultiSelectorComponent } from './components/common/selectors/users-multi-selector/users-multi-selector.component';
+import { UserPickerComponent } from './components/common/selectors/user-picker/user-picker.component';
 
 @NgModule({
   declarations: [
@@ -72,8 +76,12 @@ import { ProgressBarComponent } from './components/common/progress-bar/progress-
     ExpanderComponent,
     ServiceComponent,
     ProgressBarComponent,
-    //TripDetailsComponent,
-    //PlacePickerComponent
+    TripDetailsComponent,
+    PlacePickerComponent,
+    TripsDatePipe,
+    TripsDateTimePipe,
+    UsersMultiSelectorComponent,
+    UserPickerComponent
   ],
   imports: [
     BrowserModule,

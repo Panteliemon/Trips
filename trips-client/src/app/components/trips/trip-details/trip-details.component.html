@@ -1,0 +1,35 @@
+<div class="uniter">
+    <section *ngIf="trip">
+        <div class="clearfix">
+            <h2 class="allows-float-beside">{{tripName}}</h2>
+            <button class="button button-danger up-right-button" *ngIf="isEditMode" (click)="deleteButtonClicked()">
+                <i class="material-icons">delete_forever</i>
+                <span>Удалить</span>
+            </button>
+            <button class="button up-right-button" *ngIf="isEditButtonVisible && (!isEditMode)" (click)="editButtonClicked()">
+                <i class="material-icons">edit</i>
+                <span>Редактировать</span>
+            </button>
+            <button class="button up-right-button" *ngIf="isEditMode" (click)="endEditButtonClicked()">
+                <i class="material-icons">subject</i>
+                <span>Режим просмотра</span>
+            </button>
+        </div>
+        <div class="editor-wrapper">
+            <div class="editor-picture-panel">
+                <img class="title-picture centered" [src]="titlePicSrc" />
+            </div>
+            <div class="editor-main-panel">
+                <div class="form-field">
+                    <h3>Участники</h3>
+                    <app-users-multi-selector [selectedUsers]="trip.participants" [isEditable]="isEditMode"
+                                              (added)="userAdded($event)" (removed)="userRemoved($event)"></app-users-multi-selector>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="fog" *ngIf="isOverallLoaderVisible">
+        <app-loader class="centered"></app-loader>
+    </div>
+</div>
+<app-page404 *ngIf="isNotFound"></app-page404>

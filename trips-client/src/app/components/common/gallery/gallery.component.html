@@ -50,7 +50,7 @@
                 </div>
                 <div *ngIf="selectedImage.dateTaken" class="form-field">
                     <p>Дата съёмки:</p>
-                    <span>{{selectedImage.dateTaken | adaptiveDate:false}}</span>
+                    <span>{{selectedImage.dateTaken | tripsDateTime}}</span>
                 </div>
             </div>
         </div>

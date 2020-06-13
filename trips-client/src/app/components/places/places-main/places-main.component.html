@@ -31,7 +31,7 @@
                 <th>К.ст.</th>-->
                 <th>Дата О.</th>
             </thead>
-            <tr *ngFor="let place of places" class="entity-row">
+            <tr *ngFor="let place of places" class="entity-row selectable-row">
                 <td class="entity-picture-column">
                     <a class="cell-wrapper" routerLink="/place/{{place.id}}">
                         <img [src]="getPlacePicSrc(place)" />
@@ -66,12 +66,12 @@
                 -->
                 <td class="date-column">
                     <a class="cell-wrapper" routerLink="/place/{{place.id}}">
-                        <p *ngIf="place.discoveryDate" class="centered">{{place.discoveryDate | adaptiveDate}}</p>
+                        <p *ngIf="place.discoveryDate" class="centered">{{place.discoveryDate | tripsDate}}</p>
                     </a>
                 </td>
             </tr>
         </table>
-        <button *ngIf="isLoadMorePlacesVisible" class="button" (click)="onLoadMorePlacesClicked()">Загрузить ещё</button>
+        <button *ngIf="isLoadMorePlacesVisible" class="button form-field-margin-above" (click)="onLoadMorePlacesClicked()">Загрузить ещё</button>
         <app-loader *ngIf="isPlacesLoaderVisible"></app-loader>
     </section>
     <div class="fog" *ngIf="isOverallLoaderVisible"></div>

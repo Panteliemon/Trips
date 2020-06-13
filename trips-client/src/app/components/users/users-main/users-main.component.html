@@ -5,7 +5,7 @@
         <span>Добавить участника</span>
     </a>
     <table *ngIf="users" class="items-presenter form-field-margin-above">
-        <tr *ngFor="let user of users" class="user-row">
+        <tr *ngFor="let user of users" class="user-row selectable-row">
             <td class="user-picture-column">
                 <a class="cell-wrapper" routerLink="/user/{{user.id}}">
                     <img [src]="userPicSrc(user.smallSizeProfilePicture, user.profilePictureFormat)" />

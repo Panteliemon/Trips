@@ -15,10 +15,12 @@ import { LoginPageComponent } from './components/common/login-page/login-page.co
 import { ServiceComponent } from './components/service/service.component';
 
 import { AuthGuard } from './services/auth.guard';
+import { TripDetailsComponent } from './components/trips/trip-details/trip-details.component';
 
 const routes: Routes = [
   { path: "news", component: NewsMainComponent },
   { path: "trips", component: TripsMainComponent, canActivate: [AuthGuard] },
+  { path: "trip/:id", component: TripDetailsComponent, canActivate: [AuthGuard] },
   { path: "places", component: PlacesMainComponent, canActivate: [AuthGuard] },
   { path: "place/:id", component: PlaceDetailsComponent, canActivate: [AuthGuard] },
   { path: "regions", component: RegionsMainComponent, canActivate: [AuthGuard] },

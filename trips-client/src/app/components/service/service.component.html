@@ -31,12 +31,12 @@
             </div>
             <div class="form-field">
                 <p>Последний раз запущена:</p>
-                <p *ngIf="selectedOperation.lastStarted">{{selectedOperation.lastStarted | adaptiveDate:false}}</p>
+                <p *ngIf="selectedOperation.lastStarted">{{selectedOperation.lastStarted | tripsDateTime}}</p>
                 <p *ngIf="!selectedOperation.lastStarted">Никогда</p>
             </div>
             <div class="form-field" *ngIf="selectedOperation.lastEnded">
                 <p>Последний раз завершена:</p>
-                <p>{{selectedOperation.lastEnded | adaptiveDate:false}}</p>
+                <p>{{selectedOperation.lastEnded | tripsDateTime}}</p>
             </div>
             <div class="form-field" *ngIf="selectedOperation.lastEnded">
                 <p>Код завершения:</p>
@@ -61,7 +61,7 @@
             </div>
             <div class="form-field">
                 <p>Запущена:</p>
-                <p>{{currentOperationStatus.startTime | adaptiveDate:false}}</p>
+                <p>{{currentOperationStatus.startTime | tripsDateTime}}</p>
             </div>
             <div class="form-field" *ngIf="!currentOperationStatus.finishTime">
                 <p>Прогресс:</p>
@@ -69,7 +69,7 @@
             </div>
             <div class="form-field" *ngIf="currentOperationStatus.finishTime">
                 <p>Завершена:</p>
-                <p>{{currentOperationStatus.finishTime | adaptiveDate:false}}</p>
+                <p>{{currentOperationStatus.finishTime | tripsDateTime}}</p>
             </div>
             <div class="form-field" *ngIf="currentOperationStatus.finishTime">
                 <p>Код завершения:</p>
