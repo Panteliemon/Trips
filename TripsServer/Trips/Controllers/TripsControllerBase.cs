@@ -13,6 +13,7 @@ using Trips.Utils;
 
 namespace Trips.Controllers
 {
+    // Well, the name here doesn't refer to the Trip entity, but rather to the whole Trips project. Awkward.
     public abstract class TripsControllerBase : ControllerBase
     {
         public TripsControllerBase(TripsContext dbContext, IMapper mapper)
@@ -66,6 +67,7 @@ namespace Trips.Controllers
         /// <summary>
         /// Deals with uploading gallery picture and saving it to the picture storage and to the TripsDB.
         /// Works with controller's current <see cref="DbContext"/>. Saves changes after all is done.
+        /// If returns ok, result body contains dto of inserted picture.
         /// </summary>
         /// <param name="galleryId">Id of gallery entity, to which add the picture. This parameter is not checked,
         /// so whether the gallery exists should be checked outside.</param>

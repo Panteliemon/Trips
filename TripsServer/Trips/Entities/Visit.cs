@@ -9,6 +9,7 @@ namespace Trips.Entities
     {
         public int Id { get; set; }
         public Trip Trip { get; set; }
+        public int Index { get; set; }
         public Place Place { get; set; }         
         public Gallery Gallery { get; set; }
 

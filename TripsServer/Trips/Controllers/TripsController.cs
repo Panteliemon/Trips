@@ -68,6 +68,12 @@ namespace Trips.Controllers
                 .ThenInclude((UsersToTrips utt) => utt.User)
                 .ToListAsync();
 
+            // Some reordering
+            foreach (Trip trip in fetchedData)
+            {
+                trip.Participants = trip.Participants.OrderBy(utt => utt.Index).ToList();
+            }
+
             List<TripHeaderDto> result = fetchedData.Select(t => Mapper.Map<TripHeaderDto>(t)).ToList();
             return result;
         }
@@ -118,6 +124,10 @@ namespace Trips.Controllers
                     }
                 }
             }
+
+            // Order entities within the trip
+            trip.Participants = trip.Participants.OrderBy(utt => utt.Index).ToList();
+            trip.Visits = trip.Visits.OrderBy(v => v.Index).ToList();
 
             TripDto result = Mapper.Map<TripDto>(trip);
             return result;
@@ -475,6 +485,7 @@ namespace Trips.Controllers
             UsersToTrips utt = new UsersToTrips();
             utt.TripId = trip.Id;
             utt.UserId = addedUser.Id;
+            utt.Index = (trip.Participants.Max(utt2 => (int?)utt2.Index) + 1) ?? 0;
             trip.Participants.Add(utt);
 
             trip.ChangedBy = currentUser;
@@ -560,9 +571,12 @@ namespace Trips.Controllers
                 return NotFound();
             }
 
+            int? maxVisitIndex = DbContext.Visits.Where(v => v.Place.Id == placeId).Max(v => (int?)v.Index);
+
             // Now everything ready, create a visit with gallery
             Visit visit = new Visit();
             visit.Trip = trip;
+            visit.Index = (maxVisitIndex + 1) ?? 0;
             visit.Place = place;
             visit.Gallery = new Gallery();
             visit.Gallery.Owner = GalleryOwner.Visit;
@@ -730,6 +744,8 @@ namespace Trips.Controllers
         {
             if ((visit != null) && (dto != null))
             {
+                // Reordering visits (Visit.Index) on update is not supported because I decided so.
+
                 if (visit.Place?.Id != dto.Place?.Id)
                 {
                     if (dto.Place == null)

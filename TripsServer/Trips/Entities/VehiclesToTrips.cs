@@ -12,5 +12,7 @@ namespace Trips.Entities
 
         public int TripId { get; set; }
         public Trip Trip { get; set; }
+
+        public int Index { get; set; }
     }
 }
