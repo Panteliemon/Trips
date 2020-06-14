@@ -60,6 +60,8 @@ namespace Trips.Entities
             modelBuilder.Entity<Region>().HasOne(r => r.TitlePicture).WithMany().OnDelete(DeleteBehavior.SetNull);
             modelBuilder.Entity<Trip>().HasOne(t => t.TitlePicture).WithMany().OnDelete(DeleteBehavior.SetNull);
 
+            modelBuilder.Entity<Visit>().HasOne(v => v.Place).WithMany(p => p.Visits).OnDelete(DeleteBehavior.SetNull);
+
             modelBuilder.Entity<Picture>().HasOne(p => p.UploadedBy).WithMany(u => u.UploadedPics).OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<ServiceOperationHistory>().HasIndex(h => new { h.Key, h.Ended });

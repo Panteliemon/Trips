@@ -39,6 +39,8 @@
     <Compile Remove="Migrations\20200606103301_FKUploA.Designer.cs" />
     <Compile Remove="Migrations\20200606103513_UlaedByFK.cs" />
     <Compile Remove="Migrations\20200606103513_UlaedByFK.Designer.cs" />
+    <Compile Remove="Migrations\20200614150448_VisitPlaceNull.cs" />
+    <Compile Remove="Migrations\20200614150448_VisitPlaceNull.Designer.cs" />
     <Compile Remove="Migrations\Pics\20200418094613_Miniatures.cs" />
     <Compile Remove="Migrations\Pics\20200418094613_Miniatures.Designer.cs" />
   </ItemGroup>
