@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserHeader } from 'src/app/models/user-header';
 import { UsersService, userPicSrc } from 'src/app/services/users.service';
 import { MessageService, MessageButtons, MessageIcon } from 'src/app/services/message.service';
+import { PopupsService } from 'src/app/services/popups.service';
 
 @Component({
   selector: 'app-user-picker',
@@ -10,8 +11,8 @@ import { MessageService, MessageButtons, MessageIcon } from 'src/app/services/me
 })
 export class UserPickerComponent implements OnInit {
   // How to use:
-  // - Add to your component
-  // - Call show() when needed
+  // Access through PopupsService.
+  // Call show() when needed.
 
   isVisible: boolean;
   caption: string;
@@ -22,9 +23,10 @@ export class UserPickerComponent implements OnInit {
   onSelected: (value: UserHeader) => void;
   excludeUsers: UserHeader[];
 
-  constructor(private usersService: UsersService, private messageService: MessageService) { }
+  constructor(private usersService: UsersService, private messageService: MessageService, private popupsService: PopupsService) { }
 
   ngOnInit(): void {
+    this.popupsService.registerUserPicker(this);
   }
 
   show(caption: string, onSelected: (value: UserHeader) => void, excludeUsers: UserHeader[] = null) {

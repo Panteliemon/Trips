@@ -25,8 +25,12 @@ export class GalleryComponent implements OnInit, OnChanges {
   @Output()
   deleteConfirmed = new EventEmitter<number>();
 
-  selectedImage: Picture;
+  @Input()
   selectedImageSmallSizeId: string;
+  @Output()
+  selectedImageSmallSizeIdChange = new EventEmitter<string>();
+
+  selectedImage: Picture;
   selectedImageIndex: number = -1;
 
   canGoBack: boolean;
@@ -36,46 +40,18 @@ export class GalleryComponent implements OnInit, OnChanges {
 
   constructor(private messageService: MessageService) { }
  
-  public selectImageByIndex(index: number) {
-    if (this.gallery) {
-      if (index < 0) {
-        this.selectedImage = null;
-        this.selectedImageIndex = -1;
-        // keep selectedImageSmallSizeId
-      } else if (index >= this.gallery.pictures.length) {
-        // Select last
-        if (this.gallery.pictures.length > 0) {
-          this.selectedImage = this.gallery.pictures[this.gallery.pictures.length - 1];
-          this.selectedImageIndex = this.gallery.pictures.length - 1;
-          this.selectedImageSmallSizeId = this.gallery.pictures[this.gallery.pictures.length - 1].smallSizeId;
-        } else {
-          this.selectedImage = null;
-          this.selectedImageIndex = -1;
-          // keep selectedImageSmallSizeId
-        }
-      } else {
-        // Normal index
-        this.selectedImage = this.gallery.pictures[index];
-        this.selectedImageIndex = index;
-        this.selectedImageSmallSizeId = this.gallery.pictures[index].smallSizeId;
-      }
-    } else {
-      this.selectedImage = null;
-      this.selectedImageIndex = -1;
-      // keep selectedImageSmallSizeId
-    }
-
-    this.refreshButtonsAccessibility();
-  }
-
   ngOnInit(): void {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (changes["selectedImageSmallSizeId"]) {
+      this.selectImageBySmallSizeId(this.selectedImageSmallSizeId);
+    }
+
     if (changes["gallery"]) {
       if (this.gallery) {
-        // Select previously selected or the first one
-        this.selectImage(this.selectedImageSmallSizeId);
+        // Try to select previously selected
+        this.selectImageBySmallSizeId(this.selectedImageSmallSizeId);
       } else {
         // Reset selected picture model, but don't reset its key,
         // so if reset to null and then set the same gallery, selection remains.
@@ -106,7 +82,7 @@ export class GalleryComponent implements OnInit, OnChanges {
   }
 
   onMiniatureSelected(smallSizeId: string) {
-    this.selectImage(smallSizeId);
+    this.selectImageBySmallSizeId(smallSizeId);
   }
 
   goBackClicked() {
@@ -152,9 +128,9 @@ export class GalleryComponent implements OnInit, OnChanges {
 
   getPictureUrl = getPictureUrl;
 
-  private selectImage(smallSizeId: string) {
-    if (smallSizeId) {
-      let index = this.gallery.pictures.findIndex(pic => pic.smallSizeId == smallSizeId);
+  private selectImageBySmallSizeId(newSmallSizeId: string) {
+    if (newSmallSizeId) {
+      let index = this.gallery.pictures.findIndex(pic => pic.smallSizeId == newSmallSizeId);
       if (index >= 0) {
         this.selectImageByIndex(index);
       } else {
@@ -164,6 +140,47 @@ export class GalleryComponent implements OnInit, OnChanges {
     } else {
       // Select the first
       this.selectImageByIndex(0);
+    }
+  }
+
+  // Fundamental selection procedure: sets all
+  private selectImageByIndex(index: number) {
+    if (this.gallery) {
+      if (index < 0) {
+        this.selectedImage = null;
+        this.selectedImageIndex = -1;
+        // Keep selectedImageSmallSizeId
+      } else if (index >= this.gallery.pictures.length) {
+        // Select last
+        if (this.gallery.pictures.length > 0) {
+          this.selectedImage = this.gallery.pictures[this.gallery.pictures.length - 1];
+          this.selectedImageIndex = this.gallery.pictures.length - 1;
+          this.setSelectedImageSmallSizeId(this.gallery.pictures[this.gallery.pictures.length - 1].smallSizeId);
+        } else {
+          this.selectedImage = null;
+          this.selectedImageIndex = -1;
+          // Keep selectedImageSmallSizeId
+        }
+      } else {
+        // Normal index
+        this.selectedImage = this.gallery.pictures[index];
+        this.selectedImageIndex = index;
+        this.setSelectedImageSmallSizeId(this.gallery.pictures[index].smallSizeId);
+      }
+    } else {
+      this.selectedImage = null;
+      this.selectedImageIndex = -1;
+      // Keep selectedImageSmallSizeId
+    }
+
+    this.refreshButtonsAccessibility();
+  }
+
+  private setSelectedImageSmallSizeId(newValue: string) {
+    let hasChanged = this.selectedImageSmallSizeId != newValue;
+    this.selectedImageSmallSizeId = newValue;
+    if (hasChanged) {
+      this.selectedImageSmallSizeIdChange.emit(this.selectedImageSmallSizeId);
     }
   }
 

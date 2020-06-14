@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MessageService, MessageButtons, MessageIcon } from 'src/app/services/message.service';
 import { TripsService } from 'src/app/services/trips.service';
 import { TripHeader } from 'src/app/models/trip-header';
 import { AuthService } from 'src/app/services/auth.service';
 import { getPictureUrl } from 'src/app/stringUtils';
-import { PlacePickerComponent } from '../../common/selectors/place-picker/place-picker.component';
 import { Router } from '@angular/router';
+import { PopupsService } from 'src/app/services/popups.service';
 
 const LOAD_PORTION = 20;
 
@@ -38,11 +38,8 @@ export class TripsMainComponent implements OnInit {
 
   trips: TripHeader[];
 
-  @ViewChild("placePicker")
-  placePicker: PlacePickerComponent;
-
   constructor(private tripsService: TripsService, private messageService: MessageService, private authService: AuthService,
-              private router: Router) { }
+              private popupsService: PopupsService, private router: Router) { }
 
   ngOnInit(): void {
     this.isAddButtonVisible = this.authService.user?.canPublishTrips;
@@ -58,7 +55,7 @@ export class TripsMainComponent implements OnInit {
   }
 
   addButtonClicked() {
-    this.placePicker.open("Выберите место для поездочки", (place) => {
+    this.popupsService.placePicker.open("Выберите место для поездочки", (place) => {
       this.isOverallLoaderVisible = true;
       this.tripsService.createTrip(place.id).subscribe(trip => {
         this.isOverallLoaderVisible = false;

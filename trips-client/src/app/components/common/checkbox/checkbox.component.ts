@@ -13,6 +13,8 @@ export class CheckboxComponent implements OnInit {
 
   @Input()
   isEnabled: boolean = true;
+  @Input()
+  isEditable: boolean = true;
 
   constructor() { }
 
@@ -20,7 +22,7 @@ export class CheckboxComponent implements OnInit {
   }
 
   onClicked() {
-    if (this.isEnabled) {
+    if (this.isEnabled && this.isEditable) {
       this.value = !this.value;
       this.valueChange.emit(this.value);
     }

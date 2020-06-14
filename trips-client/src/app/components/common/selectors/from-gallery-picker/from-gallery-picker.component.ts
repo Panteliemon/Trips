@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Gallery } from 'src/app/models/gallery';
 import { Picture } from 'src/app/models/picture';
 import { getPictureUrl } from 'src/app/stringUtils';
+import { PopupsService } from 'src/app/services/popups.service';
 
 @Component({
   selector: 'app-from-gallery-picker',
@@ -9,8 +10,7 @@ import { getPictureUrl } from 'src/app/stringUtils';
   styleUrls: ['./from-gallery-picker.component.css']
 })
 export class FromGalleryPickerComponent implements OnInit {
-
-  // Usage: place in your component
+  // Access through PopupsService.
   // Call open() when needed.
 
   isVisible: boolean = false;
@@ -20,7 +20,7 @@ export class FromGalleryPickerComponent implements OnInit {
 
   selectionCallback: (value: Picture) => void;
 
-  constructor() { }
+  constructor(private popupsService: PopupsService) { }
 
   open(source: Gallery[], selectedItemSmallSizeId: string, onSelected: (value: Picture) => void) {
     this.allPictures = [];
@@ -46,6 +46,7 @@ export class FromGalleryPickerComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.popupsService.registerFromGalleryPicker(this);
   }
 
   getPictureUrl = getPictureUrl;

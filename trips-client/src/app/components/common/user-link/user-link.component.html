@@ -4,4 +4,6 @@
       <img *ngIf="showProfilePicture" class="small-profile-pic shifted-down space-after" [src]="userPicSrc(user.smallSizeProfilePicture, user.profilePictureFormat)"/>
       <span>{{user.name}}</span>
    </a>
+   <img *ngIf="(!user) && showProfilePicture" class="small-profile-pic shifted-down space-after" [src]="userPicSrc(null, null)"/>
+   <span *ngIf="!user">[ДАННЫЕ УДАЛЕНЫ]</span>
 </div>

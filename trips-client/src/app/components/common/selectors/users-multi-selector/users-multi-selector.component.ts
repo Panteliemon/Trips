@@ -1,7 +1,7 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { UserHeader } from 'src/app/models/user-header';
 import { userPicSrc } from 'src/app/services/users.service';
-import { UserPickerComponent } from '../user-picker/user-picker.component';
+import { PopupsService } from 'src/app/services/popups.service';
 
 @Component({
   selector: 'app-users-multi-selector',
@@ -19,10 +19,7 @@ export class UsersMultiSelectorComponent implements OnInit, OnChanges {
   @Output()
   removed = new EventEmitter<UserHeader>();
 
-  @ViewChild("userPicker")
-  userPicker: UserPickerComponent;
-
-  constructor() { }
+  constructor(private popupsService: PopupsService) { }
 
   ngOnInit(): void {
   }
@@ -33,7 +30,7 @@ export class UsersMultiSelectorComponent implements OnInit, OnChanges {
   userPicSrc = userPicSrc;
 
   addButtonClicked() {
-    this.userPicker.show("Выберите участника", selectedUser => {
+    this.popupsService.userPicker.show("Выберите участника", selectedUser => {
       this.selectedUsers.push(selectedUser);
       this.added.emit(selectedUser);
     }, this.selectedUsers);

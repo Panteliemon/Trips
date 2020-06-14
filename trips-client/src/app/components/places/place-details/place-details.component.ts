@@ -1,12 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Place, PlaceKind, PlaceAccessibility, PlacePopularity, PlaceCapacity } from 'src/app/models/place';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PlacesService } from 'src/app/services/places.service';
 import { MessageService, MessageButtons, MessageIcon, MessageResult } from 'src/app/services/message.service';
-import { GalleryComponent } from '../../common/gallery/gallery.component';
 import { AuthService } from 'src/app/services/auth.service';
-import { FromGalleryPickerComponent } from '../../common/selectors/from-gallery-picker/from-gallery-picker.component';
 import { dateToInputString, inputStringToDate, possibleStringToDate, createGoogleRefFromLocation, getPictureUrl } from 'src/app/stringUtils';
+import { PopupsService } from 'src/app/services/popups.service';
 
 @Component({
   selector: 'app-place-details',
@@ -34,11 +33,7 @@ export class PlaceDetailsComponent implements OnInit {
   isSelectTitlePicLabelVisible: boolean;
   isXBApprovalCheckboxVisible: boolean;
 
-  @ViewChild('gallery')
-  galleryView: GalleryComponent;
-
-  @ViewChild('fromGalleryPicker')
-  fromGalleryPicker: FromGalleryPickerComponent;
+  gallerySelectedPictureSmallSizeId: string;
 
   private _suppressDiscoveryDateInput: boolean = false;
 
@@ -46,6 +41,7 @@ export class PlaceDetailsComponent implements OnInit {
     private router: Router,
     private placesService: PlacesService,
     private messageService: MessageService,
+    private popupsService: PopupsService,
     private authService: AuthService) { }
 
   get placeKind(): PlaceKind {
@@ -160,6 +156,9 @@ export class PlaceDetailsComponent implements OnInit {
       this.place = place;
       if (!place) {
         this.isNotFound = true;
+      } else {
+        // Avoid "expression changed after it has been checked" situation
+        this.gallerySelectedPictureSmallSizeId = this.place?.gallery?.pictures[0]?.smallSizeId || null;
       }
       this.refreshTitlePicSrc();
       this.refreshSelectorsVisible();
@@ -275,7 +274,7 @@ export class PlaceDetailsComponent implements OnInit {
   }
 
   onChangeTitlePicClicked() {
-    this.fromGalleryPicker.open([this.place.gallery], this.place?.titlePicture?.smallSizeId, pic => {
+    this.popupsService.fromGalleryPicker.open([this.place.gallery], this.place?.titlePicture?.smallSizeId, pic => {
       if (pic?.smallSizeId != this.place.titlePicture?.smallSizeId) {
         this.place.titlePicture = pic;
         this.refreshTitlePicSrc();
@@ -301,7 +300,7 @@ export class PlaceDetailsComponent implements OnInit {
     this.placesService.uploadPicture(this.place.id, file).subscribe(pic => {
       // We will not reread the place, just append recieved image entry to the end of the gallery
       this.place.gallery.pictures.push(pic);
-      this.galleryView.selectImageByIndex(this.place.gallery.pictures.length-1);
+      this.gallerySelectedPictureSmallSizeId = pic.smallSizeId;
       this.isOverallLoaderVisible = false;
       this.refreshSelectTitlePicVisible();
 
@@ -327,7 +326,18 @@ export class PlaceDetailsComponent implements OnInit {
     this.placesService.deletePicture(this.place.id, deletedPicture.smallSizeId).subscribe(() => {
       this.isOverallLoaderVisible = false;
       this.place.gallery.pictures.splice(index, 1);
-      this.galleryView.selectImageByIndex(index);
+      
+      if (index < this.place.gallery.pictures.length) {
+        this.gallerySelectedPictureSmallSizeId = this.place.gallery.pictures[index].smallSizeId;
+      } else {
+        if (this.place.gallery.pictures.length > 0) {
+          this.gallerySelectedPictureSmallSizeId = this.place.gallery.pictures[this.place.gallery.pictures.length - 1].smallSizeId;
+        } else {
+          // Not necessary by logic, but need to do something with gallery for it to update.
+          this.gallerySelectedPictureSmallSizeId = null;
+        }
+      }
+
       this.refreshSelectTitlePicVisible();
       if (this.place.titlePicture.smallSizeId == deletedPicture.smallSizeId) {
         this.place.titlePicture = null;

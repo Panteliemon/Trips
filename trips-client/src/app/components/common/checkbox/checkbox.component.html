@@ -3,7 +3,7 @@
     <i *ngIf="value" class="material-icons checkbox-checkmark">check_box</i>-->
     <span class="checkbox-checkplace"
           [class.color-disabled]="!isEnabled"
-          [class.clickable-area]="isEnabled"
+          [class.clickable-area]="isEnabled && isEditable"
           (click)="onClicked()">
         <span class="checkbox-checkmark"
               *ngIf="value"
@@ -11,7 +11,7 @@
     </span>
     <div class="checkbox-content"
          [class.color-disabled]="!isEnabled"
-         [class.clickable-area]="isEnabled"
+         [class.clickable-area]="isEnabled && isEditable"
          (click)="onClicked()">
         <ng-content></ng-content>
     </div>

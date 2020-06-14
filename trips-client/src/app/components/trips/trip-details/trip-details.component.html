@@ -18,14 +18,118 @@
         <div class="editor-wrapper">
             <div class="editor-picture-panel">
                 <img class="title-picture centered" [src]="titlePicSrc" />
+                <button *ngIf="isSelectTitlePicButtonVisible" class="button button-pic-select"
+                        (click)="setTitlePicButtonClicked()">
+                    <i class="material-icons">search</i>
+                    <span>Выбрать заглавную картинку...</span>
+                </button>
+                <br />
+                <p *ngIf="isSelectTitlePicAdviceVisible" class="advice">
+                    <i class="material-icons">info</i>
+                    <span>Добавьте изображения, чтобы установить заглавную картинку</span>
+                </p>
+                <button *ngIf="isResetTitlePicButtonVisible" class="button button-pic-select"
+                        (click)="resetTitlePicButtonClicked()">
+                    <i class="material-icons">block</i>
+                    <span>Сбросить картинку</span>
+                </button>
             </div>
             <div class="editor-main-panel">
+                <div class="form-field" *ngIf="isEditMode">
+                    <label for="tDate">Дата:</label>
+                    <input type="date" id="tDate" #tDate
+                           [value]="tripDate" (blur)="setDate(tDate.value)"
+                           (keyup.enter)="setDate(tDate.value)" />
+                </div>
+                <div class="form-field" *ngIf="(!isEditMode) && (tripDate)">
+                    <p>Дата:</p>
+                    <p>{{tripDate | tripsDate}}</p>
+                </div>
+
+                <div class="form-field" *ngIf="isEditMode">
+                    <label for="tbTitle">Название:</label>
+                    <div class="field-with-button">
+                        <input type="text" id="tbTitle" #tbTitle
+                               [value]="trip.title" (blur)="setTitle(tbTitle.value)"
+                               (keyup.enter)="setTitle(tbTitle.value)"/>
+                        <button class="button" (click)="autoSetTitleClicked()">Авто</button>
+                    </div>
+                </div>
+
                 <div class="form-field">
-                    <h3>Участники</h3>
+                    <p>Участники:</p>
                     <app-users-multi-selector [selectedUsers]="trip.participants" [isEditable]="isEditMode"
                                               (added)="userAdded($event)" (removed)="userRemoved($event)"></app-users-multi-selector>
                 </div>
+
+                <div class="form-field" *ngIf="isEditMode">
+                    <label for="tbDescription">Описание:</label>
+                    <textarea id="tbDescription" #tbDescription
+                              class="description-field" [value]="trip.description"
+                              (blur)="setDescription(tbDescription.value)"></textarea>
+                </div>
+                <div class="form-field" *ngIf="(!isEditMode) && (trip.description)">
+                    <p>Описание:</p>
+                    <p class="preserve-linebreaks">{{trip.description}}</p>
+                </div>
             </div>
+        </div>
+        <section *ngFor="let visit of trip.visits" class="form-field-margin">
+            <div class="clearfix">
+                <h2 class="allows-float-beside visit-header">
+                    <img [src]="getPlacePicture(visit.place)" />
+                    {{getPlaceName(visit.place)}}
+                </h2>
+                <div class="visit-header-buttons" *ngIf="isEditMode">
+                    <button class="button space-after" (click)="changeVisitPlaceButtonClicked(visit)">
+                        <i class="material-icons">search</i>
+                        <span>Изменить место...</span>
+                    </button>
+                    <button class="button button-danger space-after"
+                            (click)="deleteVisitButtonClicked(visit)">
+                        <i class="material-icons">delete_forever</i>
+                        <span>Удалить</span>
+                    </button>
+                </div>
+            </div>
+            <div class="visit-attributes form-field-margin">
+                <div>
+                    <app-checkbox [value]="visit.withKebab" (valueChange)="setVisitWithKebab(visit, $event)"
+                                  [isEditable]="isEditMode">Шашл</app-checkbox>
+                </div>
+                <div>
+                    <app-checkbox [value]="visit.withNightStay" (valueChange)="setVisitWithNightStay(visit, $event)"
+                                  [isEditable]="isEditMode">С ночёвкой</app-checkbox>
+                </div>
+            </div>
+            <app-gallery *ngIf="isVisitGalleryVisible(visit)"
+                         [gallery]="visit.gallery" [isEditable]="isEditMode"
+                         [selectedImageSmallSizeId]="getVisitGallerySelectedPicture(visit)"
+                         (selectedImageSmallSizeIdChange)="setVisitGallerySelectedPicture(visit, $event)"
+                         (fileSelected)="visitGalleryFileSelected(visit, $event)"
+                         (reordered)="visitGalleryReordered(visit)"
+                         (deleteConfirmed)="visitGalleryDeleteConfirmed(visit, $event)"></app-gallery>
+        </section>
+        <div>
+            <button class="button" *ngIf="isEditMode" (click)="addVisitButtonClicked()">
+                <i class="material-icons">add</i>
+                <span>Добавить место...</span>
+            </button>
+        </div>
+        <h2 *ngIf="isTripGalleryVisible">Прочие изображения</h2>
+        <app-gallery *ngIf="isTripGalleryVisible"
+                     [gallery]="trip.gallery" [isEditable]="isEditMode"
+                     [(selectedImageSmallSizeId)]="tripGallerySelectedPicture"
+                     (fileSelected)="tripGalleryFileSelected($event)"
+                     (reordered)="tripGalleryReordered()"
+                     (deleteConfirmed)="tripGalleryDeleteConfirmed($event)"></app-gallery>
+        <div *ngIf="trip.addedDate" class="form-field form-field-margin-above">
+            <p>Добавлено:</p>
+            <p>{{trip.addedDate|adaptiveDate}} участником <app-user-link [user]="trip.addedBy"></app-user-link></p>
+        </div>
+        <div *ngIf="trip.changedDate" class="form-field form-field-margin-above">
+            <p>Изменено:</p>
+            <p>{{trip.changedDate|adaptiveDate}} участником <app-user-link [user]="trip.changedBy"></app-user-link></p>
         </div>
     </section>
     <div class="fog" *ngIf="isOverallLoaderVisible">

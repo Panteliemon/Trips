@@ -108,13 +108,14 @@
                 </div>
                 <div *ngIf="(!isEditMode) && placeDiscoveryDate" class="form-field">
                     <p>Дата открытия:</p>
-                    <p>{{placeDiscoveryDate | adaptiveDate}}</p>
+                    <p>{{placeDiscoveryDate | tripsDate}}</p>
                 </div>
             </div>
         </div>
         <h2 *ngIf="isGalleryVisible">Галерея</h2>
-        <app-gallery #gallery *ngIf="isGalleryVisible"
+        <app-gallery *ngIf="isGalleryVisible"
                      [gallery]="place.gallery" [isEditable]="isEditMode"
+                     [(selectedImageSmallSizeId)]="gallerySelectedPictureSmallSizeId"
                      (fileSelected)="onGalleryAddFile($event)"
                      (reordered)="onGalleryReordered()"
                      (deleteConfirmed)="onGalleryDeleteConfirmed($event)"></app-gallery>
@@ -132,4 +133,3 @@
     </div>
 </div>
 <app-page404 *ngIf="isNotFound"></app-page404>
-<app-from-gallery-picker #fromGalleryPicker></app-from-gallery-picker>

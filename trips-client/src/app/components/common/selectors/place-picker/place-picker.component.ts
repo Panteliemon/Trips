@@ -3,6 +3,7 @@ import { PlaceHeader } from 'src/app/models/place-header';
 import { PlacesService } from 'src/app/services/places.service';
 import { MessageService, MessageButtons, MessageIcon } from 'src/app/services/message.service';
 import { getPictureUrl } from 'src/app/stringUtils';
+import { PopupsService } from 'src/app/services/popups.service';
 
 const PLACES_PORTION_SIZE: number = 10;
 
@@ -12,7 +13,7 @@ const PLACES_PORTION_SIZE: number = 10;
   styleUrls: ['./place-picker.component.css']
 })
 export class PlacePickerComponent implements OnInit {
-  // Usage: place in your component
+  // Access through PopupsService.
   // Call open() when needed.
 
   private _searchString: string;
@@ -38,9 +39,10 @@ export class PlacePickerComponent implements OnInit {
   onSelected: (value: PlaceHeader) => void;
   onCancel: () => void;
 
-  constructor(private placesService: PlacesService, private messageService: MessageService) { }
+  constructor(private placesService: PlacesService, private messageService: MessageService, private popupsService: PopupsService) { }
 
   ngOnInit(): void {
+    this.popupsService.registerPlacePicker(this);
   }
 
   open(caption: string, onSelected: (value: PlaceHeader) => void, onCancel: () => void = null) {
