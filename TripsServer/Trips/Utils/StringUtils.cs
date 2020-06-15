@@ -30,5 +30,27 @@ namespace Trips.Utils
 
             return false;
         }
+
+        /// <summary>
+        /// For parameter which is concatenated ids - returns distinct parsed ids.
+        /// Returns empty list if no success.
+        /// </summary>
+        public static List<int> ParseIds(string idsParameter, params char[] separators)
+        {
+            List<int> result = new List<int>();
+            string[] parts = idsParameter.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string strId in parts)
+            {
+                if (int.TryParse(strId, out int id))
+                {
+                    if (!result.Contains(id))
+                    {
+                        result.Add(id);
+                    }
+                }
+            }
+
+            return result;
+        }
     }
 }
