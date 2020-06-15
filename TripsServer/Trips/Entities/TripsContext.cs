@@ -3,12 +3,53 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Trips.Entities
 {
     // -context Trips.Entities.TripsContext
     public class TripsContext : DbContext
     {
+        #region Queries Logging
+
+        class PrimitiveLoggingProvider : ILoggerProvider
+        {
+            public ILogger CreateLogger(string categoryName)
+            {
+                return new PrimitiveLogger();
+            }
+
+            public void Dispose()
+            {
+            }
+        }
+
+        class PrimitiveLogger : ILogger
+        {
+            public IDisposable BeginScope<TState>(TState state)
+            {
+                throw new NotImplementedException();
+            }
+
+            public bool IsEnabled(LogLevel logLevel)
+            {
+                return true;
+            }
+
+            public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
+            {
+                string s = state.ToString();
+                if (s.Contains("Executed DbCommand"))
+                {
+                    System.Diagnostics.Debug.WriteLine(state);
+                }
+            }
+        }
+
+        private static readonly ILoggerFactory _lf = new LoggerFactory(new[] { new PrimitiveLoggingProvider() });
+
+        #endregion
+
         public TripsContext(DbContextOptions<TripsContext> options)
             : base(options)
         {
@@ -17,6 +58,9 @@ namespace Trips.Entities
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(Program.TripsConnectionString);
+#if DEBUG
+            optionsBuilder.UseLoggerFactory(_lf);
+#endif
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

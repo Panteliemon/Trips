@@ -26,7 +26,9 @@ namespace Trips.Controllers
 
         [HttpGet]
         [Route("trips")]
-        public async Task<IList<TripHeaderDto>> GetTripsList(int? take, int? skip, string search, string from, string to)
+        public async Task<IList<TripHeaderDto>> GetTripsList(int? take, int? skip,
+            string search, string from, string to,
+            string users, string places)
         {
             var query = DbContext.Trips.AsQueryable();
             query = query.OrderByDescending(t => t.Date);
@@ -46,10 +48,50 @@ namespace Trips.Controllers
 
             if (!string.IsNullOrEmpty(to))
             {
-                if (StringUtils.TryParseDateParam(from, out DateTime dTo))
+                if (StringUtils.TryParseDateParam(to, out DateTime dTo))
                 {
                     dTo = dTo.AddDays(1);
                     query = query.Where(t => t.Date < dTo);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(users))
+            {
+                List<int> userIds = StringUtils.ParseIds(users, new char[] { '|', '&' });
+                if (userIds.Count > 0)
+                {
+                    if (users.IndexOf('|') >= 0)
+                    {
+                        query = query.Where(t => t.Participants.Any(utt => userIds.Contains(utt.UserId)));
+                    }
+                    else
+                    {
+                        for (int i = 0; i < userIds.Count; i++)
+                        {
+                            int userId = userIds[i];
+                            query = query.Where(t => t.Participants.Any(utt => utt.UserId == userId));
+                        }
+                    }
+                }
+            }
+
+            if (!string.IsNullOrEmpty(places))
+            {
+                List<int> placeIds = StringUtils.ParseIds(places, new char[] { '|', '&' });
+                if (placeIds.Count > 0)
+                {
+                    if (places.IndexOf('|') >= 0)
+                    {
+                        query = query.Where(t => t.Visits.Any(v => (v.Place != null) && placeIds.Contains(v.Place.Id)));
+                    }
+                    else
+                    {
+                        for (int i = 0; i < placeIds.Count; i++)
+                        {
+                            int placeId = placeIds[i];
+                            query = query.Where(t => t.Visits.Any(v => (v.Place != null) && (v.Place.Id == placeId)));
+                        }
+                    }
                 }
             }
 
