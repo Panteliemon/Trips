@@ -292,13 +292,10 @@ table.items-presenter tr.selectable-row:hover {
     background-color:@color-page-hover;
 }
 
-table.items-presenter tr.picker-row {
-    line-height:0%; /* Otherwise rows are ALWAYS taller than needed (this happens only when no a.cell-wrapper is used) */
-}
-
 /*----- Columns (set width and other useful staff) -----*/
 table.items-presenter td.entity-picture-column {
     width:110px;
+    line-height:0%; /* Otherwise rows are ALWAYS taller than needed */
 }
 table.items-presenter tr.entity-row td.entity-picture-column img {
     width:100px;
@@ -318,6 +315,9 @@ table.items-presenter tr.user-row td.user-picture-column img {
     margin:5px;
 }
 
+/* Also we have table.items-presenter tr.picker-row {   
+} - definitions not here */
+
 /* general-column: designed to contain all info in one cell (for responsive mode) */
 table.items-presenter td.general-column {
     width:auto;
@@ -327,9 +327,15 @@ table.items-presenter td.general-column a.cell-wrapper {
     text-decoration:none;
     padding-left:5px;
 }
+table.items-presenter td.general-column a.cell-wrapper > * {
+    margin-bottom: 5px;
+}
 table.items-presenter td.general-column p.title {
     font-weight:bold;
     font-size:16pt;
+}
+table.items-presenter td.general-column div.participants {
+    margin-bottom: 0px;
 }
 table.items-presenter td.general-column div.participants > * {
     margin:5px 5px 5px 0;
@@ -412,13 +418,13 @@ table.items-presenter td.delete-button-column {
 }
 
 /*----- Responsive -----*/
-/* shows up if screen width is "middle" or wider */
+/* shows up if screen width is more than "middle" */
 table.items-presenter td.show-middle,
 table.items-presenter th.show-middle {
     display:none;
 }
 
-/* hides if screen width is "middle" or wider */
+/* hides if screen width is more than "middle" */
 table.items-presenter td.hide-middle,
 table.items-presenter th.hide-middle {
     display:table-cell;
@@ -432,6 +438,30 @@ table.items-presenter th.hide-middle {
 
     table.items-presenter td.hide-middle,
     table.items-presenter th.hide-middle {
+        display:none;
+    }
+}
+
+/* shows up if screen width is more than "small" */
+table.items-presenter td.show-small,
+table.items-presenter th.show-small {
+    display:none;
+}
+
+/* hides if screen width is more than "small" */
+table.items-presenter td.hide-small,
+table.items-presenter th.hide-small {
+    display:table-cell;
+}
+
+@media only screen and (min-width: 600px) {
+    table.items-presenter td.show-small,
+    table.items-presenter th.show-small {
+        display:table-cell;
+    }
+
+    table.items-presenter td.hide-small,
+    table.items-presenter th.hide-small {
         display:none;
     }
 }
