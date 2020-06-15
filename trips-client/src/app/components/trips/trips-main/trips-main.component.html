@@ -18,9 +18,10 @@
             <table class="items-presenter">
                 <thead>
                     <th></th>
-                    <th>Дата</th>
-                    <th class="name-column">Название</th>
-                    <th>Участники</th>
+                    <th class="hide-middle"></th>
+                    <th class="show-middle">Дата</th>
+                    <th class="name-column show-middle">Название</th>
+                    <th class="participants-column show-middle">Участники</th>
                 </thead>
                 <tr *ngFor="let trip of trips" class="entity-row selectable-row">
                     <td class="entity-picture-column">
@@ -28,18 +29,31 @@
                             <img [src]="getMiniaturePicSrc(trip)" />
                         </a>
                     </td>
-                    <td class="date-column">
+                    <td class="general-column hide-middle">
+                        <a class="cell-wrapper" routerLink="/trip/{{trip.id}}">
+                            <p *ngIf="trip.date">{{trip.date | tripsDate}}</p>
+                            <p class="title">{{trip.title}}</p>
+                            <div class="participants clearfix">
+                                <app-user-link *ngFor="let user of trip.participants"
+                                               [user]="user" [showProfilePicture]="true"></app-user-link>
+                            </div>
+                        </a>
+                    </td>
+                    <td class="date-column show-middle">
                         <a class="cell-wrapper" routerLink="/trip/{{trip.id}}">
                             <p *ngIf="trip.date" class="centered">{{trip.date | tripsDate}}</p>
                         </a>
                     </td>
-                    <td class="name-column">
+                    <td class="name-column show-middle">
                         <a class="cell-wrapper" routerLink="/trip/{{trip.id}}">
                             <p>{{trip.title}}</p>
                         </a>
                     </td>
-                    <td>
-
+                    <td class="participants-column show-middle">
+                        <a class="cell-wrapper" routerLink="/trip/{{trip.id}}">
+                            <app-user-link *ngFor="let user of trip.participants"
+                                           [user]="user" [showProfilePicture]="true"></app-user-link>
+                        </a>
                     </td>
                 </tr>
             </table>

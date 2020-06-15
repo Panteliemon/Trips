@@ -272,12 +272,13 @@ table.items-presenter th {
 
 table.items-presenter a.cell-wrapper {
     display:block;
+    position:relative;
 }
 
 /*----- Rows (set height and useful stuff) -----*/
 /* Setup row's height. Row can be either "entity" or "user" */
 table.items-presenter tr.entity-row a.cell-wrapper {
-    height:90px;
+    min-height:90px;
 }
 table.items-presenter tr.user-row a.cell-wrapper {
     height:74px;
@@ -317,6 +318,25 @@ table.items-presenter tr.user-row td.user-picture-column img {
     margin:5px;
 }
 
+/* general-column: designed to contain all info in one cell (for responsive mode) */
+table.items-presenter td.general-column {
+    width:auto;
+}
+table.items-presenter td.general-column a.cell-wrapper {
+    color:@color-text-on-page;
+    text-decoration:none;
+    padding-left:5px;
+}
+table.items-presenter td.general-column p.title {
+    font-weight:bold;
+    font-size:16pt;
+}
+table.items-presenter td.general-column div.participants > * {
+    margin:5px 5px 5px 0;
+    display:block;
+    float:left;
+}
+
 table.items-presenter td.name-column {
     width:auto;
     font-weight:bold; /* for pickers */
@@ -329,19 +349,13 @@ table.items-presenter td.name-column a.cell-wrapper {
 }
 table.items-presenter td.name-column a.cell-wrapper > p {
     font-size:16pt;
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
 }
 table.items-presenter th.name-column {
     text-align: start;
     padding-left:5px;
-}
-
-table.items-presenter tr.entity-row td.name-column a.cell-wrapper > p {
-    position:relative;
-    top:30px;
-}
-table.items-presenter tr.user-row td.name-column a.cell-wrapper > p {
-    position:relative;
-    top:23px;
 }
 
 /* if no cellwrapper is used */
@@ -374,14 +388,52 @@ table.items-presenter td.date-column a.cell-wrapper {
     text-decoration:none;
     position:relative;
 }
-
 table.items-presenter tr.entity-row td.date-column a.cell-wrapper > p {
     position:relative;
     top:35px;
 }
 
+table.items-presenter td.participants-column,
+table.items-presenter th.participants-column {
+    width:200px;
+}
+table.items-presenter th.participants-column {
+    text-align: start;
+    padding-left:5px;
+}
+table.items-presenter td.participants-column a.cell-wrapper > * {
+    display:block;
+    float:left;
+    margin:5px;
+}
+
 table.items-presenter td.delete-button-column {
     width:39px; /* makes it line up with Edit button (so far) */
+}
+
+/*----- Responsive -----*/
+/* shows up if screen width is "middle" or wider */
+table.items-presenter td.show-middle,
+table.items-presenter th.show-middle {
+    display:none;
+}
+
+/* hides if screen width is "middle" or wider */
+table.items-presenter td.hide-middle,
+table.items-presenter th.hide-middle {
+    display:table-cell;
+}
+
+@media only screen and (min-width: 768px) {
+    table.items-presenter td.show-middle,
+    table.items-presenter th.show-middle {
+        display:table-cell;
+    }
+
+    table.items-presenter td.hide-middle,
+    table.items-presenter th.hide-middle {
+        display:none;
+    }
 }
 
 /*----------------------------------- form-field -------------------------------------*/
