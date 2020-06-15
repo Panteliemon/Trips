@@ -27,64 +27,93 @@
     background-color:@color-page;
     border:none;
     cursor:pointer;
-    position:absolute;
-    width:64px;
-    height:100%;
+    width:50%;
+    height:64px;
+    position:relative;
 }
-
 .navigation-button:hover {
     background-color:@color-page-hover;
 }
 
+#smallNavButtonsWrapper {
+    margin: 0 2px;
+}
+#smallNavButtonsWrapper .navigation-button img {
+    max-height:90%;
+}
+
 #navLeft {
-    left:0;
+    float:left;
 }
 
 #navRight {
-    right:0;
+    float:right;
 }
 
-#centralPictureArea {
-    margin-left:64px;
-    margin-right:64px;
+#navLeftBig {
+    display: none;
+    margin:5px 0 2px 2px;
+}
+
+#navRightBig {
+    display: none;
+    margin:5px 2px 2px 0;
 }
 
 #centralImageWrapper {
     position:relative;
-    height:300px;
+    margin:2px;
 }
 
-#centralImage {
-    max-height:98%;
-    max-width:98%;
-}
-
-#divMeta {
-    margin-left:20px;
+#centralImageWrapper img {
+    max-width:100%;
+    max-height:100%;
 }
 
 #noImageEmptyDiv {
     height:300px;
 }
 
-@media only screen and (min-width: 640px) {
-    #centralImageWrapper {
-        position:relative;
-        height:400px;
-    }
-
-    #noImageEmptyDiv {
-        height:400px;
-    }
+#divMeta {
+    margin: 0 2px;
 }
 
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: 600px) {
+    #imageWithNavigationArea {
+        display:flex;
+        flex-direction:row;
+        margin-bottom:5px;
+    }
+
+    .navigation-button {
+        height:unset;
+        width:10%;
+        min-width:32px;
+        max-width:64px;
+    }
+    .navigation-button img {
+        max-width:100%;
+    }
+
+    #smallNavButtonsWrapper {
+        display:none;
+    }
+
+    #navLeftBig, #navRightBig {
+        display:block;
+    }
+
     #centralImageWrapper {
-        position:relative;
-        height:720px;
+        flex-grow:1;
+        max-height:660px;
+        margin: 5px 2px -2px 2px; /* I don't know why bottom edge is not lined up with big nav buttons */
     }
 
     #noImageEmptyDiv {
-        height:720px;
+        height:600px;
+    }   
+
+    #divMeta {
+        margin: 0 10px;
     }
 }
