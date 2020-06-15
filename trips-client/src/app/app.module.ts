@@ -28,7 +28,7 @@ import { PlaceKindSelectorComponent } from './components/common/selectors/place-
 import { PlaceAccessibilitySelectorComponent } from './components/common/selectors/place-accessibility-selector/place-accessibility-selector.component';
 import { PlacePopularitySelectorComponent } from './components/common/selectors/place-popularity-selector/place-popularity-selector.component';
 import { PlaceCapacitySelectorComponent } from './components/common/selectors/place-capacity-selector/place-capacity-selector.component';
-import { FromGalleryPickerComponent } from './components/common/selectors/from-gallery-picker/from-gallery-picker.component';
+import { FromGalleryPickerComponent } from './components/common/pickers/from-gallery-picker/from-gallery-picker.component';
 import { PlacesOrderingSelectorComponent } from './components/common/selectors/places-ordering-selector/places-ordering-selector.component';
 import { CheckboxComponent } from './components/common/checkbox/checkbox.component';
 import { MultiSelectorEngineComponent } from './components/common/selectors/multi-selector-engine/multi-selector-engine.component';
@@ -37,11 +37,11 @@ import { ExpanderComponent } from './components/common/expander/expander.compone
 import { ServiceComponent } from './components/service/service.component';
 import { ProgressBarComponent } from './components/common/progress-bar/progress-bar.component';
 import { TripDetailsComponent } from './components/trips/trip-details/trip-details.component';
-import { PlacePickerComponent } from './components/common/selectors/place-picker/place-picker.component';
+import { PlacePickerComponent } from './components/common/pickers/place-picker/place-picker.component';
 import { TripsDatePipe } from './pipes/trips-date.pipe';
 import { TripsDateTimePipe } from './pipes/trips-date-time.pipe';
 import { UsersMultiSelectorComponent } from './components/common/selectors/users-multi-selector/users-multi-selector.component';
-import { UserPickerComponent } from './components/common/selectors/user-picker/user-picker.component';
+import { UserPickerComponent } from './components/common/pickers/user-picker/user-picker.component';
 
 @NgModule({
   declarations: [

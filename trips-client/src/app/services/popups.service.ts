@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { FromGalleryPickerComponent } from '../components/common/selectors/from-gallery-picker/from-gallery-picker.component';
-import { PlacePickerComponent } from '../components/common/selectors/place-picker/place-picker.component';
-import { UserPickerComponent } from '../components/common/selectors/user-picker/user-picker.component';
+import { FromGalleryPickerComponent } from '../components/common/pickers/from-gallery-picker/from-gallery-picker.component';
+import { PlacePickerComponent } from '../components/common/pickers/place-picker/place-picker.component';
+import { UserPickerComponent } from '../components/common/pickers/user-picker/user-picker.component';
 
 @Injectable({
   providedIn: 'root'
