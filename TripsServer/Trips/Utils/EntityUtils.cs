@@ -84,6 +84,46 @@ namespace Trips.Utils
         }
 
         /// <summary>
+        /// Returns list, in which places from <paramref name="placesList"/> are ordered in the same order
+        /// as their ids are ordered in <paramref name="ids"/>.
+        /// Result contains only places that have their ids in <paramref name="ids"/> list.
+        /// </summary>
+        public static List<Place> OrderByIds(List<Place> placesList, List<int> ids)
+        {
+            List<Place> result = new List<Place>();
+            for (int i = 0; i < ids.Count; i++)
+            {
+                Place place = placesList.FirstOrDefault(p => p.Id == ids[i]);
+                if (place != null)
+                {
+                    result.Add(place);
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Returns list, in which users from <paramref name="usersList"/> are ordered in the same order
+        /// as their ids are ordered in <paramref name="ids"/>.
+        /// Result contains only users that have their ids in <paramref name="ids"/> list.
+        /// </summary>
+        public static List<User> OrderByIds(List<User> usersList, List<int> ids)
+        {
+            List<User> result = new List<User>();
+            for (int i = 0; i < ids.Count; i++)
+            {
+                User user = usersList.FirstOrDefault(u => u.Id == ids[i]);
+                if (user != null)
+                {
+                    result.Add(user);
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Deletes data of all pictures, belonging to <paramref name="gallery"/>, from storage.
         /// Doesn't remove pictures entities from the gallery entity.
         /// </summary>

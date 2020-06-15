@@ -27,7 +27,7 @@ namespace Trips.Controllers
 
         [HttpGet]
         [Route("places")]
-        public async Task<IList<PlaceHeaderDto>> GetPlacesList(string order, int? take, int? skip, string search, string kind)
+        public async Task<IList<PlaceHeaderDto>> GetPlacesList(string order, int? take, int? skip, string search, string kind, string exact)
         {
             var query = DbContext.Places.AsQueryable();
 
@@ -54,6 +54,16 @@ namespace Trips.Controllers
                 query = query.Where(p => placeKindsForFilter.Contains(p.Kind));
             }
 
+            List<int> placeIds = null;
+            if (!string.IsNullOrEmpty(exact))
+            {
+                placeIds = StringUtils.ParseIds(exact, '|');
+                if (placeIds.Count > 0)
+                {
+                    query = query.Where(p => placeIds.Contains(p.Id));
+                }
+            }
+
             if (order?.ToLower() == "date")
             {
                 query = query.OrderByDescending(p => p.DiscoveryDate);
@@ -74,6 +84,13 @@ namespace Trips.Controllers
             }
 
             List<Place> placesList = await query.Include(p => p.TitlePicture).ToListAsync();
+
+            // If queried with "exact" option - override the order according to requested
+            if ((placeIds != null) && (placeIds.Count > 0))
+            {
+                placesList = EntityUtils.OrderByIds(placesList, placeIds);
+            }
+
             List<PlaceHeaderDto> result = placesList.Select(p => Mapper.Map<PlaceHeaderDto>(p)).ToList();
             return result;
         }

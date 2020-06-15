@@ -50,9 +50,29 @@ namespace Trips.Controllers
 
         [HttpGet]
         [Route("users")]
-        public async Task<IList<UserHeaderDto>> GetUsers()
+        public async Task<IList<UserHeaderDto>> GetUsers(string exact)
         {
-            var result = await Task.Run(() => DbContext.Users.Select(u => Mapper.Map<UserHeaderDto>(u)).ToList());
+            var query = DbContext.Users.AsQueryable();
+
+            List<int> userIds = null;
+            if (!string.IsNullOrEmpty(exact))
+            {
+                userIds = StringUtils.ParseIds(exact, '|');
+                if (userIds.Count > 0)
+                {
+                    query = query.Where(u => userIds.Contains(u.Id));
+                }
+            }
+
+            List<User> users = await query.ToListAsync();
+
+            // If queried with "exact" option - override the order according to requested
+            if ((userIds != null) && (userIds.Count > 0))
+            {
+                users = EntityUtils.OrderByIds(users, userIds);
+            }
+
+            var result = users.Select(u => Mapper.Map<UserHeaderDto>(u)).ToList();
             return result;
         }
 
