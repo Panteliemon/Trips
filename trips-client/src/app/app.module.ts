@@ -42,6 +42,8 @@ import { TripsDatePipe } from './pipes/trips-date.pipe';
 import { TripsDateTimePipe } from './pipes/trips-date-time.pipe';
 import { UsersMultiSelectorComponent } from './components/common/selectors/users-multi-selector/users-multi-selector.component';
 import { UserPickerComponent } from './components/common/pickers/user-picker/user-picker.component';
+import { FilterOperationSelectorComponent } from './components/common/selectors/filter-operation-selector/filter-operation-selector.component';
+import { PlacesMultiSelectorComponent } from './components/common/selectors/places-multi-selector/places-multi-selector.component';
 
 @NgModule({
   declarations: [
@@ -81,7 +83,9 @@ import { UserPickerComponent } from './components/common/pickers/user-picker/use
     TripsDatePipe,
     TripsDateTimePipe,
     UsersMultiSelectorComponent,
-    UserPickerComponent
+    UserPickerComponent,
+    FilterOperationSelectorComponent,
+    PlacesMultiSelectorComponent
   ],
   imports: [
     BrowserModule,

@@ -12,7 +12,46 @@
                     <input type="text" id="tbSearchString" [(ngModel)]="searchString" />
                 </div>
                 <app-expander class="form-field-margin" title="Расширенный поиск" [(isExpanded)]="isAdvancedSearchExpanded">
-                    ХУЙ
+                    <div class="two-columns clearfix">
+                        <div class="form-field">
+                            <label for="tbDateFrom">Дата С:</label>
+                            <input type="date" id="tbDateFrom" #tbDateFrom
+                                   [value]="searchDateFrom"
+                                   (blur)="setSearchDateFrom(tbDateFrom.value)"
+                                   (keyup.enter)="setSearchDateFrom(tbDateFrom.value)"
+                                   (change)="editSearchDateFrom(tbDateFrom.value)" />
+                        </div>
+                        <div class="form-field">
+                            <label for="tbDateTo">Дата ПО:</label>
+                            <input type="date" id="tbDateTo" #tbDateTo
+                                   [value]="searchDateTo"
+                                   (blur)="setSearchDateTo(tbDateTo.value)"
+                                   (keyup.enter)="setSearchDateTo(tbDateTo.value)"
+                                   (change)="editSearchDateTo(tbDateTo.value)" />
+                        </div>
+                    </div>
+                    <div class="form-field">
+                        <p>Фильтр по участникам</p>
+                        <app-users-multi-selector [selectedUsers]="usersFilter"
+                                                  (added)="usersFilterChanged()" (removed)="usersFilterChanged()"></app-users-multi-selector>
+                        <div class="form-field-margin-above" *ngIf="usersFilter && (usersFilter.length > 1)">
+                            <app-filter-operation-selector [value]="usersFilterOperation"
+                                                           (valueChange)="setUsersFilterOperation($event)"
+                                                           orCaption="Любой из выбранных"
+                                                           andCaption="Все выбранные"></app-filter-operation-selector>
+                        </div>
+                    </div>
+                    <div class="form-field">
+                        <p>Фильтр по месту</p>
+                        <app-places-multi-selector [selectedPlaces]="placesFilter"
+                                                   (added)="placesFilterChanged()" (removed)="placesFilterChanged()"></app-places-multi-selector>
+                        <div class="form-field-margin-above" *ngIf="placesFilter && (placesFilter.length > 1)">
+                            <app-filter-operation-selector [value]="placesFilterOperation"
+                                                           (valueChange)="setPlacesFilterOperation($event)"
+                                                           orCaption="Любое из выбранных"
+                                                           andCaption="Все выбранные"></app-filter-operation-selector>
+                        </div>
+                    </div>
                 </app-expander>
             </div>
             <table class="items-presenter">
@@ -32,7 +71,7 @@
                     <td class="general-column hide-middle">
                         <a class="cell-wrapper" routerLink="/trip/{{trip.id}}">
                             <p *ngIf="trip.date">{{trip.date | tripsDate}}</p>
-                            <p class="title">{{trip.title}}</p>
+                            <p class="title">{{getTripTitle(trip)}}</p>
                             <div class="participants clearfix">
                                 <app-user-link *ngFor="let user of trip.participants"
                                                [user]="user" [showProfilePicture]="true"></app-user-link>
@@ -46,13 +85,15 @@
                     </td>
                     <td class="name-column show-middle">
                         <a class="cell-wrapper" routerLink="/trip/{{trip.id}}">
-                            <p>{{trip.title}}</p>
+                            <p>{{getTripTitle(trip)}}</p>
                         </a>
                     </td>
                     <td class="participants-column show-middle">
                         <a class="cell-wrapper" routerLink="/trip/{{trip.id}}">
-                            <app-user-link *ngFor="let user of trip.participants"
-                                           [user]="user" [showProfilePicture]="true"></app-user-link>
+                            <div class="participants clearfix">
+                                <app-user-link *ngFor="let user of trip.participants"
+                                               [user]="user" [showProfilePicture]="true"></app-user-link>
+                            </div>  
                         </a>
                     </td>
                 </tr>

@@ -1,0 +1,30 @@
+<div>
+    <table class="items-presenter" *ngIf="selectedPlaces && (selectedPlaces.length > 0)">
+        <tr class="entity-row picker-row" *ngFor="let place of selectedPlaces">
+            <td class="entity-picture-column">
+                <img [src]="getPlaceImgSrc(place)" />
+            </td>
+            <td class="name-column">
+                <span>{{getPlaceName(place)}}</span>
+                <a routerLink="/place/{{place.id}}" class="inline-ref">
+                    <i class="material-icons">link</i>
+                </a>
+            </td>
+            <td *ngIf="isEditable" class="delete-button-column">
+                <button class="button selector-delete-button" (click)="deleteButtonClicked(place)">
+                    <i class="material-icons">clear</i>
+                    <div class="selector-tooltip selector-tooltip-left selector-button-tooltip">
+                        Удалить
+                    </div>
+                </button>
+            </td>
+        </tr>
+    </table>
+    <button *ngIf="isEditable"
+            class="button button-std"
+            [class.form-field-margin-above]="selectedPlaces && (selectedPlaces.length > 0)"
+            (click)="addButtonClicked()">
+        <i class="material-icons">add</i>
+        <span>Добавить...</span>
+    </button>
+</div>

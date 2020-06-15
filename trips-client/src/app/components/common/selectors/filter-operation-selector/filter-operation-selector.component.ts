@@ -1,11 +1,12 @@
 import { Component, OnInit, OnChanges, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { ChoiceViewModel, SEL_NOT_SELECTED, SEL_WHITE, SEL_THEME_DARK } from '../selector-engine/selector-engine.component';
+import { FilterOperation } from 'src/app/models/filter-operation';
+import { ChoiceViewModel, SEL_WHITE, SEL_THEME_DARK, SEL_NOT_SELECTED } from '../selector-engine/selector-engine.component';
 
-let placesOrderingViewModels: ChoiceViewModel[] = [
+let filterOperationViewModels: ChoiceViewModel[] = [
   {
-    associatedValue: "name",
+    associatedValue: FilterOperation.OR,
     bigText: "",
-    smallText: "По имени",
+    smallText: "OR",
     showBigText: false,
     showSmallText: true,
     description: "",
@@ -15,9 +16,9 @@ let placesOrderingViewModels: ChoiceViewModel[] = [
     backgroundColorWhenNotSelected: SEL_NOT_SELECTED
   },
   {
-    associatedValue: "date",
+    associatedValue: FilterOperation.AND,
     bigText: "",
-    smallText: "По дате открытия",
+    smallText: "AND",
     showBigText: false,
     showSmallText: true,
     description: "",
@@ -29,16 +30,20 @@ let placesOrderingViewModels: ChoiceViewModel[] = [
 ];
 
 @Component({
-  selector: 'app-places-ordering-selector',
-  templateUrl: './places-ordering-selector.component.html',
-  styleUrls: ['./places-ordering-selector.component.css']
+  selector: 'app-filter-operation-selector',
+  templateUrl: './filter-operation-selector.component.html',
+  styleUrls: ['./filter-operation-selector.component.css']
 })
-export class PlacesOrderingSelectorComponent implements OnInit, OnChanges {
+export class FilterOperationSelectorComponent implements OnInit, OnChanges {
   @Input()
-  value: string;
-
+  value: FilterOperation;
   @Output()
-  valueChange = new EventEmitter<string>();
+  valueChange = new EventEmitter<FilterOperation>();
+
+  @Input()
+  orCaption: string;
+  @Input()
+  andCaption: string;
 
   @Input()
   isEditable: boolean = true;
@@ -72,11 +77,23 @@ export class PlacesOrderingSelectorComponent implements OnInit, OnChanges {
         this._selectedViewModel = this.viewModels[0];
       }
     }
+
+    if (changes["orCaption"] || changes["andCaption"]) {
+      this.initViewModels();
+      let orVm = this.viewModels.find(vm => vm.associatedValue == FilterOperation.OR);
+      if (orVm) { // always True
+        orVm.smallText = this.orCaption;
+      }
+      let andVm = this.viewModels.find(vm => vm.associatedValue == FilterOperation.AND);
+      if (andVm) { // always True
+        andVm.smallText = this.andCaption;
+      }
+    }
   }
 
   private initViewModels() {
     if (!this.viewModels) {
-      this.viewModels = placesOrderingViewModels;
+      this.viewModels = filterOperationViewModels.map(vm => <ChoiceViewModel>Object.assign({}, vm));
     }
   }
 }

@@ -8,6 +8,7 @@ import { Picture } from '../models/picture';
 import { dateToQueryParamString } from '../stringUtils';
 import { API_BASE_PATH } from './api';
 import { MessageIcon } from './message.service';
+import { FilterOperation } from '../models/filter-operation';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,9 @@ import { MessageIcon } from './message.service';
 export class TripsService {
   constructor(private http: HttpClient) { }
 
-  getTripsList(take: number, skip: number, search: string, from: Date, to: Date): Observable<TripHeader[]> {
+  getTripsList(take: number, skip: number, search: string, from: Date, to: Date,
+      userFilter: number[] = null, userFilterOperation: FilterOperation = FilterOperation.OR,
+      placeFilter: number[] = null, placeFilterOperation: FilterOperation = FilterOperation.OR): Observable<TripHeader[]> {
     let params = new HttpParams();
     if (take) {
       params = params.set("take", take.toString());
@@ -31,6 +34,14 @@ export class TripsService {
     }
     if (to) {
       params = params.set("to", dateToQueryParamString(to));
+    }
+    if (userFilter && (userFilter.length > 0)) {
+      let paramValue = (userFilterOperation == FilterOperation.AND) ? userFilter.join("&") : userFilter.join("|");
+      params = params.set("users", paramValue);
+    }
+    if (placeFilter && (placeFilter.length > 0)) {
+      let paramValue = (placeFilterOperation == FilterOperation.AND) ? placeFilter.join("&") : placeFilter.join("|");
+      params = params.set("places", paramValue);
     }
 
     return this.http.get<TripHeader[]>(`${API_BASE_PATH}/trips`, { params: params });
@@ -98,7 +109,7 @@ export class TripsService {
 
   //-------------------------------------
 
-  getDisplayableTripTitle(trip: Trip) {
+  getDisplayableTripTitle(trip: Trip|TripHeader) {
     if (trip.title) {
       return trip.title;
     } else {

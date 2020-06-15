@@ -79,6 +79,9 @@
                 <h2 class="allows-float-beside visit-header">
                     <img [src]="getPlacePicture(visit.place)" />
                     {{getPlaceName(visit.place)}}
+                    <a *ngIf="visit.place" routerLink="/place/{{visit.place.id}}" class="inline-ref">
+                        <i class="material-icons">link</i>
+                    </a>
                 </h2>
                 <div class="visit-header-buttons" *ngIf="isEditMode">
                     <button class="button space-after" (click)="changeVisitPlaceButtonClicked(visit)">

@@ -20,6 +20,7 @@ export const SEL_GRAY = "#888";
 export const SEL_BLUE = "#06f";
 export const SEL_DARKGREEN = "#072";
 export const SEL_LIGHTGREEN = "#2d0";
+export const SEL_THEME_DARK = "#472";
 export const SEL_YELLOW = "#fd0";
 export const SEL_ORANGE = "#f80";
 export const SEL_RED = "#f00";

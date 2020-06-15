@@ -26,6 +26,11 @@ export class UsersService {
     return this.http.get<UserHeader[]>(API_BASE_PATH + "/users");
   }
 
+  getUsersExact(userIds: number[]): Observable<UserHeader[]> {
+    let paramValue = userIds.join("|");
+    return this.http.get<UserHeader[]>(API_BASE_PATH + "/users", { params: { exact: paramValue }});
+  }
+
   getUserById(id: number): Observable<User> {
     return this.http.get<User>(API_BASE_PATH + `/user/${id}/full`);
   }

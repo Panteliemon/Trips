@@ -37,7 +37,7 @@ export class PlacePickerComponent implements OnInit {
   isLoading: boolean;
 
   onSelected: (value: PlaceHeader) => void;
-  onCancel: () => void;
+  excludePlaces: PlaceHeader[];
 
   constructor(private placesService: PlacesService, private messageService: MessageService, private popupsService: PopupsService) { }
 
@@ -45,11 +45,11 @@ export class PlacePickerComponent implements OnInit {
     this.popupsService.registerPlacePicker(this);
   }
 
-  open(caption: string, onSelected: (value: PlaceHeader) => void, onCancel: () => void = null) {
+  open(caption: string, onSelected: (value: PlaceHeader) => void, excludePlaces: PlaceHeader[] = null) {
     this.isVisible = true;
     this.caption = caption;
     this.onSelected = onSelected;
-    this.onCancel = onCancel;
+    this.excludePlaces = excludePlaces;
 
     this.places = [];
     this._searchString = "";
@@ -58,9 +58,6 @@ export class PlacePickerComponent implements OnInit {
 
   cancelClicked() {
     this.isVisible = false;
-    if (this.onCancel) {
-      this.onCancel();
-    }
   }
 
   placeClicked(place: PlaceHeader) {
@@ -94,7 +91,11 @@ export class PlacePickerComponent implements OnInit {
       this.isLoading = false;
       // Apply if result is not outdated
       if (this._queryId == myQueryId) {
-        this.places = places;
+        if (this.excludePlaces && (this.excludePlaces.length > 0)) {
+          this.places = places.filter(p => !this.excludePlaces.find(p2 => p2.id == p.id));
+        } else {
+          this.places = places;
+        }
       }
     }, error => {
       this.isLoading = false;

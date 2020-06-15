@@ -40,6 +40,11 @@ export class PlacesService {
     return this.http.get<PlaceHeader[]>(`${API_BASE_PATH}/places`, { params: params });
   }
 
+  getPlacesExact(placeIds: number[]): Observable<PlaceHeader[]> {
+    let paramValue = placeIds.join("|");
+    return this.http.get<PlaceHeader[]>(`${API_BASE_PATH}/places`, { params: { exact: paramValue } });
+  }
+
   getPlace(id: number): Observable<Place> {
     return this.http.get<Place>(`${API_BASE_PATH}/place/${id}`)
   }
