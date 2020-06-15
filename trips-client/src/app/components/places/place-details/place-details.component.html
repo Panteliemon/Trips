@@ -117,7 +117,7 @@
                      [gallery]="place.gallery" [isEditable]="isEditMode"
                      [(selectedImageSmallSizeId)]="gallerySelectedPictureSmallSizeId"
                      (fileSelected)="onGalleryAddFile($event)"
-                     (reordered)="onGalleryReordered()"
+                     (updateRequested)="onGalleryUpdateRequested()"
                      (deleteConfirmed)="onGalleryDeleteConfirmed($event)"></app-gallery>
         <div *ngIf="place.addedDate" class="form-field form-field-margin-above">
             <p>Добавлено:</p>

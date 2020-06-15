@@ -20,7 +20,8 @@ export class GalleryComponent implements OnInit, OnChanges {
   fileSelected = new EventEmitter<File>();
 
   @Output()
-  reordered = new EventEmitter();
+  // Happens when needs to update gallery data: pictures reordered or description changed
+  updateRequested = new EventEmitter();
 
   @Output()
   deleteConfirmed = new EventEmitter<number>();
@@ -100,7 +101,7 @@ export class GalleryComponent implements OnInit, OnChanges {
       this.gallery.pictures[this.selectedImageIndex] = nextPic;
       this.selectedImageIndex++;
       this.refreshButtonsAccessibility();
-      this.reordered.emit();
+      this.updateRequested.emit();
     }
   }
 
@@ -111,7 +112,7 @@ export class GalleryComponent implements OnInit, OnChanges {
       this.gallery.pictures[this.selectedImageIndex] = prevPic;
       this.selectedImageIndex--;
       this.refreshButtonsAccessibility();
-      this.reordered.emit();
+      this.updateRequested.emit();
     }
   }
 
@@ -127,6 +128,13 @@ export class GalleryComponent implements OnInit, OnChanges {
   }
 
   getPictureUrl = getPictureUrl;
+
+  setDescription(value: string) {
+    if (this.selectedImage) {
+      this.selectedImage.description = value;
+      this.updateRequested.emit();
+    }
+  }
 
   private selectImageBySmallSizeId(newSmallSizeId: string) {
     if (newSmallSizeId) {

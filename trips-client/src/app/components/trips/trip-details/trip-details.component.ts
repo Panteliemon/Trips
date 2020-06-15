@@ -294,7 +294,7 @@ export class TripDetailsComponent implements OnInit {
     }
   }
 
-  visitGalleryReordered(visit: Visit) {
+  visitGalleryUpdateRequested(visit: Visit) {
     this.silentUpdate(visit, true);
   }
 
@@ -388,7 +388,7 @@ export class TripDetailsComponent implements OnInit {
     }
   }
 
-  tripGalleryReordered() {
+  tripGalleryUpdateRequested() {
     this.silentUpdate(null, false, true);
   }
 

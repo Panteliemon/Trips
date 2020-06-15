@@ -43,7 +43,10 @@
                     [class.hidden]="!canGoNext" (click)="goNextClicked()">
                 <img src="/assets/gal-nav-right.png" class="centered-both" />
             </button>
-            <div id="smallNavButtonsWrapper">
+
+            <p id="descriptionLabelSmall" class="centered"
+               *ngIf="(!isEditable) && selectedImage.description">{{selectedImage.description}}</p>
+            <div id="smallNavButtonsWrapper" *ngIf="canGoBack || canGoNext">
                 <button id="navLeft" class="navigation-button"
                         [class.hidden]="!canGoBack" (click)="goBackClicked()">
                     <img src="/assets/gal-nav-left-small.png" class="centered-both" />
@@ -58,6 +61,16 @@
             <p class="big-gray-text centered-both">Изображение не выбрано</p>
         </div>
         <div id="divMeta" *ngIf="selectedImage">
+            <p id="descriptionLabelBig" class="centered form-field-margin"
+               *ngIf="(!isEditable) && selectedImage.description">{{selectedImage.description}}</p>
+            <div class="form-field" *ngIf="isEditable">
+                <label for="tbDescription">Описание:</label>
+                <input type="text" #tbDescription id="tbDescription"
+                       [value]="selectedImage.description"
+                       (blur)="setDescription(tbDescription.value)"
+                       (keyup.enter)="setDescription(tbDescription.value)" />
+            </div>
+
             <div class="form-field">
                 <p>Загружено:</p>
                 <span>{{selectedImage.dateUploaded | adaptiveDate}} участником <app-user-link [user]="selectedImage.uploadedBy"></app-user-link></span>

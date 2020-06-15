@@ -316,7 +316,7 @@ export class PlaceDetailsComponent implements OnInit {
     });
   }
 
-  onGalleryReordered() {
+  onGalleryUpdateRequested() {
     this.initiateFullSilentUpdate();
   }
 

@@ -107,7 +107,7 @@
                          [selectedImageSmallSizeId]="getVisitGallerySelectedPicture(visit)"
                          (selectedImageSmallSizeIdChange)="setVisitGallerySelectedPicture(visit, $event)"
                          (fileSelected)="visitGalleryFileSelected(visit, $event)"
-                         (reordered)="visitGalleryReordered(visit)"
+                         (updateRequested)="visitGalleryUpdateRequested(visit)"
                          (deleteConfirmed)="visitGalleryDeleteConfirmed(visit, $event)"></app-gallery>
         </section>
         <div>
@@ -121,7 +121,7 @@
                      [gallery]="trip.gallery" [isEditable]="isEditMode"
                      [(selectedImageSmallSizeId)]="tripGallerySelectedPicture"
                      (fileSelected)="tripGalleryFileSelected($event)"
-                     (reordered)="tripGalleryReordered()"
+                     (updateRequested)="tripGalleryUpdateRequested()"
                      (deleteConfirmed)="tripGalleryDeleteConfirmed($event)"></app-gallery>
         <div *ngIf="trip.addedDate" class="form-field form-field-margin-above">
             <p>Добавлено:</p>
