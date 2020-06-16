@@ -8,6 +8,9 @@ import { dateToInputString, inputStringToDate, possibleStringToDate, createGoogl
 import { PopupsService } from 'src/app/services/popups.service';
 import { TripsService } from 'src/app/services/trips.service';
 import { FilterOperation } from 'src/app/models/filter-operation';
+import { TripHeader } from 'src/app/models/trip-header';
+
+const LOAD_TRIPS_PORTION: number = 20;
 
 @Component({
   selector: 'app-place-details',
@@ -38,6 +41,11 @@ export class PlaceDetailsComponent implements OnInit {
   gallerySelectedPictureSmallSizeId: string;
 
   private _suppressDiscoveryDateInput: boolean = false;
+
+  areTripsToHereVisible: boolean;
+  tripsToHere: TripHeader[];
+  isTripsLoaderVisible: boolean;
+  isLoadMoreTripsVisible: boolean;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -188,6 +196,13 @@ export class PlaceDetailsComponent implements OnInit {
           this.messageService.showMessage("У вас нет прав на редактирование");
         }
       }
+
+      // Decide once and forever, if we display "trips to here" section
+      if (this.place) {
+        this.tripsService.getTripsList(1, 0, null, null, null, null, null, [this.place.id]).subscribe(trips => {
+          this.areTripsToHereVisible = trips && (trips.length > 0);
+        }); // on error ignore
+      }
     }, error => {
       this.messageService.showMessage(this.placesService.getServerErrorText(error), MessageButtons.ok, MessageIcon.error);
       // Nothing is visible. Display empty page.
@@ -223,7 +238,7 @@ export class PlaceDetailsComponent implements OnInit {
   onDeleteClicked() {
     // Gather some statistics before ask
     this.isOverallLoaderVisible = true;
-    this.tripsService.getTripsList(1, 0, null, null, null, null, FilterOperation.AND, [this.place.id]).subscribe(async result => {
+    this.tripsService.getTripsList(1, 0, null, null, null, null, null, [this.place.id]).subscribe(async result => {
       this.isOverallLoaderVisible = false;
       let hasVisits = result.length > 0;
 
@@ -362,6 +377,43 @@ export class PlaceDetailsComponent implements OnInit {
 
   getPlaceName() {
     return this.placesService.getDisplayablePlaceName(this.place.name);
+  }
+
+  onTripsToHereExpandedChanged(isExpanded: boolean) {
+    if (isExpanded && ((!this.tripsToHere) || (this.tripsToHere.length == 0))) {
+      this.tripsToHere = [];
+      this.onLoadMoreTripsClicked();
+    }
+  }
+
+  getTripImgSrc(trip: TripHeader): string {
+    return this.tripsService.getMiniatureImgSrc(trip);
+  }
+
+  getTripTitle(trip: TripHeader): string {
+    return this.tripsService.getDisplayableTripTitle(trip);
+  }
+
+  onLoadMoreTripsClicked() {
+    this.isTripsLoaderVisible = true;
+    this.isLoadMoreTripsVisible = false;
+    this.tripsService.getTripsList(LOAD_TRIPS_PORTION + 1, this.tripsToHere.length, null, null, null, null, null, [this.place.id]).subscribe(trips => {
+      this.isTripsLoaderVisible = false;
+      if (trips.length > LOAD_TRIPS_PORTION) {
+        for (let i=0; i<LOAD_TRIPS_PORTION; i++) {
+          this.tripsToHere.push(trips[i]);
+        }
+
+        this.isLoadMoreTripsVisible = true;
+      } else {
+        for (let i=0; i<trips.length; i++) {
+          this.tripsToHere.push(trips[i]);
+        }
+      }
+    }, error => {
+      this.isTripsLoaderVisible = false;
+      this.messageService.showMessage(this.tripsService.getServerErrorText(error), MessageButtons.ok, MessageIcon.error);
+    });
   }
 
   // Updates the place without sending gallery data to server (minimize traffic)

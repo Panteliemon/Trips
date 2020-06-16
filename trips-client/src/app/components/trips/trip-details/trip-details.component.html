@@ -2,18 +2,20 @@
     <section *ngIf="trip">
         <div class="clearfix">
             <h2 class="allows-float-beside">{{tripName}}</h2>
-            <button class="button button-danger up-right-button" *ngIf="isEditMode" (click)="deleteButtonClicked()">
-                <i class="material-icons">delete_forever</i>
-                <span>Удалить</span>
-            </button>
-            <button class="button up-right-button" *ngIf="isEditButtonVisible && (!isEditMode)" (click)="editButtonClicked()">
-                <i class="material-icons">edit</i>
-                <span>Редактировать</span>
-            </button>
-            <button class="button up-right-button" *ngIf="isEditMode" (click)="endEditButtonClicked()">
-                <i class="material-icons">subject</i>
-                <span>Режим просмотра</span>
-            </button>
+            <div class="up-right-buttons">
+                <button class="button" *ngIf="isEditButtonVisible && (!isEditMode)" (click)="editButtonClicked()">
+                    <i class="material-icons">edit</i>
+                    <span>Редактировать</span>
+                </button>
+                <button class="button" *ngIf="isEditMode" (click)="endEditButtonClicked()">
+                    <i class="material-icons">subject</i>
+                    <span>Режим просмотра</span>
+                </button>
+                <button class="button button-danger" *ngIf="isEditMode" (click)="deleteButtonClicked()">
+                    <i class="material-icons">delete_forever</i>
+                    <span>Удалить</span>
+                </button>
+            </div>
         </div>
         <div class="editor-wrapper">
             <div class="editor-picture-panel">

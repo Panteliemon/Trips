@@ -213,6 +213,11 @@ img.small-profile-pic {
     margin-right:10px;
 }
 
+.wide-margin-up-down {
+    margin-top:20px;
+    margin-bottom:30px;
+}
+
 .centered {
     display:inline-block;
     position:relative;
@@ -246,7 +251,21 @@ h1.allows-float-beside, h2.allows-float-beside {
 
 button.up-right-button, a.up-right-button {
     float:right;
-    margin:5px 5px 5px 0;
+    margin:5px 0;
+}
+h1 + button.up-right-button, h1 + a.up-right-button {
+    margin-top:10px;
+}
+
+div.up-right-buttons {
+    float:right;
+    margin:5px 0;
+}
+div.up-right-buttons > * {
+    margin-left:5px;
+}
+h1 + div.up-right-buttons {
+    margin-top:10px;
 }
 
 textarea.description-field {
@@ -566,6 +585,11 @@ div.modal-popup-background {
     height: 100%;
     width: 100%;
     background-color: rgba(0, 0, 0, 0.25);
+}
+
+div.sub-entities-list {
+    max-height:800px;
+    overflow-y:auto;
 }
 
 /*----------------------------------- Editors -------------------------------------*/

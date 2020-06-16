@@ -2,18 +2,20 @@
     <section *ngIf="place">
         <div class="clearfix">
             <h2 class="allows-float-beside">{{getPlaceName()}}</h2>
-            <button class="button button-danger up-right-button" *ngIf="isEditMode" (click)="onDeleteClicked()">
-                <i class="material-icons">delete_forever</i>
-                <span>Удалить</span>
-            </button>
-            <button class="button up-right-button" *ngIf="isEditButtonVisible && (!isEditMode)" (click)="onEditClicked()">
-                <i class="material-icons">edit</i>
-                <span>Редактировать</span>
-            </button>
-            <button class="button up-right-button" *ngIf="isEditMode" (click)="onEndEditClicked()">
-                <i class="material-icons">subject</i>
-                <span>Режим просмотра</span>
-            </button>
+            <div class="up-right-buttons">
+                <button class="button" *ngIf="isEditButtonVisible && (!isEditMode)" (click)="onEditClicked()">
+                    <i class="material-icons">edit</i>
+                    <span>Редактировать</span>
+                </button>
+                <button class="button" *ngIf="isEditMode" (click)="onEndEditClicked()">
+                    <i class="material-icons">subject</i>
+                    <span>Режим просмотра</span>
+                </button>
+                <button class="button button-danger" *ngIf="isEditMode" (click)="onDeleteClicked()">
+                    <i class="material-icons">delete_forever</i>
+                    <span>Удалить</span>
+                </button>
+            </div>
         </div>
         <div class="editor-wrapper">
             <div class="editor-picture-panel">
@@ -128,6 +130,38 @@
             <p>Изменено:</p>
             <p>{{place.changedDate|adaptiveDate}} участником <app-user-link [user]="place.changedBy"></app-user-link></p>
         </div>
+        <app-expander *ngIf="areTripsToHereVisible" title="Поездочки в это место"
+                      (isExpandedChange)="onTripsToHereExpandedChanged($event)">
+            <div class="sub-entities-list">
+                <table class="items-presenter">
+                    <tr *ngFor="let trip of tripsToHere" class="entity-row selectable-row">
+                        <td class="entity-picture-column">
+                            <a class="cell-wrapper" routerLink="/trip/{{trip.id}}">
+                                <img [src]="getTripImgSrc(trip)" />
+                            </a>
+                        </td>
+                        <td class="general-column hide-small">
+                            <a class="cell-wrapper" routerLink="/trip/{{trip.id}}">
+                                <p *ngIf="trip.date">{{trip.date | tripsDate}}</p>
+                                <p class="title">{{getTripTitle(trip)}}</p>
+                            </a>
+                        </td>
+                        <td class="date-column show-small">
+                            <a class="cell-wrapper" routerLink="/trip/{{trip.id}}">
+                                <p *ngIf="trip.date" class="centered">{{trip.date | tripsDate}}</p>
+                            </a>
+                        </td>
+                        <td class="name-column show-small">
+                            <a class="cell-wrapper" routerLink="/trip/{{trip.id}}">
+                                <p>{{getTripTitle(trip)}}</p>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+                <app-loader *ngIf="isTripsLoaderVisible"></app-loader>
+                <button *ngIf="isLoadMoreTripsVisible" class="button form-field-margin-above" (click)="onLoadMoreTripsClicked()">Загрузить ещё</button>
+            </div>
+        </app-expander>
     </section>
     <div class="fog" *ngIf="isOverallLoaderVisible">
         <app-loader *ngIf="isOverallLoaderVisible" class="centered"></app-loader>

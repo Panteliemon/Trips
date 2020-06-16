@@ -5,7 +5,7 @@
             <i class="material-icons">add</i>
             <span>Добавить место</span>
         </button>
-        <div>
+        <div style="clear:both;">
             <div class="form-field">
                 <label for="tbSearchString">Поиск по имени:</label>
                 <input type="text" id="tbSearchString" [(ngModel)]="searchString" />
@@ -21,7 +21,7 @@
                 <app-places-ordering-selector [(value)]="sortingOrder"></app-places-ordering-selector>
             </div>
         </div>
-        <table class="items-presenter">
+        <table class="items-presenter" *ngIf="places && (places.length > 0)">
             <thead>
                 <th></th>
                 <th class="name-column show-small">Название</th>
@@ -58,6 +58,8 @@
                 </td>
             </tr>
         </table>
+        <p class="big-gray-text centered wide-margin-up-down"
+           *ngIf="(!isPlacesLoaderVisible) && ((!places) || (places.length == 0))">Не найдено</p>
         <button *ngIf="isLoadMorePlacesVisible" class="button form-field-margin-above" (click)="onLoadMorePlacesClicked()">Загрузить ещё</button>
         <app-loader *ngIf="isPlacesLoaderVisible"></app-loader>
     </section>

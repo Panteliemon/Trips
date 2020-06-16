@@ -6,7 +6,7 @@
                 <i class="material-icons">add</i>
                 <span>Добавить...</span>
             </button>
-            <div>
+            <div style="clear:both;">
                 <div class="form-field">
                     <label for="tbSearchString">Поиск по названию:</label>
                     <input type="text" id="tbSearchString" [(ngModel)]="searchString" />
@@ -54,7 +54,7 @@
                     </div>
                 </app-expander>
             </div>
-            <table class="items-presenter">
+            <table class="items-presenter" *ngIf="trips && (trips.length > 0)">
                 <thead>
                     <th></th>
                     <th class="hide-middle"></th>
@@ -98,6 +98,8 @@
                     </td>
                 </tr>
             </table>
+            <p class="big-gray-text centered wide-margin-up-down"
+               *ngIf="(!isListLoaderVisible) && ((!trips) || (trips.length == 0))">Не найдено</p>
             <app-loader *ngIf="isListLoaderVisible"></app-loader>
             <button *ngIf="isLoadMoreButtonVisible" class="button button-std form-field-margin-above"
                     (click)="loadMoreButtonClicked()">Загрузить ещё</button>

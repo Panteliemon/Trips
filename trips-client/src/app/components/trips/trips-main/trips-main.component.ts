@@ -101,11 +101,7 @@ export class TripsMainComponent implements OnInit {
   }
  
   getMiniaturePicSrc(th: TripHeader): string {
-    if (th?.titlePictureSmallSizeId) {
-      return getPictureUrl(th.titlePictureSmallSizeId, th.titlePictureFormat);
-    } else {
-      return "/assets/no-pic-trip.png";
-    }
+    return this.tripsService.getMiniatureImgSrc(th);
   }
 
   getTripTitle(th: TripHeader): string {

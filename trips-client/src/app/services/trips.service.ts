@@ -5,7 +5,7 @@ import { filter, map } from 'rxjs/operators';
 import { TripHeader } from '../models/trip-header';
 import { Trip } from '../models/trip';
 import { Picture } from '../models/picture';
-import { dateToQueryParamString } from '../stringUtils';
+import { dateToQueryParamString, getPictureUrl } from '../stringUtils';
 import { API_BASE_PATH } from './api';
 import { MessageIcon } from './message.service';
 import { FilterOperation } from '../models/filter-operation';
@@ -108,6 +108,14 @@ export class TripsService {
   }
 
   //-------------------------------------
+
+  getMiniatureImgSrc(trip: TripHeader): string {
+    if (trip?.titlePictureSmallSizeId) {
+      return getPictureUrl(trip.titlePictureSmallSizeId, trip.titlePictureFormat);
+    } else {
+      return "/assets/no-pic-trip.png";
+    }
+  }
 
   getDisplayableTripTitle(trip: Trip|TripHeader) {
     if (trip.title) {

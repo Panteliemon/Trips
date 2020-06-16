@@ -4,6 +4,10 @@ import { UsersService, userPicSrc } from 'src/app/services/users.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService, MessageButtons, MessageResult, MessageIcon } from 'src/app/services/message.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { TripHeader } from 'src/app/models/trip-header';
+import { TripsService } from 'src/app/services/trips.service';
+
+const TRIPS_LOAD_PORTION: number = 20;
 
 @Component({
   selector: 'app-user-details',
@@ -45,11 +49,17 @@ export class UserDetailsComponent implements OnInit {
   isResetPasswordExpanded: boolean;
   passwordForReset: string;
 
+  isTripsOfUserVisible: boolean;
+  tripsOfUser: TripHeader[];
+  isTripsLoaderVisible: boolean;
+  isLoadMoreTripsVisible: boolean;
+
   constructor(private route: ActivatedRoute,
     private router: Router,
     private usersService: UsersService,
     private authService: AuthService,
-    private messageService: MessageService) { }
+    private messageService: MessageService,
+    private tripsService: TripsService) { }
 
   get newLogin(): string {
     return this._newLogin;
@@ -66,6 +76,13 @@ export class UserDetailsComponent implements OnInit {
     this.usersService.getUserById(id).subscribe(user => {
       this.user = user;
       this.refreshAllVisibility();
+
+      // Decide whether we display "trips of this user" section
+      if (this.user) {
+        this.tripsService.getTripsList(1, 0, null, null, null, [this.user.id]).subscribe(trips => {
+          this.isTripsOfUserVisible = trips && (trips.length > 0);
+        }); // on error ignore
+      }
     }, error => {
       this.messageService.showMessage(this.usersService.getFullErrorText(error), MessageButtons.ok, MessageIcon.error);
       this.user = null;
@@ -320,6 +337,43 @@ export class UserDetailsComponent implements OnInit {
     this.passwordForReset = "";
   }
 
+  onTripsOfUserExpandedChanged(isExpanded: boolean) {
+    if (isExpanded && ((!this.tripsOfUser) || (this.tripsOfUser.length > 0))) {
+      this.tripsOfUser = [];
+      this.onLoadMoreTripsClicked();
+    }
+  }
+
+  getTripImgSrc(trip: TripHeader): string {
+    return this.tripsService.getMiniatureImgSrc(trip);
+  }
+
+  getTripTitle(trip: TripHeader): string {
+    return this.tripsService.getDisplayableTripTitle(trip);
+  }
+
+  onLoadMoreTripsClicked() {
+    this.isTripsLoaderVisible = true;
+    this.isLoadMoreTripsVisible = false;
+    this.tripsService.getTripsList(TRIPS_LOAD_PORTION + 1, this.tripsOfUser.length, null, null, null, [this.user.id]).subscribe(trips => {
+      this.isTripsLoaderVisible = false;
+      if (trips.length > TRIPS_LOAD_PORTION) {
+        for (let i=0; i<TRIPS_LOAD_PORTION; i++) {
+          this.tripsOfUser.push(trips[i]);
+        }
+
+        this.isLoadMoreTripsVisible = true;
+      } else {
+        for (let i=0; i<trips.length; i++) {
+          this.tripsOfUser.push(trips[i]);
+        }
+      }
+    }, error => {
+      this.isTripsLoaderVisible = false;
+      this.messageService.showMessage(this.tripsService.getServerErrorText(error), MessageButtons.ok, MessageIcon.error);
+    })
+  }
+  
   private handleServerError(error) {
     this.messageService.showMessage("Ошибка от сервера: " + this.usersService.getFullErrorText(error), MessageButtons.ok, MessageIcon.error);
   }
