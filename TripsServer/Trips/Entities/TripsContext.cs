@@ -39,7 +39,9 @@ namespace Trips.Entities
             public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
             {
                 string s = state.ToString();
-                if (s.Contains("Executed DbCommand"))
+                if (s.StartsWith("Executed DbCommand")
+                    || (s.StartsWith("Failed"))
+                    || (s.StartsWith("An exception occurred")))
                 {
                     System.Diagnostics.Debug.WriteLine(state);
                 }

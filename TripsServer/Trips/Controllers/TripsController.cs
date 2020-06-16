@@ -220,6 +220,12 @@ namespace Trips.Controllers
             trip.Visits = new List<Visit>();
             trip.Visits.Add(visit);
 
+            UsersToTrips utt = new UsersToTrips();
+            utt.User = currentUser;
+            utt.Trip = trip;
+            trip.Participants = new List<UsersToTrips>();
+            trip.Participants.Add(utt);
+
             DbContext.Add(trip);
             await DbContext.SaveChangesAsync();
 
