@@ -21,15 +21,23 @@
     </button>
   </div>
 </header>
-<nav>
+<nav class="clearfix">
   <a routerLink="/news" routerLinkActive="active">Новости</a>
-  <a routerLink="/trips" routerLinkActive="active">Поездочки</a>
-  <a routerLink="/places" routerLinkActive="active">Места</a>
-  <!--
+
+  <a routerLink="/trips" [class.active]="tripActive.isActive || tripsListActive.isActive">Поездочки</a>
+  <a style="display:none;" routerLink="/trips" routerLinkActive #tripsListActive="routerLinkActive"></a>
+  <a style="display:none;" routerLink="/trip" routerLinkActive #tripActive="routerLinkActive"></a>
+  
+  <a routerLink="/places" [class.active]="placeActive.isActive || placesListActive.isActive">Места</a>
+  <a style="display:none;" routerLink="/places" routerLinkActive #placesListActive="routerLinkActive"></a>
+  <a style="display:none;" routerLink="/place" routerLinkActive #placeActive="routerLinkActive"></a>
+  <!-- TODO uncomment while develop
   <a routerLink="/regions" routerLinkActive="active">Направления</a>
   <a routerLink="/vehicles" routerLinkActive="active">Транспортные средства</a>
   -->
-  <a routerLink="/users" routerLinkActive="active">Участники</a>
+  <a routerLink="/users" [class.active]="userActive.isActive || usersListActive.isActive">Участники</a>
+  <a style="display:none;" routerLink="/users" routerLinkActive #usersListActive="routerLinkActive"></a>
+  <a style="display:none;" routerLink="/user" routerLinkActive #userActive="routerLinkActive"></a>
 </nav>
 <div class="content-presenter">
   <router-outlet></router-outlet>

@@ -31,6 +31,7 @@ export class PlacesMainComponent implements OnInit {
     let counterWhenSet = this._searchStringInputCounter;
     setTimeout(() => {
       if (this._searchStringInputCounter == counterWhenSet) {
+        this.renavigateWithParams();
         this.startFetchPlacesWithCurrentSettings();
       }
     }, 500);
@@ -66,6 +67,9 @@ export class PlacesMainComponent implements OnInit {
               private authService: AuthService) { }
 
   ngOnInit(): void {
+    if (this.activatedRoute.snapshot.paramMap.get("search")) {
+      this._searchString = this.activatedRoute.snapshot.paramMap.get("search");
+    }
     if (this.activatedRoute.snapshot.paramMap.get("order")) {
       this._sortingOrder = this.activatedRoute.snapshot.paramMap.get("order");
     } else {
@@ -158,7 +162,13 @@ export class PlacesMainComponent implements OnInit {
 
   private renavigateWithParams() {
     let parametersObj = <any>{};
+    
+    if (this._searchString) {
+      parametersObj.search = this._searchString;
+    }
+
     parametersObj.order = this._sortingOrder;
+
     if (this._placeKindFilter && (this._placeKindFilter.length > 0)) {
       parametersObj.kind = this.placesService.getKindFilterStr(this._placeKindFilter);
     }

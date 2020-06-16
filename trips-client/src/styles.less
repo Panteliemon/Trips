@@ -321,6 +321,7 @@ table.items-presenter tr.entity-row td.entity-picture-column img {
 
 table.items-presenter td.user-picture-column {
     width:74px;
+    line-height:0%; /* Otherwise rows taller than needed in pickers (when cellwrapper is used - works fine) */
 }
 table.items-presenter tr.user-row td.user-picture-column img {
     width:64px;
@@ -786,6 +787,7 @@ button.selector-delete-button {
 
 nav {
     clear:both;
+    margin-bottom: 5px;
 }
 
 nav>a {
@@ -793,14 +795,20 @@ nav>a {
     background-color:@theme-color-dark;
     color:@color-text-on-dark;
     text-decoration: none;
-    /*font-weight:bold;
-    font-size: 16pt;*/
     text-transform: uppercase;
     float:left;
     padding:8px 8px 10px 8px;
-    border-radius:5px 5px 0 0;
-    margin-right:5px;
-    margin-top:5px;
+    margin: 5px 5px 0 0;
+}
+
+@media only screen and (min-width: 450px) {
+    nav {
+        margin-bottom: 0px;
+    }
+
+    nav>a {
+        border-radius:5px 5px 0 0;
+    }   
 }
 
 nav > a:hover {
@@ -819,7 +827,7 @@ nav > a:focus {
 div.content-presenter {
     clear:both;
     background-color:@color-page;
-    margin:5px 0 5px 0;
+    margin-bottom: 5px;
     padding:10px;
 }
 

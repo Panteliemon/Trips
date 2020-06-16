@@ -5,15 +5,13 @@
             <div *ngFor="let picture of allPictures"
                 class="gal-miniature-holder"
                 [class.gal-selected]="picture == selectedPicture"
-                (click)="onClick(picture)"
-                (dblclick)="onSelectClicked()">
+                (click)="onClick(picture)">
                 <img [src]="getPictureUrl(picture.smallSizeId, picture.format)"
                      class="gal-miniature-img centered-both" />
             </div>
         </div>
         <div class="clearfix">
             <button class="button button-std pickerbutton-right" (click)="onCancelClicked()">Отмена</button>
-            <button class="button button-std pickerbutton-right" (click)="onSelectClicked()">Выбрать</button>
         </div>
     </div>
 </div>

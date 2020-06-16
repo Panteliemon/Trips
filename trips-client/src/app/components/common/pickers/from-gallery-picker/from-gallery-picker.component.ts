@@ -52,19 +52,13 @@ export class FromGalleryPickerComponent implements OnInit {
   getPictureUrl = getPictureUrl;
 
   onClick(picture: Picture) {
-    this.selectedPicture = picture;
-  }
-
-  onSelectClicked() {
     this.isVisible = false;
     // Clear trash
     this.allPictures.length = 0;
 
     if (this.selectionCallback) {
-      this.selectionCallback(this.selectedPicture);
+      this.selectionCallback(picture);
     }
-
-    this.selectedPicture = null;
   }
 
   onCancelClicked() {

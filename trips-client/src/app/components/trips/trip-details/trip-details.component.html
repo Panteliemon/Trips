@@ -39,7 +39,8 @@
                     <label for="tDate">Дата:</label>
                     <input type="date" id="tDate" #tDate
                            [value]="tripDate" (blur)="setDate(tDate.value)"
-                           (keyup.enter)="setDate(tDate.value)" />
+                           (keyup.enter)="setDate(tDate.value)"
+                           (change)="dateChanged(tDate.value)" />
                 </div>
                 <div class="form-field" *ngIf="(!isEditMode) && (tripDate)">
                     <p>Дата:</p>

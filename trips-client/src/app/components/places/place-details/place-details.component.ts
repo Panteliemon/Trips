@@ -6,6 +6,8 @@ import { MessageService, MessageButtons, MessageIcon, MessageResult } from 'src/
 import { AuthService } from 'src/app/services/auth.service';
 import { dateToInputString, inputStringToDate, possibleStringToDate, createGoogleRefFromLocation, getPictureUrl } from 'src/app/stringUtils';
 import { PopupsService } from 'src/app/services/popups.service';
+import { TripsService } from 'src/app/services/trips.service';
+import { FilterOperation } from 'src/app/models/filter-operation';
 
 @Component({
   selector: 'app-place-details',
@@ -40,6 +42,7 @@ export class PlaceDetailsComponent implements OnInit {
   constructor(private route: ActivatedRoute,
     private router: Router,
     private placesService: PlacesService,
+    private tripsService: TripsService,
     private messageService: MessageService,
     private popupsService: PopupsService,
     private authService: AuthService) { }
@@ -94,23 +97,31 @@ export class PlaceDetailsComponent implements OnInit {
   }
 
   async setPlaceDiscoveryDate(value: string) {
-    // When value changed by enter and messagebox appears, we immediately receive blur event,
-    // so messagebox appears second time. Use this workaroud to prevent:
-    if (!this._suppressDiscoveryDateInput) {
-      let dValue = inputStringToDate(value);
-
-      this._suppressDiscoveryDateInput = true;
-      if (dValue && this.place.addedDate && (dValue > possibleStringToDate(this.place.addedDate))) {
-        await this.messageService.showMessage("Место не может быть открыто позже, чем добавлено сюда.").toPromise();
-      } else if (dValue && (dValue > (new Date()))) {
-        await this.messageService.showMessage("Дата больше чем сегодня").toPromise();
-      } else if (dValue && (dValue < new Date(2014, 7, 8))) { // I guess that 8 Aug 2014
-        await this.messageService.showMessage("Введенная дата - это слишком давно. Введите плз что-либо из периода эпохи поездочек.").toPromise();
-      } else {
-        this.place.discoveryDate = dValue;
-        this.initiatePartialSilentUpdate();
+    let dValue = inputStringToDate(value);
+    if (possibleStringToDate(this.place.discoveryDate)?.getTime() != dValue?.getTime()) {
+      // When value changed by enter and messagebox appears, we immediately receive blur event,
+      // so messagebox appears second time. Use this workaroud to prevent:
+      if (!this._suppressDiscoveryDateInput) {
+        this._suppressDiscoveryDateInput = true;
+        if (dValue && this.place.addedDate && (dValue > possibleStringToDate(this.place.addedDate))) {
+          await this.messageService.showMessage("Место не может быть открыто позже, чем добавлено сюда.").toPromise();
+        } else if (dValue && (dValue > (new Date()))) {
+          await this.messageService.showMessage("Дата больше чем сегодня").toPromise();
+        } else if (dValue && (dValue < new Date(2014, 7, 8))) { // I guess that 8 Aug 2014
+          await this.messageService.showMessage("Введенная дата - это слишком давно. Введите плз что-либо из периода эпохи поездочек.").toPromise();
+        } else {
+          this.place.discoveryDate = dValue;
+          this.initiatePartialSilentUpdate();
+        }
+        this._suppressDiscoveryDateInput = false;
       }
-      this._suppressDiscoveryDateInput = false;
+    }
+  }
+
+  placeDiscoveryDateChanged(value: string) {
+    // React only on clear here
+    if (!value) {
+      this.setPlaceDiscoveryDate(value);
     }
   }
 
@@ -212,7 +223,7 @@ export class PlaceDetailsComponent implements OnInit {
   onDeleteClicked() {
     // Gather some statistics before ask
     this.isOverallLoaderVisible = true;
-    this.placesService.getVisitsForPlace(this.place.id, 1, 0).subscribe(async result => {
+    this.tripsService.getTripsList(1, 0, null, null, null, null, FilterOperation.AND, [this.place.id]).subscribe(async result => {
       this.isOverallLoaderVisible = false;
       let hasVisits = result.length > 0;
 

@@ -153,32 +153,43 @@ export class TripDetailsComponent implements OnInit {
   }
 
   async setDate(value: string) {
-    // When value changed by enter and messagebox appears, we immediately receive blur event,
-    // so messagebox appears second time. Use this workaroud to prevent:
-    if (!this._isDateProcessing) {
-      this._isDateProcessing = true;
+    let dValue = inputStringToDate(value);
+    if (dValue?.getTime() != possibleStringToDate(this.trip.date)?.getTime()) {
+      // When value changed by enter and messagebox appears, we immediately receive blur event,
+      // so messagebox appears second time. Use this workaroud to prevent:
+      if (!this._isDateProcessing) {
+        this._isDateProcessing = true;
 
-      let dValue = inputStringToDate(value);
-      if (dValue && this.trip.addedDate && (dValue > possibleStringToDate(this.trip.addedDate))) {
-        await this.messageService.showMessage("Поездка не может состояться позже, чем добавлена сюда.").toPromise();
-      } else if (dValue && (dValue > (new Date()))) {
-        await this.messageService.showMessage("Дата больше чем сегодня").toPromise();
-      } else if (dValue && (dValue < new Date(2014, 7, 8))) { // I guess that 8 Aug 2014
-        await this.messageService.showMessage("Введенная дата - это слишком давно. Введите плз что-либо из периода эпохи поездочек.").toPromise();
-      } else {
-        this.trip.date = dValue;
-        this.refreshTripDate();
-        this.silentUpdate();
+        if (dValue && this.trip.addedDate && (dValue > possibleStringToDate(this.trip.addedDate))) {
+          await this.messageService.showMessage("Поездка не может состояться позже, чем добавлена сюда.").toPromise();
+        } else if (dValue && (dValue > (new Date()))) {
+          await this.messageService.showMessage("Дата больше чем сегодня").toPromise();
+        } else if (dValue && (dValue < new Date(2014, 7, 8))) { // I guess that 8 Aug 2014
+          await this.messageService.showMessage("Введенная дата - это слишком давно. Введите плз что-либо из периода эпохи поездочек.").toPromise();
+        } else {
+          this.trip.date = dValue;
+          this.refreshTripDate();
+          this.silentUpdate();
+        }
+
+        this._isDateProcessing = false;
       }
+    }
+  }
 
-      this._isDateProcessing = true;
+  dateChanged(value: string) {
+    // React only on empty (clear button): no need to update date on every keystroke
+    if (!value) {
+      this.setDate(value);
     }
   }
 
   setTitle(value: string) {
-    this.trip.title = value;
-    this.refreshTripName();
-    this.silentUpdate();
+    if (value != this.trip.title) {
+      this.trip.title = value;
+      this.refreshTripName();
+      this.silentUpdate();
+    }
   }
 
   autoSetTitleClicked() {
@@ -196,8 +207,10 @@ export class TripDetailsComponent implements OnInit {
   }
 
   setDescription(value: string) {
-    this.trip.description = value;
-    this.silentUpdate();
+    if (value != this.trip.description) {
+      this.trip.description = value;
+      this.silentUpdate();
+    }
   }
 
   getPlaceName(place: PlaceHeader): string {
@@ -531,7 +544,7 @@ export class TripDetailsComponent implements OnInit {
   }
 
   private getDefaultTitle(): string {
-    return this.trip.visits.map(v => v.place.name).join(" - ");
+    return this.trip.visits.map(v => this.getPlaceName(v.place)).join(" - ");
   }
 
   private hasAnyPictures(): boolean {

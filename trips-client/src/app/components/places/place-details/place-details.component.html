@@ -104,7 +104,8 @@
                     <label for="tbDiscoveryDate">Дата открытия:</label>
                     <input #discoveryDate type="date" id="tbDiscoveryDate" [value]="placeDiscoveryDate"
                            (blur)="setPlaceDiscoveryDate(discoveryDate.value)"
-                           (keyup.enter)="setPlaceDiscoveryDate(discoveryDate.value)" />
+                           (keyup.enter)="setPlaceDiscoveryDate(discoveryDate.value)"
+                           (change)="placeDiscoveryDateChanged(discoveryDate.value)" />
                 </div>
                 <div *ngIf="(!isEditMode) && placeDiscoveryDate" class="form-field">
                     <p>Дата открытия:</p>

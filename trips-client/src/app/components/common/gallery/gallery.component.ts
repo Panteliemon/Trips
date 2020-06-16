@@ -130,7 +130,7 @@ export class GalleryComponent implements OnInit, OnChanges {
   getPictureUrl = getPictureUrl;
 
   setDescription(value: string) {
-    if (this.selectedImage) {
+    if ((this.selectedImage) && (value != this.selectedImage.description)) {
       this.selectedImage.description = value;
       this.updateRequested.emit();
     }

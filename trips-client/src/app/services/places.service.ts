@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 import { API_BASE_PATH } from './api';
 import { Place, PlaceKind } from '../models/place';
 import { Picture } from '../models/picture';
-import { VisitForPlace } from '../models/visit-for-place';
 import { MessageIcon } from './message.service';
 import { getPictureUrl } from '../stringUtils';
 
@@ -81,18 +80,6 @@ export class PlacesService {
 
   deletePicture(placeId: number, pictureSmallSizeId: string): Observable<any> {
     return this.http.delete(`${API_BASE_PATH}/place/${placeId}/gallery/${pictureSmallSizeId}`);
-  }
-
-  getVisitsForPlace(placeId: number, take: number|null, skip: number|null): Observable<VisitForPlace[]> {
-    let params = new HttpParams();
-    if (take) {
-      params = params.set("take", take.toString());
-    }
-    if (skip) {
-      params = params.set("skip", skip.toString());
-    }
-
-    return this.http.get<VisitForPlace[]>(`${API_BASE_PATH}/place/${placeId}/visits`, { params: params });
   }
 
   //---------- Service area
