@@ -619,7 +619,7 @@ namespace Trips.Controllers
                 return NotFound();
             }
 
-            int? maxVisitIndex = DbContext.Visits.Where(v => v.Place.Id == placeId).Max(v => (int?)v.Index);
+            int? maxVisitIndex = DbContext.Visits.Where(v => v.Trip.Id == tripId).Max(v => (int?)v.Index);
 
             // Now everything ready, create a visit with gallery
             Visit visit = new Visit();
