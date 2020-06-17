@@ -1,3 +1,5 @@
+@import "../../../../colors.less";
+
 .visit-header img {
     width:100px;
     height:80px;
@@ -8,17 +10,35 @@
     position: relative;
     top: -2px;
 }
+.visit-header a {
+    /* style as h2 */
+    font-size:20pt;
+    font-weight:bold;
+    color:@color-text-on-page;
+    text-decoration:none;
+}
+.visit-header i.material-icons {
+    font-size:20pt;
+    position:relative;
+    top:6px;
+    color:@theme-color-dark;
+}
 
 div.visit-header-buttons {
     float:right;
-    margin-top:5px;
+    margin:5px 0 10px 5px;
 }
 @media only screen and (min-width: 768px) {
     div.visit-header-buttons {
-        margin-top:unset;
         position:relative;
+        margin-top:unset;
         top:32px;
     }
+}
+
+div.visit-header-buttons-noplace {
+    float:right;
+    margin:8px 0 10px 5px;
 }
 
 div.visit-attributes {

@@ -80,13 +80,18 @@
         <section *ngFor="let visit of trip.visits" class="form-field-margin">
             <div class="clearfix">
                 <h2 class="allows-float-beside visit-header">
-                    <img [src]="getPlacePicture(visit.place)" />
-                    {{getPlaceName(visit.place)}}
-                    <a *ngIf="visit.place" routerLink="/place/{{visit.place.id}}" class="inline-ref">
+                    <a *ngIf="visit.place" routerLink="/place/{{visit.place.id}}">
+                        <img [src]="getPlacePicture(visit.place)" />
+                    </a>
+                    <a *ngIf="visit.place" routerLink="/place/{{visit.place.id}}">
+                        {{getPlaceName(visit.place)}}
                         <i class="material-icons">link</i>
                     </a>
+                    <ng-container *ngIf="!visit.place">{{getPlaceName(visit.place)}}</ng-container>
                 </h2>
-                <div class="visit-header-buttons" *ngIf="isEditMode">
+                <div *ngIf="isEditMode"
+                     [class.visit-header-buttons]="visit.place"
+                     [class.visit-header-buttons-noplace]="!visit.place">
                     <button class="button space-after" (click)="changeVisitPlaceButtonClicked(visit)">
                         <i class="material-icons">search</i>
                         <span>Изменить место...</span>
