@@ -292,6 +292,7 @@ namespace Trips.Service
             ServiceOperations.Add(new EmptyServiceOperation());
             ServiceOperations.Add(new FillPictureFormatServiceOperation());
             ServiceOperations.Add(new PicturesMigrateServiceOperation(Program.PictureStorage));
+            ServiceOperations.Add(new VisitIndexFixServiceOperation());
         }
 
         private TripsContext GetTripsContext()
