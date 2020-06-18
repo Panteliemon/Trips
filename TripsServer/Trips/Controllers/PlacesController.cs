@@ -427,43 +427,5 @@ namespace Trips.Controllers
         }
 
         #endregion
-
-        #region Visits by place
-
-        [HttpGet]
-        [Route("place/{id}/visits")]
-        public async Task<IList<VisitForPlaceDto>> GetVisitsForPlace(int id, int? take, int? skip)
-        {
-            var query = DbContext.Visits.Where(v => v.Place.Id == id)
-                                        .OrderByDescending(v => v.Trip.Date)
-                                        .Select(v => new
-                                        {
-                                            TripId = v.Trip.Id,
-                                            TripDate = v.Trip.Date,
-                                            Participants = v.Trip.Participants.Select(u => u.User)
-                                        });
-            if (skip.HasValue)
-            {
-                query = query.Skip(skip.Value);
-            }
-
-            if (take.HasValue)
-            {
-                query = query.Take(take.Value);
-            }
-
-            var fetchedList = await query.ToListAsync();
-
-            List<VisitForPlaceDto> result = fetchedList.Select(obj => new VisitForPlaceDto()
-            {
-                TripId = obj.TripId,
-                TripDate = obj.TripDate,
-                Participants = obj.Participants.Select(u => Mapper.Map<UserHeaderDto>(u)).ToList()
-            }).ToList();
-
-            return result;
-        }
-
-        #endregion
     }
 }
