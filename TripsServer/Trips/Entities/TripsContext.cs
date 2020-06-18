@@ -94,6 +94,8 @@ namespace Trips.Entities
             modelBuilder.Entity<Region>().HasOne(r => r.ChangedBy).WithMany(u => u.ChangedRegions);
             modelBuilder.Entity<Trip>().HasOne(t => t.AddedBy).WithMany(u => u.AddedTrips);
             modelBuilder.Entity<Trip>().HasOne(t => t.ChangedBy).WithMany(u => u.ChangedTrips);
+            modelBuilder.Entity<Vehicle>().HasOne(v => v.AddedBy).WithMany(u => u.AddedVehicles);
+            modelBuilder.Entity<Vehicle>().HasOne(v => v.ChangedBy).WithMany(u => u.ChangedVehicles);
 
             // Picture-Gallery: unobvious index
             modelBuilder.Entity<Picture>().HasOne(p => p.Gallery).WithMany(g => g.Pictures)
@@ -105,10 +107,13 @@ namespace Trips.Entities
             modelBuilder.Entity<Place>().HasOne(p => p.TitlePicture).WithMany().OnDelete(DeleteBehavior.SetNull);
             modelBuilder.Entity<Region>().HasOne(r => r.TitlePicture).WithMany().OnDelete(DeleteBehavior.SetNull);
             modelBuilder.Entity<Trip>().HasOne(t => t.TitlePicture).WithMany().OnDelete(DeleteBehavior.SetNull);
+            modelBuilder.Entity<Vehicle>().HasOne(v => v.TitlePicture).WithMany().OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Visit>().HasOne(v => v.Place).WithMany(p => p.Visits).OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Picture>().HasOne(p => p.UploadedBy).WithMany(u => u.UploadedPics).OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Vehicle>().HasOne(v => v.Owner).WithMany(u => u.Vehicles).OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<ServiceOperationHistory>().HasIndex(h => new { h.Key, h.Ended });
         }

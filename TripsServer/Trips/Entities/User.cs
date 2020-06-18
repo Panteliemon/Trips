@@ -23,6 +23,9 @@ namespace Trips.Entities
         public bool CanEditGeography { get; set; }
 
         public ICollection<UsersToTrips> Trips { get; set; }
+        public ICollection<Vehicle> Vehicles { get; set; }
+        public ICollection<Picture> UploadedPics { get; set; }
+
         public ICollection<News> PostedNews { get; set; }
         public ICollection<News> EditedNews { get; set; }
         public ICollection<Place> AddedPlaces { get; set; }
@@ -31,7 +34,7 @@ namespace Trips.Entities
         public ICollection<Region> ChangedRegions { get; set; }
         public ICollection<Trip> AddedTrips { get; set; }
         public ICollection<Trip> ChangedTrips { get; set; }
-        public ICollection<Vehicle> Vehicles { get; set; }
-        public ICollection<Picture> UploadedPics { get; set; }
+        public ICollection<Vehicle> AddedVehicles { get; set; }
+        public ICollection<Vehicle> ChangedVehicles { get; set; }
     }
 }

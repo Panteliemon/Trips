@@ -501,6 +501,17 @@ namespace Trips.Controllers
                     t.ChangedBy = null;
                 }
 
+                await DbContext.Entry(user).Collection(u => u.AddedVehicles).LoadAsync();
+                await DbContext.Entry(user).Collection(u => u.ChangedVehicles).LoadAsync();
+                foreach (Vehicle v in user.AddedVehicles)
+                {
+                    v.AddedBy = null;
+                }
+                foreach (Vehicle v in user.ChangedVehicles)
+                {
+                    v.ChangedBy = null;
+                }
+
                 DbContext.Remove(user);
 
                 await DbContext.SaveChangesAsync();
