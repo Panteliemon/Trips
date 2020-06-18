@@ -56,7 +56,7 @@ export class PlacesService {
     return this.http.put(`${API_BASE_PATH}/place`, place);
   }
 
-  deletePlace(id: number, deleteVisits: boolean) {
+  deletePlace(id: number, deleteVisits: boolean): Observable<any> {
     return this.http.delete(`${API_BASE_PATH}/place/${id}${deleteVisits ? "?deleteVisits=true" : ""}`);
   }
 
