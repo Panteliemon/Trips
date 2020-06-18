@@ -1,5 +1,6 @@
 <div>
-    <table class="items-presenter" *ngIf="selectedUsers && (selectedUsers.length > 0)">
+    <table class="items-presenter" *ngIf="selectedUsers && (selectedUsers.length > 0)"
+           [class.no-border]="!isEditable">
         <tr class="user-row picker-row" *ngFor="let user of selectedUsers">
             <td class="user-picture-column">
                 <img [src]="userPicSrc(user.smallSizeProfilePicture, user.profilePictureFormat)" />
