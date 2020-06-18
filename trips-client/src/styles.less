@@ -208,6 +208,10 @@ img.small-profile-pic {
     margin-right:10px;
 }
 
+.space-before {
+    margin-left:5px;
+}
+
 .wide-margin-up-down {
     margin-top:20px;
     margin-bottom:30px;
@@ -278,6 +282,28 @@ div.two-columns > div:last-child {
     padding-right:unset;
 }
 
+/*----------------------------------- Responsive -------------------------------------*/
+
+/* shows up if screen width is more than "small" */
+div.show-small {
+    display:none;
+}
+
+/* hides if screen width is more than "small" */
+div.hide-small {
+    display:block;
+}
+
+@media only screen and (min-width: 600px) {
+    div.show-small {
+        display:block;
+    }
+
+    div.hide-small {
+        display:none;
+    }
+}
+
 /*----------------------------------- items-presenter -------------------------------------*/
 /*----- Fundamental -----*/
 table.items-presenter {
@@ -287,6 +313,10 @@ table.items-presenter {
 table.items-presenter tr {
     border-top: 2px solid @theme-color-light;
     border-bottom: 2px solid @theme-color-light;
+}
+table.items-presenter.no-border tr {
+    border-top: none;
+    border-bottom: none;
 }
 table.items-presenter td {
     padding: 0px;
@@ -328,7 +358,7 @@ table.items-presenter td.entity-picture-column {
 table.items-presenter tr.entity-row td.entity-picture-column img {
     width:100px;
     height:80px;
-    margin:5px;
+    margin:5px 5px 5px 0;
     object-fit:cover;
     border-radius:5px;
 }
@@ -341,7 +371,7 @@ table.items-presenter tr.user-row td.user-picture-column img {
     width:64px;
     height:64px;
     border-radius:5px;
-    margin:5px;
+    margin:5px 5px 5px 0;
 }
 
 /* Also we have table.items-presenter tr.picker-row {   
@@ -370,6 +400,12 @@ table.items-presenter td.general-column div.participants > * {
     margin:5px 5px 5px 0;
     display:block;
     float:left;
+}
+
+/* empty-column: for selectors, to hold something when value is empty*/
+table.items-presenter tr.user-row td.empty-column {
+    height: 76px;
+    width: auto;
 }
 
 table.items-presenter td.name-column {
@@ -448,8 +484,14 @@ table.items-presenter td.participants-column div.participants > * {
     margin:5px;
 }
 
+table.items-presenter td.selector-buttons-column {
+    width:160px;
+    text-align: right;
+}
+
 table.items-presenter td.delete-button-column {
-    width:39px; /* makes it line up with Edit button (so far) */
+    width:34px;
+    text-align: right;
 }
 
 /*----- Responsive -----*/
@@ -802,6 +844,11 @@ button.selector-delete-button {
     display:block;
 }
 
+div.selector-responsive-buttons {
+    margin-top:5px;
+    text-align:right;
+}
+
 /*----------------------------------- Main page -------------------------------------*/
 
 nav {
@@ -820,14 +867,14 @@ nav>a {
     margin: 5px 5px 0 0;
 }
 
-@media only screen and (min-width: 450px) {
+@media only screen and (min-width: 680px) {
     nav {
         margin-bottom: 0px;
     }
 
-    nav>a {
+    /*nav>a {
         border-radius:5px 5px 0 0;
-    }   
+    } */  
 }
 
 nav > a:hover {

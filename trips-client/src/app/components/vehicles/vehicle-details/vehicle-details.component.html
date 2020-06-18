@@ -1,0 +1,70 @@
+<div class="uniter">
+    <section *ngIf="vehicle">
+        <div class="clearfix">
+            <h2 class="allows-float-beside">{{vehicleName}}</h2>
+            <div class="up-right-buttons">
+                <button class="button" *ngIf="isEditButtonVisible && (!isEditMode)" (click)="editButtonClicked()">
+                    <i class="material-icons">edit</i>
+                    <span>Редактировать</span>
+                </button>
+                <button class="button" *ngIf="isEditMode" (click)="endEditButtonClicked()">
+                    <i class="material-icons">subject</i>
+                    <span>Режим просмотра</span>
+                </button>
+                <button class="button button-danger" *ngIf="isEditMode" (click)="deleteButtonClicked()">
+                    <i class="material-icons">delete_forever</i>
+                    <span>Удалить</span>
+                </button>
+            </div>
+        </div>
+        <div class="editor-wrapper">
+            <div class="editor-picture-panel">
+                <img class="title-picture centered" [src]="titlePictureImgSrc" />
+            </div>
+            <div class="editor-main-panel">
+                <div class="form-field">
+                    <p>Владелец:</p>
+                    <app-user-selector [value]="vehicle.owner"
+                                       (valueChange)="setOwner($event)"
+                                       [isEditable]="isOwnerEditable"></app-user-selector>
+                </div>
+
+                <div class="form-field" *ngIf="isEditMode">
+                    <label for="tbName">Название:</label>
+                    <input type="text" id="tbName" #tbName
+                           [value]="vehicle.name"
+                           (blur)="setName(tbName.value)"
+                           (keyup.enter)="setName(tbName.value)" />
+                </div>
+
+                <div class="form-field" *ngIf="!isEditMode">
+                    <p>Марка/Модель:</p>
+                    <p>{{vehicle.officialName}}</p>
+                </div>
+                <div class="form-field" *ngIf="isEditMode">
+                    <label for="tbOfficialName">Марка/Модель:</label>
+                    <input type="text" id="tbOfficialName" #tbOfficialName
+                           [value]="vehicle.officialName"
+                           (blur)="setOfficialName(tbOfficialName.value)"
+                           (keyup.enter)="setOfficialName(tbOfficialName.value)" />
+                </div>
+
+                <div class="form-field" *ngIf="!isEditMode">
+                    <p>Рег. знак:</p>
+                    <p>{{vehicle.licenseNumber}}</p>
+                </div>
+                <div class="form-field" *ngIf="isEditMode">
+                    <label for="tbLicenseNumber">Рег. знак:</label>
+                    <input type="text" id="tbLicenseNumber" #tbLicenseNumber
+                           [value]="vehicle.licenseNumber"
+                           (blur)="setLicenseNumber(tbLicenseNumber.value)"
+                           (keyup.enter)="setLicenseNumber(tbLicenseNumber.value)" />
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="fog" *ngIf="isOverallLoaderVisible">
+        <app-loader></app-loader>
+    </div>
+</div>
+<app-page404 *ngIf="isNotFound"></app-page404>

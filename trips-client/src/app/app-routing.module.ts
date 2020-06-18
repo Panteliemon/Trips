@@ -13,9 +13,10 @@ import { Page404Component } from './components/common/page404/page404.component'
 import { UserCreateComponent } from './components/users/user-create/user-create.component';
 import { LoginPageComponent } from './components/common/login-page/login-page.component';
 import { ServiceComponent } from './components/service/service.component';
+import { TripDetailsComponent } from './components/trips/trip-details/trip-details.component';
+import { VehicleDetailsComponent } from './components/vehicles/vehicle-details/vehicle-details.component';
 
 import { AuthGuard } from './services/auth.guard';
-import { TripDetailsComponent } from './components/trips/trip-details/trip-details.component';
 
 const routes: Routes = [
   { path: "news", component: NewsMainComponent },
@@ -25,6 +26,7 @@ const routes: Routes = [
   { path: "place/:id", component: PlaceDetailsComponent, canActivate: [AuthGuard] },
   { path: "regions", component: RegionsMainComponent, canActivate: [AuthGuard] },
   { path: "vehicles", component: VehiclesMainComponent, canActivate: [AuthGuard] },
+  { path: "vehicle/:id", component: VehicleDetailsComponent, canActivate: [AuthGuard] },
   { path: "users", component: UsersMainComponent, canActivate: [AuthGuard] },
   { path: "users/create", component: UserCreateComponent, canActivate: [AuthGuard] },
   { path: "user/:id", component: UserDetailsComponent, canActivate: [AuthGuard] },

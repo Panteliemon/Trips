@@ -1,3 +1,41 @@
-<section>
-    <h1>vehicles</h1>
-</section>
+<div class="uniter">
+    <section>
+        <div class="clearfix">
+            <h1 class="allows-float-beside">Транспортные средства</h1>
+            <button class="button up-right-button" (click)="addButtonClicked()">
+                <i class="material-icons">add</i>
+                <span>Добавить...</span>
+            </button>
+        </div>
+        <table class="items-presenter" *ngIf="vehicles && (vehicles.length > 0)">
+            <thead>
+                <th></th>
+                <th class="name-column">Название</th>
+                <th>Рег.№</th>
+            </thead>
+            <tr class="entity-row selectable-row" *ngFor="let vehicle of vehicles">
+                <td class="entity-picture-column">
+                    <a class="cell-wrapper" routerLink="/vehicle/{{vehicle.id}}">
+                        <img [src]="getMiniatureImgSrc(vehicle)" />
+                    </a>
+                </td>
+                <td class="name-column">
+                    <a class="cell-wrapper" routerLink="/vehicle/{{vehicle.id}}">
+                        <p>{{getVehicleName(vehicle)}}</p>
+                    </a>
+                </td>
+                <td class="date-column">
+                    <a class="cell-wrapper" routerLink="/vehicle/{{vehicle.id}}">
+                        <p>{{vehicle.licenseNumber}}</p>
+                    </a>
+                </td>
+            </tr>
+        </table>
+        <p class="big-gray-text centered wide-margin-up-down"
+        *ngIf="isNotFoundVisible">Не найдено</p>
+        <app-loader *ngIf="isLoaderVisible"></app-loader>
+    </section>
+    <div class="fog" *ngIf="isOverallLoaderVisible">
+        <app-loader class="centered-both"></app-loader>
+    </div>
+</div>

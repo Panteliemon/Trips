@@ -31,10 +31,13 @@
   <a routerLink="/places" [class.active]="placeActive.isActive || placesListActive.isActive">Места</a>
   <a style="display:none;" routerLink="/places" routerLinkActive #placesListActive="routerLinkActive"></a>
   <a style="display:none;" routerLink="/place" routerLinkActive #placeActive="routerLinkActive"></a>
-  <!-- TODO uncomment while develop
+  <!-- TODO uncomment while develop // just one left! Success!
   <a routerLink="/regions" routerLinkActive="active">Направления</a>
-  <a routerLink="/vehicles" routerLinkActive="active">Транспортные средства</a>
   -->
+  <a routerLink="/vehicles" [class.active]="vehicleActive.isActive || vehiclesListActive.isActive">Транспортные средства</a>
+  <a style="display:none;" routerLink="/vehicles" routerLinkActive #vehiclesListActive="routerLinkActive"></a>
+  <a style="display:none;" routerLink="/vehicle" routerLinkActive #vehicleActive="routerLinkActive"></a>
+
   <a routerLink="/users" [class.active]="userActive.isActive || usersListActive.isActive">Участники</a>
   <a style="display:none;" routerLink="/users" routerLinkActive #usersListActive="routerLinkActive"></a>
   <a style="display:none;" routerLink="/user" routerLinkActive #userActive="routerLinkActive"></a>
