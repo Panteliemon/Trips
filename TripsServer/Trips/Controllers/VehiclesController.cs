@@ -39,7 +39,8 @@ namespace Trips.Controllers
                 }
             }
 
-            List<Vehicle> loadedList = await query.Include(v => v.TitlePicture).ToListAsync();
+            List<Vehicle> loadedList = await query.Include(v => v.TitlePicture)
+                                                  .Include(v => v.Owner).ToListAsync();
             List<VehicleHeaderDto> result = loadedList.Select(v => Mapper.Map<VehicleHeaderDto>(v)).ToList();
             return result;
         }
