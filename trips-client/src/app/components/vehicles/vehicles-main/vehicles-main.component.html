@@ -24,7 +24,7 @@
                     <a class="cell-wrapper" routerLink="/vehicle/{{vehicle.id}}">
                         <p class="title">{{getVehicleName(vehicle)}}</p>                        
                         <div>
-                            <app-user-link [user]="vehicle.owner" [showProfilePicture]="true"></app-user-link>
+                            <app-user-link [user]="vehicle.owner" [showProfilePicture]="vehicle.owner"></app-user-link>
                         </div>
                         <app-place-accessibility-selector [value]="vehicle.acceptableAccessibility"
                                                           [isEditable]="false" [isShortView]="true"></app-place-accessibility-selector>
@@ -37,7 +37,7 @@
                 </td>
                 <td class="users-column show-middle">
                     <a class="cell-wrapper" routerLink="/vehicle/{{vehicle.id}}">
-                        <app-user-link [user]="vehicle.owner" [showProfilePicture]="true"></app-user-link>
+                        <app-user-link [user]="vehicle.owner" [showProfilePicture]="vehicle.owner"></app-user-link>
                     </a>
                 </td>
                 <td class="enum-column show-middle">
@@ -50,7 +50,7 @@
             </tr>
         </table>
         <p class="big-gray-text centered wide-margin-up-down"
-        *ngIf="isNotFoundVisible">Не найдено</p>
+           *ngIf="isNotFoundVisible">Не найдено</p>
         <app-loader *ngIf="isLoaderVisible"></app-loader>
     </section>
     <div class="fog" *ngIf="isOverallLoaderVisible">
