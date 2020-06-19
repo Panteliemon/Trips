@@ -60,7 +60,7 @@
                     <th class="hide-middle"></th>
                     <th class="show-middle">Дата</th>
                     <th class="name-column show-middle">Название</th>
-                    <th class="participants-column show-middle">Участники</th>
+                    <th class="users-column show-middle">Участники</th>
                 </thead>
                 <tr *ngFor="let trip of trips" class="entity-row selectable-row">
                     <td class="entity-picture-column">
@@ -88,7 +88,7 @@
                             <p>{{getTripTitle(trip)}}</p>
                         </a>
                     </td>
-                    <td class="participants-column show-middle">
+                    <td class="users-column show-middle">
                         <a class="cell-wrapper" routerLink="/trip/{{trip.id}}">
                             <div class="participants clearfix">
                                 <app-user-link *ngFor="let user of trip.participants"

@@ -9,6 +9,9 @@ import { UserHeader } from 'src/app/models/user-header';
 import { PopupsService } from 'src/app/services/popups.service';
 import { PlaceAccessibility } from 'src/app/models/place';
 import { TripsService } from 'src/app/services/trips.service';
+import { TripHeader } from 'src/app/models/trip-header';
+
+const TRIPS_LOAD_PORTION: number = 20;
 
 @Component({
   selector: 'app-vehicle-details',
@@ -34,6 +37,11 @@ export class VehicleDetailsComponent implements OnInit {
   isGalleryVisible: boolean;
 
   gallerySelectedImage: string;
+
+  areTripsVisible: boolean;
+  tripsOfVehicle: TripHeader[] = [];
+  isTripsLoaderVisible: boolean;
+  isLoadMoreTripsVisible: boolean;
 
   private _isSetYearProcessing: boolean; // to avoid double messageboxes
 
@@ -66,6 +74,13 @@ export class VehicleDetailsComponent implements OnInit {
       // Initialize selected image to avoid angular conceptual error
       if (this.vehicle?.gallery?.pictures && (this.vehicle.gallery.pictures.length > 0)) {
         this.gallerySelectedImage = this.vehicle.gallery.pictures[0].smallSizeId;
+      }
+
+      // Decide whether or not display trips section
+      if (this.vehicle) {
+        this.tripsService.getTripsList(1, 0, null, null, null, [], null, [], null, [this.vehicleId]).subscribe(trips => {
+          this.areTripsVisible = trips && (trips.length > 0);
+        }); // on error ignore
       }
     }, error => {
       this.isOverallLoaderVisible = false;
@@ -272,6 +287,44 @@ export class VehicleDetailsComponent implements OnInit {
           this.vehiclesService.getServerErrorIcon(error));
       }
     }
+  }
+
+  tripsExpandedChanged(isExpanded: boolean) {
+    if (isExpanded && ((!this.tripsOfVehicle) || (this.tripsOfVehicle.length == 0))) {
+      this.tripsOfVehicle = [];
+      this.loadMoreTripsClicked();
+    }
+  }
+
+  getTripImgSrc(trip: TripHeader): string {
+    return this.tripsService.getMiniatureImgSrc(trip);
+  }
+
+  getTripTitle(trip: TripHeader): string {
+    return this.tripsService.getDisplayableTripTitle(trip);
+  }
+
+  loadMoreTripsClicked() {
+    this.isLoadMoreTripsVisible = false;
+    this.isTripsLoaderVisible = true;
+    this.tripsService.getTripsList(TRIPS_LOAD_PORTION + 1, this.tripsOfVehicle.length, null, null, null, [], null, [], null, [this.vehicleId]).subscribe(trips => {
+      this.isTripsLoaderVisible = false;
+      if (trips) { // should be always true
+        if (trips.length > TRIPS_LOAD_PORTION) {
+          this.isLoadMoreTripsVisible = true;
+          for (let i=0; i<TRIPS_LOAD_PORTION; i++) {
+            this.tripsOfVehicle.push(trips[i]);
+          }
+        } else {
+          for (let i=0; i<trips.length; i++) {
+            this.tripsOfVehicle.push(trips[i]);
+          }
+        }
+      }
+    }, error => {
+      this.isTripsLoaderVisible = false;
+      this.messageService.showMessage(this.tripsService.getServerErrorText(error), MessageButtons.ok, MessageIcon.error);
+    });
   }
 
   private setVehicle(value: Vehicle) {

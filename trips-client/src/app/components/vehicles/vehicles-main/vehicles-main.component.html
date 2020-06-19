@@ -10,8 +10,9 @@
         <table class="items-presenter" *ngIf="vehicles && (vehicles.length > 0)">
             <thead>
                 <th></th>
-                <th class="name-column">Название</th>
-
+                <th class="name-column show-middle">Название</th>
+                <th class="users-column show-middle">Владелец</th>
+                <th class="show-middle">Н.П.</th>
             </thead>
             <tr class="entity-row selectable-row" *ngFor="let vehicle of vehicles">
                 <td class="entity-picture-column">
@@ -19,12 +20,33 @@
                         <img [src]="getMiniatureImgSrc(vehicle)" />
                     </a>
                 </td>
-                <td class="name-column">
+                <td class="general-column hide-middle">
+                    <a class="cell-wrapper" routerLink="/vehicle/{{vehicle.id}}">
+                        <p class="title">{{getVehicleName(vehicle)}}</p>                        
+                        <div>
+                            <app-user-link [user]="vehicle.owner" [showProfilePicture]="true"></app-user-link>
+                        </div>
+                        <app-place-accessibility-selector [value]="vehicle.acceptableAccessibility"
+                                                          [isEditable]="false" [isShortView]="true"></app-place-accessibility-selector>
+                    </a>
+                </td>
+                <td class="name-column show-middle">
                     <a class="cell-wrapper" routerLink="/vehicle/{{vehicle.id}}">
                         <p>{{getVehicleName(vehicle)}}</p>
                     </a>
                 </td>
-
+                <td class="users-column show-middle">
+                    <a class="cell-wrapper" routerLink="/vehicle/{{vehicle.id}}">
+                        <app-user-link [user]="vehicle.owner" [showProfilePicture]="true"></app-user-link>
+                    </a>
+                </td>
+                <td class="enum-column show-middle">
+                    <a class="cell-wrapper" routerLink="/vehicle/{{vehicle.id}}">
+                        <app-place-accessibility-selector class="centered" [value]="vehicle.acceptableAccessibility"
+                                                          [isEditable]="false" [isShortView]="true"
+                                                          [isTooltipToLeft]="true"></app-place-accessibility-selector>
+                    </a>
+                </td>
             </tr>
         </table>
         <p class="big-gray-text centered wide-margin-up-down"

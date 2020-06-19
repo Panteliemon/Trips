@@ -122,6 +122,38 @@
             <p>Изменено:</p>
             <p>{{vehicle.changedDate|adaptiveDate}} участником <app-user-link [user]="vehicle.changedBy"></app-user-link></p>
         </div>
+        <app-expander *ngIf="areTripsVisible" title="Поездочки с данным ТС"
+                      (isExpandedChange)="tripsExpandedChanged($event)">
+            <div class="sub-entities-list">
+                <table class="items-presenter">
+                    <tr *ngFor="let trip of tripsOfVehicle" class="entity-row selectable-row">
+                        <td class="entity-picture-column">
+                            <a class="cell-wrapper" routerLink="/trip/{{trip.id}}">
+                                <img [src]="getTripImgSrc(trip)" />
+                            </a>
+                        </td>
+                        <td class="general-column hide-small">
+                            <a class="cell-wrapper" routerLink="/trip/{{trip.id}}">
+                                <p *ngIf="trip.date">{{trip.date | tripsDate}}</p>
+                                <p class="title">{{getTripTitle(trip)}}</p>
+                            </a>
+                        </td>
+                        <td class="date-column show-small">
+                            <a class="cell-wrapper" routerLink="/trip/{{trip.id}}">
+                                <p *ngIf="trip.date" class="centered">{{trip.date | tripsDate}}</p>
+                            </a>
+                        </td>
+                        <td class="name-column show-small">
+                            <a class="cell-wrapper" routerLink="/trip/{{trip.id}}">
+                                <p>{{getTripTitle(trip)}}</p>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+                <app-loader *ngIf="isTripsLoaderVisible"></app-loader>
+                <button *ngIf="isLoadMoreTripsVisible" class="button form-field-margin-above" (click)="loadMoreTripsClicked()">Загрузить ещё</button>
+            </div>
+        </app-expander>
     </section>
     <div class="fog" *ngIf="isOverallLoaderVisible">
         <app-loader></app-loader>

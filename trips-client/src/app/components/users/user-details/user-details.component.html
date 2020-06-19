@@ -121,6 +121,35 @@
                 </div>
             </div>
             <br />
+            <app-expander *ngIf="isVehiclesOfUserVisible" title="Транспортные средства"
+                          (isExpandedChange)="onVehiclesOfUserExpandedChanged($event)">
+                <div class="sub-entities-list">
+                    <div *ngIf="isAddNewVehicleVisible" class="clearfix"
+                         [class.form-field-margin]="vehiclesOfUser && (vehiclesOfUser.length > 0)">
+                        <p class="advice no-user-vehicles"
+                           *ngIf="(!isVehiclesLoaderVisible) && vehiclesOfUser && (vehiclesOfUser.length == 0)">Пока ничего нет</p>
+                        <button class="button add-user-vehicle" (click)="onAddNewVehicleClicked()">
+                            <i class="material-icons">add</i>
+                            <span>Добавить...</span>
+                        </button>
+                    </div>
+                    <table class="items-presenter" *ngIf="vehiclesOfUser && (vehiclesOfUser.length > 0)">
+                        <tr *ngFor="let vehicle of vehiclesOfUser" class="entity-row selectable-row">
+                            <td class="entity-picture-column">
+                                <a class="cell-wrapper" routerLink="/vehicle/{{vehicle.id}}">
+                                    <img [src]="getVehicleImgSrc(vehicle)" />
+                                </a>
+                            </td>
+                            <td class="name-column">
+                                <a class="cell-wrapper" routerLink="/vehicle/{{vehicle.id}}">
+                                    <p>{{getVehicleName(vehicle)}}</p>
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                    <app-loader *ngIf="isVehiclesLoaderVisible"></app-loader>
+                </div>
+            </app-expander>
             <app-expander *ngIf="isTripsOfUserVisible" title="Поездочки с данным участником"
                           (isExpandedChange)="onTripsOfUserExpandedChanged($event)">
                 <div class="sub-entities-list">

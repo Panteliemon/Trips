@@ -91,9 +91,10 @@ export class PlaceAccessibilitySelectorComponent implements OnInit, OnChanges {
 
   @Input()
   isEditable: boolean = true;
-
   @Input()
   isShortView: boolean = false;
+  @Input()
+  isTooltipToLeft: boolean = false;
 
   viewModels: ChoiceViewModel[];
 

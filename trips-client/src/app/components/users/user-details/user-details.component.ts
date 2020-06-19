@@ -6,6 +6,8 @@ import { MessageService, MessageButtons, MessageResult, MessageIcon } from 'src/
 import { AuthService } from 'src/app/services/auth.service';
 import { TripHeader } from 'src/app/models/trip-header';
 import { TripsService } from 'src/app/services/trips.service';
+import { VehicleHeader } from 'src/app/models/vehicle-header';
+import { VehiclesService } from 'src/app/services/vehicles.service';
 
 const TRIPS_LOAD_PORTION: number = 20;
 
@@ -49,6 +51,11 @@ export class UserDetailsComponent implements OnInit {
   isResetPasswordExpanded: boolean;
   passwordForReset: string;
 
+  isVehiclesOfUserVisible: boolean;
+  vehiclesOfUser: VehicleHeader[];
+  isVehiclesLoaderVisible: boolean;
+  isAddNewVehicleVisible: boolean;
+
   isTripsOfUserVisible: boolean;
   tripsOfUser: TripHeader[];
   isTripsLoaderVisible: boolean;
@@ -59,7 +66,8 @@ export class UserDetailsComponent implements OnInit {
     private usersService: UsersService,
     private authService: AuthService,
     private messageService: MessageService,
-    private tripsService: TripsService) { }
+    private tripsService: TripsService,
+    private vehiclesService: VehiclesService) { }
 
   get newLogin(): string {
     return this._newLogin;
@@ -77,8 +85,19 @@ export class UserDetailsComponent implements OnInit {
       this.user = user;
       this.refreshAllVisibility();
 
-      // Decide whether we display "trips of this user" section
+      // Decide whether we display "vehicles of this user" and "trips of this user" sections
       if (this.user) {
+        // Admin or self: allow edit vehicles, so the section is always visible. Else: read only, display only if not empty.
+        if (this.authService.user?.isAdmin || (this.authService.user?.id == this.user.id)) {
+          this.isVehiclesOfUserVisible = true;
+          this.isAddNewVehicleVisible = true;
+        } else {
+          this.isAddNewVehicleVisible = false;
+          this.vehiclesService.getVehiclesList([this.user.id]).subscribe(vehicles => {
+            this.isVehiclesOfUserVisible = vehicles && (vehicles.length > 0);
+          }); // on error ignore
+        }
+
         this.tripsService.getTripsList(1, 0, null, null, null, [this.user.id]).subscribe(trips => {
           this.isTripsOfUserVisible = trips && (trips.length > 0);
         }); // on error ignore
@@ -337,8 +356,41 @@ export class UserDetailsComponent implements OnInit {
     this.passwordForReset = "";
   }
 
+  onVehiclesOfUserExpandedChanged(isExpanded: boolean) {
+    if (isExpanded && ((!this.vehiclesOfUser) || (this.vehiclesOfUser.length == 0))) {
+      this.vehiclesOfUser = [];
+      this.loadVehicles();
+    }
+  }
+
+  getVehicleImgSrc(vehicle: VehicleHeader): string {
+    return this.vehiclesService.getMiniatureImgSrc(vehicle);
+  }
+
+  getVehicleName(vehicle: VehicleHeader): string {
+    return this.vehiclesService.getDisplayableVehicleName(vehicle);
+  }
+
+  onAddNewVehicleClicked() {
+    let question = (this.authService.user?.id == this.user.id)
+                   ? "Добавить вам транспортное средство?"
+                   : `Добавить транспортное средство участнику ${this.user.name}?`;
+    this.messageService.showMessage(question, MessageButtons.yesNo, MessageIcon.question).subscribe(answer => {
+      if (answer == MessageResult.yes) {
+        this.isOverallLoaderVisible = true;
+        this.vehiclesService.createVehicle(this.user.id).subscribe(vehicle => {
+          this.isOverallLoaderVisible = false;
+          this.router.navigate([`/vehicle/${vehicle.id}`, { edit: true }]);
+        }, error => {
+          this.isOverallLoaderVisible = false;
+          this.messageService.showMessage(this.vehiclesService.getServerErrorText(error), MessageButtons.ok, MessageIcon.error);
+        });
+      }
+    });
+  }
+
   onTripsOfUserExpandedChanged(isExpanded: boolean) {
-    if (isExpanded && ((!this.tripsOfUser) || (this.tripsOfUser.length > 0))) {
+    if (isExpanded && ((!this.tripsOfUser) || (this.tripsOfUser.length == 0))) {
       this.tripsOfUser = [];
       this.onLoadMoreTripsClicked();
     }
@@ -450,5 +502,16 @@ export class UserDetailsComponent implements OnInit {
 
     this.isPictureLoaderVisible = false;
     this.isOverallLoaderVisible = false;
+  }
+
+  private loadVehicles() {
+    this.isVehiclesLoaderVisible = true;
+    this.vehiclesService.getVehiclesList([this.user.id]).subscribe(vehicles => {
+      this.isVehiclesLoaderVisible = false;
+      this.vehiclesOfUser = vehicles;
+    }, error => {
+      this.isVehiclesLoaderVisible = false;
+      this.messageService.showMessage(this.vehiclesService.getServerErrorText(error), MessageButtons.ok, MessageIcon.error);
+    });
   }
 }
