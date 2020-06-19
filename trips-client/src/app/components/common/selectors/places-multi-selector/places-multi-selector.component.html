@@ -1,12 +1,15 @@
 <div>
-    <table class="items-presenter" *ngIf="selectedPlaces && (selectedPlaces.length > 0)">
-        <tr class="entity-row picker-row" *ngFor="let place of selectedPlaces">
+    <table class="items-presenter" *ngIf="selectedPlaces && (selectedPlaces.length > 0)"
+           [class.no-border]="!isEditable">
+        <tr *ngFor="let place of selectedPlaces">
             <td class="entity-picture-column">
-                <img [src]="getPlaceImgSrc(place)" />
+                <a class="value-wrapper" routerLink="/place/{{place.id}}">
+                    <img [src]="getPlaceImgSrc(place)" />
+                </a>
             </td>
             <td class="name-column">
-                <span>{{getPlaceName(place)}}</span>
-                <a routerLink="/place/{{place.id}}" class="inline-ref">
+                <a class="value-wrapper" routerLink="/place/{{place.id}}">
+                    <span>{{getPlaceName(place)}}</span>
                     <i class="material-icons">link</i>
                 </a>
             </td>
