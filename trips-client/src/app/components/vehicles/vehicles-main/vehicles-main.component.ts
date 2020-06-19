@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService, MessageButtons, MessageIcon, MessageResult } from 'src/app/services/message.service';
-import { PopupsService } from 'src/app/services/popups.service';
 import { VehiclesService } from 'src/app/services/vehicles.service';
 import { VehicleHeader } from 'src/app/models/vehicle-header';
 import { AuthService } from 'src/app/services/auth.service';
-import { stringify } from 'querystring';
 import { Router } from '@angular/router';
 
 @Component({
@@ -20,7 +18,6 @@ export class VehiclesMainComponent implements OnInit {
   isOverallLoaderVisible: boolean; // for create new vehicle only
 
   constructor(private messageService: MessageService,
-              private popupsService: PopupsService,
               private vehiclesService: VehiclesService,
               private authService: AuthService,
               private router: Router) { }

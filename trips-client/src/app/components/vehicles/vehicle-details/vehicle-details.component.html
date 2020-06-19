@@ -20,6 +20,21 @@
         <div class="editor-wrapper">
             <div class="editor-picture-panel">
                 <img class="title-picture centered" [src]="titlePictureImgSrc" />
+                <button *ngIf="isSelectTitlePicButtonVisible" class="button button-pic-select"
+                        (click)="setTitlePicButtonClicked()">
+                    <i class="material-icons">search</i>
+                    <span>Выбрать заглавную картинку...</span>
+                </button>
+                <p *ngIf="isSelectTitlePicAdviceVisible" class="advice">
+                    <i class="material-icons">info</i>
+                    <span>Добавьте изображения в галерею, чтобы установить заглавную картинку</span>
+                </p>
+                <br *ngIf="isResetTitlePicButtonVisible" />
+                <button *ngIf="isResetTitlePicButtonVisible" class="button button-pic-select"
+                        (click)="resetTitlePicButtonClicked()">
+                    <i class="material-icons">clear</i>
+                    <span>Сбросить картинку</span>
+                </button>
             </div>
             <div class="editor-main-panel">
                 <div class="form-field">
@@ -60,7 +75,52 @@
                            (blur)="setLicenseNumber(tbLicenseNumber.value)"
                            (keyup.enter)="setLicenseNumber(tbLicenseNumber.value)" />
                 </div>
+
+                <div class="form-field" *ngIf="!isEditMode">
+                    <p>Год выпуска:</p>
+                    <p>{{vehicle.yearOfManufacture}}</p>
+                </div>
+                <div class="form-field" *ngIf="isEditMode">
+                    <label for="tbYear">Год выпуска:</label>
+                    <input type="number" id="tbYear" #tbYear
+                           [value]="vehicle.yearOfManufacture"
+                           (keyup.enter)="setYear(tbYear.value)"
+                           (change)="setYear(tbYear.value)" />
+                </div>
+
+                <div class="form-field" *ngIf="(!isEditMode) && vehicle.description">
+                    <p>Описание:</p>
+                    <p class="preserve-linebreaks">{{vehicle.description}}</p>
+                </div>
+                <div class="form-field" *ngIf="isEditMode">
+                    <label for="tbDescription">Описание:</label>
+                    <textarea id="tbDescription" #tbDescription
+                              class="description-field"
+                              [value]="vehicle.description"
+                              (blur)="setDescription(tbDescription.value)"></textarea>
+                </div>
+
+                <div class="form-field">
+                    <p>Номинальная проходимость:</p>
+                    <app-place-accessibility-selector [value]="vehicle.acceptableAccessibility" [isEditable]="isEditMode"
+                                                      (valueChange)="setAcceptableAccessibility($event)"></app-place-accessibility-selector>
+                </div>
             </div>
+        </div>
+        <h2 *ngIf="isGalleryVisible">Галерея</h2>
+        <app-gallery *ngIf="isGalleryVisible"
+                     [gallery]="vehicle.gallery" [isEditable]="isEditMode"
+                     [(selectedImageSmallSizeId)]="gallerySelectedImage"
+                     (fileSelected)="galleryFileSelected($event)"
+                     (updateRequested)="galleryUpdateRequested()"
+                     (deleteConfirmed)="galleryDeleteConfirmed($event)"></app-gallery>
+        <div *ngIf="vehicle.addedDate" class="form-field form-field-margin-above">
+            <p>Добавлено:</p>
+            <p>{{vehicle.addedDate|adaptiveDate}} участником <app-user-link [user]="vehicle.addedBy"></app-user-link></p>
+        </div>
+        <div *ngIf="vehicle.changedDate" class="form-field form-field-margin-above">
+            <p>Изменено:</p>
+            <p>{{vehicle.changedDate|adaptiveDate}} участником <app-user-link [user]="vehicle.changedBy"></app-user-link></p>
         </div>
     </section>
     <div class="fog" *ngIf="isOverallLoaderVisible">

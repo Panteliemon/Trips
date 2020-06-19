@@ -11,7 +11,7 @@
             <thead>
                 <th></th>
                 <th class="name-column">Название</th>
-                <th>Рег.№</th>
+
             </thead>
             <tr class="entity-row selectable-row" *ngFor="let vehicle of vehicles">
                 <td class="entity-picture-column">
@@ -24,11 +24,7 @@
                         <p>{{getVehicleName(vehicle)}}</p>
                     </a>
                 </td>
-                <td class="date-column">
-                    <a class="cell-wrapper" routerLink="/vehicle/{{vehicle.id}}">
-                        <p>{{vehicle.licenseNumber}}</p>
-                    </a>
-                </td>
+
             </tr>
         </table>
         <p class="big-gray-text centered wide-margin-up-down"

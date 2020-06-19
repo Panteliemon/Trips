@@ -18,7 +18,8 @@ export class TripsService {
 
   getTripsList(take: number, skip: number, search: string, from: Date, to: Date,
       userFilter: number[] = null, userFilterOperation: FilterOperation = FilterOperation.OR,
-      placeFilter: number[] = null, placeFilterOperation: FilterOperation = FilterOperation.OR): Observable<TripHeader[]> {
+      placeFilter: number[] = null, placeFilterOperation: FilterOperation = FilterOperation.OR,
+      vehicleFilter: number[] = null): Observable<TripHeader[]> {
     let params = new HttpParams();
     if (take) {
       params = params.set("take", take.toString());
@@ -42,6 +43,10 @@ export class TripsService {
     if (placeFilter && (placeFilter.length > 0)) {
       let paramValue = (placeFilterOperation == FilterOperation.AND) ? placeFilter.join("&") : placeFilter.join("|");
       params = params.set("places", paramValue);
+    }
+    if (vehicleFilter && (vehicleFilter.length > 0)) {
+      let paramValue = vehicleFilter.join("|");
+      params = params.set("vehicles", paramValue);
     }
 
     return this.http.get<TripHeader[]>(`${API_BASE_PATH}/trips`, { params: params });

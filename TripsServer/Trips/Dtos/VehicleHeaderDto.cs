@@ -11,7 +11,7 @@ namespace Trips.Dtos
         public int Id { get; set; }
         public UserHeaderDto Owner { get; set; }
         public string Name { get; set; }
-        public string LicenseNumber { get; set; }
+        public PlaceAccessibility? AcceptableAccessibility { get; set; }
         public Guid? TitlePictureSmallSizeId { get; set; }
         public PicFormat? TitlePictureFormat { get; set; }
     }
