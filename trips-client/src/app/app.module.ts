@@ -46,6 +46,8 @@ import { FilterOperationSelectorComponent } from './components/common/selectors/
 import { PlacesMultiSelectorComponent } from './components/common/selectors/places-multi-selector/places-multi-selector.component';
 import { VehicleDetailsComponent } from './components/vehicles/vehicle-details/vehicle-details.component';
 import { UserSelectorComponent } from './components/common/selectors/user-selector/user-selector.component';
+import { VehiclesMultiSelectorComponent } from './components/common/selectors/vehicles-multi-selector/vehicles-multi-selector.component';
+import { VehiclePickerComponent } from './components/common/pickers/vehicle-picker/vehicle-picker.component';
 
 @NgModule({
   declarations: [
@@ -89,7 +91,9 @@ import { UserSelectorComponent } from './components/common/selectors/user-select
     FilterOperationSelectorComponent,
     PlacesMultiSelectorComponent,
     VehicleDetailsComponent,
-    UserSelectorComponent
+    UserSelectorComponent,
+    VehiclesMultiSelectorComponent,
+    VehiclePickerComponent
   ],
   imports: [
     BrowserModule,

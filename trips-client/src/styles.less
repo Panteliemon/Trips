@@ -355,15 +355,22 @@ definitions not here */
 
 /*----- Columns (set width and other useful staff) -----*/
 table.items-presenter td.entity-picture-column {
-    width:110px;
+    width:100px; /* less than can be needed in some cases */
     line-height:0%; /* Otherwise rows are ALWAYS taller than needed */
 }
 table.items-presenter td.entity-picture-column img {
     width:100px;
     height:80px;
-    margin:5px 5px 5px 0;
     object-fit:cover;
     border-radius:5px;
+}
+table.items-presenter td.entity-picture-column a.cell-wrapper > img,
+table.items-presenter td.entity-picture-column > img {
+    margin:5px 5px 5px 0;
+}
+table.items-presenter td.entity-picture-column a.value-wrapper {
+    display:inline-block;
+    margin:5px 0;
 }
 
 table.items-presenter td.user-picture-column {

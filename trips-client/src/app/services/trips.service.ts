@@ -90,6 +90,14 @@ export class TripsService {
     return this.http.delete(`${API_BASE_PATH}/trip/${tripId}/participant/${userId}`);
   }
 
+  addVehicle(tripId: number, vehicleId: number): Observable<any> {
+    return this.http.post(`${API_BASE_PATH}/trip/${tripId}/vehicles`, null, { params: { vehicleId: vehicleId.toString() }})
+  }
+
+  removeVehicle(tripId: number, vehicleId: number): Observable<any> {
+    return this.http.delete(`${API_BASE_PATH}/trip/${tripId}/vehicle/${vehicleId}`);
+  }
+
   addVisit(tripId: number, placeId: number): Observable<any> {
     return this.http.post(`${API_BASE_PATH}/trip/${tripId}/visits?placeId=${placeId}`, null);
   }

@@ -1,0 +1,33 @@
+<div>
+    <table class="items-presenter" *ngIf="selectedVehicles && (selectedVehicles.length > 0)"
+           [class.no-border]="!isEditable">
+        <tr *ngFor="let vehicle of selectedVehicles">
+            <td class="entity-picture-column">
+                <a class="value-wrapper" routerLink="/vehicle/{{vehicle.id}}">
+                    <img [src]="getMiniatureImgSrc(vehicle)" />
+                </a>
+            </td>
+            <td class="name-column">
+                <a class="value-wrapper" routerLink="/vehicle/{{vehicle.id}}">
+                    <span>{{getVehicleName(vehicle)}}</span>
+                    <i class="material-icons">link</i>
+                </a>
+            </td>
+            <td *ngIf="isEditable" class="delete-button-column">
+                <button class="button selector-delete-button" (click)="deleteClicked(vehicle)">
+                    <i class="material-icons">clear</i>
+                    <div class="selector-tooltip selector-tooltip-left selector-button-tooltip">
+                        Удалить
+                    </div>
+                </button>
+            </td>
+        </tr>
+    </table>
+    <button *ngIf="isEditable"
+            class="button button-std"
+            [class.form-field-margin-above]="selectedVehicles && (selectedVehicles.length > 0)"
+            (click)="addClicked()">
+        <i class="material-icons">add</i>
+        <span>Добавить...</span>
+    </button>
+</div>

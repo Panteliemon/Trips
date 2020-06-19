@@ -1,0 +1,32 @@
+<div *ngIf="isVisible" class="modal-popup-background">
+    <div class="picker-popup">
+        <h3 class="pickermargin">{{caption}}</h3>
+        <div class="picker-table-holder">
+            <table class="items-presenter" *ngIf="vehicles && (vehicles.length > 0)">
+                <thead>
+                    <th></th>
+                    <th class="name-column">Название</th>
+                </thead>
+                <tr *ngFor="let vehicle of vehicles"
+                    class="entity-row selectable-row picker-row"
+                    (click)="rowClicked(vehicle)">
+                    <td class="entity-picture-column">
+                        <img [src]="getMiniatureImgSrc(vehicle)" />
+                    </td>
+                    <td class="name-column">
+                        <span>{{getVehicleName(vehicle)}}</span>
+                        <a routerLink="/vehicle/{{vehicle.id}}" class="inline-ref">
+                            <i class="material-icons">link</i>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+            <p *ngIf="(!isLoaderVisible) && (vehicles) && (vehicles.length == 0)"
+               class="big-gray-text centered">Ничего не найдено</p>
+            <app-loader *ngIf="isLoaderVisible"></app-loader>
+        </div>
+        <div>
+            <button class="button button-std pickerbutton-right" (click)="cancelClicked()">Отмена</button>
+        </div>
+    </div>
+</div>

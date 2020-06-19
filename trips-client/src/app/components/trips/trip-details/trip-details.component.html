@@ -65,6 +65,13 @@
                                               (added)="userAdded($event)" (removed)="userRemoved($event)"></app-users-multi-selector>
                 </div>
 
+                <div class="form-field">
+                    <p>Транспортные средства:</p>
+                    <app-vehicles-multi-selector [selectedVehicles]="trip.vehicles" [isEditable]="isEditMode"
+                                                 (added)="vehicleAdded($event)"
+                                                 (removed)="vehicleRemoved($event)"></app-vehicles-multi-selector>
+                </div>
+
                 <div class="form-field" *ngIf="isEditMode">
                     <label for="tbDescription">Описание:</label>
                     <textarea id="tbDescription" #tbDescription

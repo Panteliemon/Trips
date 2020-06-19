@@ -12,6 +12,7 @@ import { PlacesService } from 'src/app/services/places.service';
 import { Visit } from 'src/app/models/visit';
 import { PopupsService } from 'src/app/services/popups.service';
 import { Gallery } from 'src/app/models/gallery';
+import { VehicleHeader } from 'src/app/models/vehicle-header';
 
 // Additional data for visit
 class VisitData {
@@ -204,6 +205,14 @@ export class TripDetailsComponent implements OnInit {
 
   userRemoved(user: UserHeader) {
     this.performSilentUpdate(this.tripsService.removeParticipant(this.trip.id, user.id));
+  }
+
+  vehicleAdded(vehicle: VehicleHeader) {
+    this.performSilentUpdate(this.tripsService.addVehicle(this.trip.id, vehicle.id));
+  }
+
+  vehicleRemoved(vehicle: VehicleHeader) {
+    this.performSilentUpdate(this.tripsService.removeVehicle(this.trip.id, vehicle.id));
   }
 
   setDescription(value: string) {
