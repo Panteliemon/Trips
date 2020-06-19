@@ -20,7 +20,7 @@ namespace Trips.Dtos
         public DateTime? ChangedDate { get; set; }
 
         public List<UserHeaderDto> Participants { get; set; }
-        // TODO Vehicles
+        public List<VehicleHeaderDto> Vehicles { get; set; }
         public List<VisitDto> Visits { get; set; }
     }
 }

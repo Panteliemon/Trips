@@ -316,7 +316,7 @@ namespace Trips.Controllers
         }
 
         [HttpDelete]
-        [Route("trip/{vehicleId}/gallery/{pictureSmallSizeId}")]
+        [Route("vehicle/{vehicleId}/gallery/{pictureSmallSizeId}")]
         public async Task<IActionResult> DeletePicture(int vehicleId, string pictureSmallSizeId)
         {
             if (Program.IsLocked)

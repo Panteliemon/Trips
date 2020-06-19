@@ -28,7 +28,7 @@ namespace Trips.Controllers
         [Route("trips")]
         public async Task<IList<TripHeaderDto>> GetTripsList(int? take, int? skip,
             string search, string from, string to,
-            string users, string places)
+            string users, string places, string vehicles)
         {
             var query = DbContext.Trips.AsQueryable();
             query = query.OrderByDescending(t => t.Date);
@@ -95,6 +95,26 @@ namespace Trips.Controllers
                 }
             }
 
+            if (!string.IsNullOrEmpty(vehicles))
+            {
+                List<int> vehicleIds = StringUtils.ParseIds(vehicles, new char[] { '|', '&' });
+                if (vehicleIds.Count > 0)
+                {
+                    if (vehicles.IndexOf('|') > 0)
+                    {
+                        query = query.Where(t => t.Vehicles.Any(vtt => vehicleIds.Contains(vtt.VehicleId)));
+                    }
+                    else
+                    {
+                        for (int i=0; i< vehicleIds.Count; i++)
+                        {
+                            int vehicleId = vehicleIds[i];
+                            query = query.Where(t => t.Vehicles.Any(vtt => vtt.VehicleId == vehicleId));
+                        }
+                    }
+                }
+            }
+
             if (skip.HasValue && (skip.Value > 0))
             {
                 query = query.Skip(skip.Value);
@@ -135,7 +155,15 @@ namespace Trips.Controllers
 
                 .Include(t => t.Participants)
                 .ThenInclude((UsersToTrips utt) => utt.User)
-                // TODO vehicles
+                
+                .Include(t => t.Vehicles)
+                .ThenInclude((VehiclesToTrips vtt) => vtt.Vehicle)
+                .ThenInclude(v => v.Owner)
+
+                .Include(t => t.Vehicles)
+                .ThenInclude((VehiclesToTrips vtt) => vtt.Vehicle)
+                .ThenInclude(v => v.TitlePicture)
+
                 .Include(t => t.Visits)
                 .ThenInclude((Visit v) => v.Place)
                 .ThenInclude(p => p.TitlePicture)
@@ -169,6 +197,7 @@ namespace Trips.Controllers
 
             // Order entities within the trip
             trip.Participants = trip.Participants.OrderBy(utt => utt.Index).ToList();
+            trip.Vehicles = trip.Vehicles.OrderBy(vtt => vtt.Index).ToList();
             trip.Visits = trip.Visits.OrderBy(v => v.Index).ToList();
 
             TripDto result = Mapper.Map<TripDto>(trip);
@@ -577,6 +606,104 @@ namespace Trips.Controllers
 
             // Do delete
             DbContext.Entry(utt).State = EntityState.Deleted;
+            trip.ChangedBy = currentUser;
+            trip.ChangedDate = DateTime.Now;
+
+            await DbContext.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        #endregion
+
+        #region Vehicles
+
+        [HttpPost]
+        [Route("trip/{tripId}/vehicles")]
+        public async Task<IActionResult> AddVehicle(int tripId, int? vehicleId)
+        {
+            if (Program.IsLocked)
+            {
+                return StatusCode(StatusCodes.Status423Locked);
+            }
+
+            // Check permissions
+            User currentUser = await GetCurrentUserAsync();
+            if ((currentUser == null) || (!currentUser.CanPublishTrips))
+            {
+                return Forbid();
+            }
+
+            Trip trip = await DbContext.Trips.Where(t => t.Id == tripId)
+                .Include(t => t.ChangedBy)
+                .Include(t => t.Vehicles)
+                .FirstOrDefaultAsync();
+            if (trip == null)
+            {
+                return NotFound();
+            }
+
+            // What if already exists
+            if (trip?.Vehicles.FirstOrDefault(vtt => vtt.VehicleId == vehicleId) != null)
+            {
+                return Ok();
+            }
+
+            Vehicle vehicle = await DbContext.Vehicles.Where(v => v.Id == vehicleId).FirstOrDefaultAsync();
+            if (vehicle == null)
+            {
+                return NotFound();
+            }
+
+            // ---------------- Add
+
+            VehiclesToTrips vtt = new VehiclesToTrips();
+            vtt.TripId = trip.Id;
+            vtt.VehicleId = vehicle.Id;
+            vtt.Index = (trip.Vehicles.Max(vtt2 => (int?)vtt2.Index) + 1) ?? 0;
+            trip.Vehicles.Add(vtt);
+
+            trip.ChangedBy = currentUser;
+            trip.ChangedDate = DateTime.Now;
+
+            await DbContext.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpDelete]
+        [Route("trip/{tripId}/vehicle/{vehicleId}")]
+        public async Task<IActionResult> RemoveVehicle(int tripId, int vehicleId)
+        {
+            if (Program.IsLocked)
+            {
+                return StatusCode(StatusCodes.Status423Locked);
+            }
+
+            // Check permissions
+            User currentUser = await GetCurrentUserAsync();
+            if ((currentUser == null) || (!currentUser.CanPublishTrips))
+            {
+                return Forbid();
+            }
+
+            Trip trip = await DbContext.Trips.Where(t => t.Id == tripId)
+                .Include(t => t.ChangedBy)
+                .Include(t => t.Vehicles)
+                .FirstOrDefaultAsync();
+            if (trip == null)
+            {
+                return NotFound();
+            }
+
+            VehiclesToTrips vtt = trip.Vehicles.FirstOrDefault(vtt2 => vtt2.VehicleId == vehicleId);
+            if (vtt == null)
+            {
+                return NotFound();
+            }
+
+            // ------ Delete
+            DbContext.Entry(vtt).State = EntityState.Deleted;
             trip.ChangedBy = currentUser;
             trip.ChangedDate = DateTime.Now;
 

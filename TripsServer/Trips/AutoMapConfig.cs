@@ -27,6 +27,8 @@ namespace Trips
             CreateMap<Visit, VisitDto>();
             CreateMap<Trip, TripDto>().ForMember(
                 dest => dest.Participants, opt => opt.MapFrom(trip => trip.Participants.Select(utt => utt.User))
+            ).ForMember(
+                dest => dest.Vehicles, opt => opt.MapFrom(trip => trip.Vehicles.Select(vtt => vtt.Vehicle))
             );
             CreateMap<Trip, TripHeaderDto>().ForMember(
                 dest => dest.Participants, opt => opt.MapFrom(trip => trip.Participants.Select(utt => utt.User))
