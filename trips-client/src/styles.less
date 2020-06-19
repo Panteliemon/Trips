@@ -350,12 +350,15 @@ table.items-presenter tr.selectable-row:hover {
     background-color:@color-page-hover;
 }
 
+/* Also we have tr.picker-row,   
+definitions not here */
+
 /*----- Columns (set width and other useful staff) -----*/
 table.items-presenter td.entity-picture-column {
     width:110px;
     line-height:0%; /* Otherwise rows are ALWAYS taller than needed */
 }
-table.items-presenter tr.entity-row td.entity-picture-column img {
+table.items-presenter td.entity-picture-column img {
     width:100px;
     height:80px;
     margin:5px 5px 5px 0;
@@ -364,18 +367,22 @@ table.items-presenter tr.entity-row td.entity-picture-column img {
 }
 
 table.items-presenter td.user-picture-column {
-    width:74px;
-    line-height:0%; /* Otherwise rows taller than needed in pickers (when cellwrapper is used - works fine) */
+    width:64px; /* that's less than needed, but that's on purpose */
+    line-height:0%; /* Otherwise rows taller than needed in selectors/pickers (when cellwrapper is used - works fine) */
 }
-table.items-presenter tr.user-row td.user-picture-column img {
+table.items-presenter td.user-picture-column img {
     width:64px;
     height:64px;
     border-radius:5px;
+}
+table.items-presenter td.user-picture-column a.cell-wrapper > img,
+table.items-presenter td.user-picture-column > img {
     margin:5px 5px 5px 0;
 }
-
-/* Also we have table.items-presenter tr.picker-row {   
-} - definitions not here */
+table.items-presenter td.user-picture-column a.value-wrapper {
+    display:inline-block;
+    margin:5px 0;
+}
 
 /* general-column: designed to contain all info in one cell (for responsive mode) */
 table.items-presenter td.general-column {
@@ -410,7 +417,7 @@ table.items-presenter tr.user-row td.empty-column {
 
 table.items-presenter td.name-column {
     width:auto;
-    font-weight:bold; /* for pickers */
+    font-weight:bold; /* for selectors and pickers */
 }
 table.items-presenter td.name-column a.cell-wrapper {
     color:@color-text-on-page;
@@ -429,7 +436,7 @@ table.items-presenter th.name-column {
     padding-left:5px;
 }
 
-/* if no cellwrapper is used */
+/* if no cellwrapper is used: picker-row */
 table.items-presenter tr.picker-row td.name-column span {
     font-size:16pt;
     margin-left:5px;
@@ -441,6 +448,29 @@ table.items-presenter tr.picker-row td.name-column a {
     position:relative;
     top:3px;
 }
+
+/* if no cellwrapper is used: value-wrapper */
+table.items-presenter td.name-column a.value-wrapper {
+    text-decoration:none;
+    padding-left:10px;
+    position:relative;
+    top:-3px;
+}
+table.items-presenter td.name-column a.value-wrapper span {
+    color:@color-text-on-page;
+    font-size:16pt;
+    position:relative;
+}
+table.items-presenter td.name-column a.value-wrapper i.material-icons {
+    margin-left:5px;
+    position:relative;
+    top:6px;
+    color:@theme-color-dark;
+}
+table.items-presenter td.name-column a.value-wrapper i.material-icons:hover {
+    color:@color-dark-text-hover;
+}
+
 
 table.items-presenter td.enum-column {
     width:80px;

@@ -1,16 +1,18 @@
 <div>
     <table class="items-presenter"
            [class.no-border]="!isEditable">
-        <tr class="user-row picker-row">
+        <tr class="user-row">
             <td class="empty-column" *ngIf="!value">
                 <p>[ ДАННЫЕ УДАЛЕНЫ ]</p>
             </td>
             <td class="user-picture-column" *ngIf="value">
-                <img [src]="userPicSrc(value.smallSizeProfilePicture, value.profilePictureFormat)" />
+                <a class="value-wrapper" routerLink="/user/{{value.id}}">
+                    <img [src]="userPicSrc(value.smallSizeProfilePicture, value.profilePictureFormat)" />
+                </a>
             </td>
             <td class="name-column" *ngIf="value">
-                <span>{{value.name}}</span>
-                <a routerLink="/user/{{value.id}}" class="inline-ref">
+                <a class="value-wrapper" routerLink="/user/{{value.id}}">
+                    <span>{{value.name}}</span>
                     <i class="material-icons">link</i>
                 </a>
             </td>

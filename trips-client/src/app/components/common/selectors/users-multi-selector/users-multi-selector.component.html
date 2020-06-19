@@ -1,13 +1,15 @@
 <div>
     <table class="items-presenter" *ngIf="selectedUsers && (selectedUsers.length > 0)"
            [class.no-border]="!isEditable">
-        <tr class="user-row picker-row" *ngFor="let user of selectedUsers">
+        <tr class="user-row" *ngFor="let user of selectedUsers">
             <td class="user-picture-column">
-                <img [src]="userPicSrc(user.smallSizeProfilePicture, user.profilePictureFormat)" />
+                <a class="value-wrapper" routerLink="/user/{{user.id}}">
+                    <img [src]="userPicSrc(user.smallSizeProfilePicture, user.profilePictureFormat)" />
+                </a>
             </td>
             <td class="name-column">
-                <span>{{user.name}}</span>
-                <a routerLink="/user/{{user.id}}" class="inline-ref">
+                <a class="value-wrapper" routerLink="/user/{{user.id}}">
+                    <span>{{user.name}}</span>
                     <i class="material-icons">link</i>
                 </a>
             </td>
