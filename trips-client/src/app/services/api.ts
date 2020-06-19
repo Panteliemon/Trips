@@ -1,4 +1,7 @@
-export const API_BASE_PATH: string = "https://poezdo4ki-api.azurewebsites.net";
+export const API_BASE_PATH: string
+// For production:
+= "https://poezdo4ki-api.azurewebsites.net";
+// For localhost:
 //= 'https://localhost:44341';
 
 export const PICS_BASE_PATH: string
