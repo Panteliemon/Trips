@@ -273,6 +273,12 @@ textarea.description-field {
     resize: vertical;
 }
 
+textarea.advanced-editor {
+    width:100%;
+    min-height: 150px;
+    resize: vertical;
+}
+
 div.two-columns > div {
     width:50%;
     float:left;
@@ -499,6 +505,11 @@ table.items-presenter td.date-column a.cell-wrapper {
 table.items-presenter tr.entity-row td.date-column a.cell-wrapper > p {
     position:relative;
     top:35px;
+}
+/* if no cellwrapper is used: picker-row */
+table.items-presenter tr.picker-row td.date-column > p {
+    position:relative;
+    top:-1px;
 }
 
 table.items-presenter td.users-column,
@@ -795,6 +806,7 @@ div.picker-table-holder {
     flex-grow:1;
     overflow-y:auto;
     margin: 10px;
+    position: relative;
 }
 
 /*----------------------------------- Gallery (shared) -------------------------------------*/

@@ -1,0 +1,58 @@
+<div *ngIf="isVisible" class="modal-popup-background">
+    <div class="picker-popup picker-popup-fixed-height">
+        <h3 class="pickermargin">{{caption}}</h3>
+        <div class="pickermargin">
+            <div class="form-field">
+                <label for="tbTripHeader">Заголовок:</label>
+                <input type="text" id="tbTripHeader" [(ngModel)]="searchString" />
+            </div>
+            <div class="two-columns clearfix">
+                <div class="form-field">
+                    <label for="tbDateFrom">Дата С:</label>
+                    <input type="date" id="tbDateFrom" #tbDateFrom
+                           [value]="searchDateFrom"
+                           (blur)="setSearchDateFrom(tbDateFrom.value)"
+                           (keyup.enter)="setSearchDateFrom(tbDateFrom.value)"
+                           (change)="editSearchDateFrom(tbDateFrom.value)" />
+                </div>
+                <div class="form-field">
+                    <label for="tbDateTo">Дата ПО:</label>
+                    <input type="date" id="tbDateTo" #tbDateTo
+                           [value]="searchDateTo"
+                           (blur)="setSearchDateTo(tbDateTo.value)"
+                           (keyup.enter)="setSearchDateTo(tbDateTo.value)"
+                           (change)="editSearchDateTo(tbDateTo.value)" />
+                </div>
+            </div>
+        </div>
+        <div class="picker-table-holder">
+            <table class="items-presenter" *ngIf="(trips) && (trips.length > 0)">
+                <thead>
+                    <th></th>
+                    <th>Дата</th>
+                    <th class="name-column">Заголовок</th>
+                </thead>
+                <tr *ngFor="let trip of trips" class="entity-row selectable-row picker-row" (click)="tripClicked(trip)">
+                    <td class="entity-picture-column">
+                        <img [src]="getPictureSrc(trip)" />
+                    </td>
+                    <td class="date-column">
+                        <p *ngIf="trip.date" class="centered">{{trip.date | tripsDate}}</p>
+                    </td>
+                    <td class="name-column">
+                        <span>{{getTripName(trip)}}</span>
+                        <a routerLink="/trip/{{trip.id}}" class="inline-ref">
+                            <i class="material-icons">link</i>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+            <p *ngIf="(!isLoaderVisible) && (trips) && (trips.length == 0)"
+               class="big-gray-text centered-both">Ничего не найдено</p>
+            <app-loader *ngIf="isLoaderVisible"></app-loader>
+        </div>
+        <div>
+            <button class="button button-std pickerbutton-right" (click)="cancelClicked()">Отмена</button>
+        </div>
+    </div>
+</div>
