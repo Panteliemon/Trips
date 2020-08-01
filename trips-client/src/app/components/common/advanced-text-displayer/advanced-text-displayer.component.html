@@ -1,4 +1,4 @@
-<p class="atd-container preserve-linebreaks">
+<p *ngIf="isVisible" class="atd-container preserve-linebreaks">
     <ng-container *ngFor="let chunk of chunks"
                   [ngSwitch]="chunk.type">
         <!--<br /><span>============ CHUNK</span><br />-->
@@ -25,6 +25,9 @@
         </div>
         <div *ngSwitchCase="ChunkType.PLACEACCESS" class="selector-wrapper">
             <app-place-accessibility-selector [isEditable]="false" [value]="chunk.value"></app-place-accessibility-selector>
+        </div>
+        <div *ngSwitchCase="ChunkType.PLACEPOP" class="selector-wrapper">
+            <app-place-popularity-selector [isEditable]="false" [value]="chunk.value"></app-place-popularity-selector>
         </div>
         <div *ngSwitchCase="ChunkType.PLACECAPACITY" class="selector-wrapper">
             <app-place-capacity-selector [isEditable]="false" [value]="chunk.value"></app-place-capacity-selector>

@@ -1,10 +1,10 @@
 import { Component, OnInit, SimpleChanges, OnChanges, Input, Output, EventEmitter } from '@angular/core';
-import { PlaceKind, PlaceAccessibility, PlaceCapacity } from 'src/app/models/place';
+import { PlaceKind, PlaceAccessibility, PlaceCapacity, PlacePopularity } from 'src/app/models/place';
 
 // In lower case
-const allTags = ["b", "i", "u", "s", "color", "size", "h1", "h2", "h3", "url", "img", "placekind", "placeaccess", "placecapacity"];
+const allTags = ["b", "i", "u", "s", "color", "size", "h1", "h2", "h3", "url", "img", "placekind", "placeaccess", "placepop", "placecapacity"];
 
-enum ChunkType { TEXT, URL, IMG, H1, H2, H3, PLACEKIND, PLACEACCESS, PLACECAPACITY };
+enum ChunkType { TEXT, URL, IMG, H1, H2, H3, PLACEKIND, PLACEACCESS, PLACEPOP, PLACECAPACITY };
 
 class Chunk {
   type: ChunkType;
@@ -12,7 +12,7 @@ class Chunk {
   style: string; // for TEXT
   src: string; // for IMG
   url: string; // for URL, IMG
-  value: number; // for PLACEKIND, PLACEACCESS, PLACECAPACITY
+  value: number; // for PLACEKIND, PLACEACCESS, PLACEPOP, PLACECAPACITY
 }
 
 class DetectionResult {
@@ -46,6 +46,8 @@ const ERR_TAGNOTCLOSED = "Не закрыт тэг ";
 export class AdvancedTextDisplayerComponent implements OnInit {
   @Input()
   text: string;
+  @Input()
+  isVisible: boolean = true;
 
   @Output()
   warningsChange = new EventEmitter<string[]>();
@@ -281,6 +283,17 @@ export class AdvancedTextDisplayerComponent implements OnInit {
                   }
                   // Switch mode
                   currentChunkMode = ChunkType.PLACEACCESS;
+                } break;
+
+                case "placepop": {
+                  this.addParameterIgnored(tagAtPosition, errors);
+                  // Finish text chunk
+                  if (currentText.length > 0) {
+                    result.push(this.createTextChunk(currentText, depthB, depthI, depthU, depthS, stackColor, stackSize));
+                    currentText = "";
+                  }
+                  // Switch mode
+                  currentChunkMode = ChunkType.PLACEPOP;
                 } break;
     
                 case "placecapacity": {
@@ -522,6 +535,20 @@ export class AdvancedTextDisplayerComponent implements OnInit {
             }
           } break;
 
+          case ChunkType.PLACEPOP: {
+            if (this.checkIsExpectedClosingTag(tagAtPosition, "placepop", errors)) {
+              let numValue = +currentText;
+              let value: PlacePopularity = isNaN(numValue) ? null : numValue;
+              let chunk = new Chunk();
+              chunk.type = ChunkType.PLACEPOP;
+              chunk.value = value;
+              result.push(chunk);
+
+              currentText = "";
+              currentChunkMode = ChunkType.TEXT;
+            }
+          } break;
+
           case ChunkType.PLACECAPACITY: {
             if (this.checkIsExpectedClosingTag(tagAtPosition, "placecapacity", errors)) {
               let numValue = +currentText;
@@ -625,6 +652,10 @@ export class AdvancedTextDisplayerComponent implements OnInit {
 
       case ChunkType.PLACEACCESS: {
         errors.push(ERR_TAGNOTCLOSED + "[placeaccess]");
+      } break;
+
+      case ChunkType.PLACEPOP: {
+        errors.push(ERR_TAGNOTCLOSED + "[placepop]");
       } break;
 
       case ChunkType.PLACECAPACITY: {
