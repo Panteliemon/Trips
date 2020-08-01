@@ -1,0 +1,36 @@
+<p *ngIf="isVisible" class="atd-container preserve-linebreaks">
+    <ng-container *ngFor="let chunk of chunks"
+                  [ngSwitch]="chunk.type">
+        <!--<br /><span>============ CHUNK</span><br />-->
+
+        <span *ngSwitchCase="ChunkType.TEXT" [style]="chunk.style">{{chunk.text}}</span>
+        
+        <a *ngSwitchCase="ChunkType.URL" class="inline-ref" [href]="chunk.url">{{chunk.text}}</a>
+
+        <ng-container *ngSwitchCase="ChunkType.IMG">
+            <div *ngIf="chunk.url">
+                <a *ngIf="chunk.url" [href]="chunk.url" class="image-wrapper">
+                    <img [src]="chunk.src" />
+                </a>
+            </div>
+            <img *ngIf="!chunk.url" [src]="chunk.src" />
+        </ng-container>
+
+        <h1 *ngSwitchCase="ChunkType.H1">{{chunk.text}}</h1>
+        <h2 *ngSwitchCase="ChunkType.H2">{{chunk.text}}</h2>
+        <h3 *ngSwitchCase="ChunkType.H3">{{chunk.text}}</h3>
+
+        <div *ngSwitchCase="ChunkType.PLACEKIND" class="selector-wrapper">
+            <app-place-kind-selector [isEditable]="false" [value]="chunk.value"></app-place-kind-selector>
+        </div>
+        <div *ngSwitchCase="ChunkType.PLACEACCESS" class="selector-wrapper">
+            <app-place-accessibility-selector [isEditable]="false" [value]="chunk.value"></app-place-accessibility-selector>
+        </div>
+        <div *ngSwitchCase="ChunkType.PLACEPOP" class="selector-wrapper">
+            <app-place-popularity-selector [isEditable]="false" [value]="chunk.value"></app-place-popularity-selector>
+        </div>
+        <div *ngSwitchCase="ChunkType.PLACECAPACITY" class="selector-wrapper">
+            <app-place-capacity-selector [isEditable]="false" [value]="chunk.value"></app-place-capacity-selector>
+        </div>
+    </ng-container>
+</p>

@@ -1,0 +1,22 @@
+.atd-container img {
+    display: block;
+    width:100%;
+    max-width:800px;
+    max-height:700px;
+    /*position:relative;
+    left:50%;
+    transform:translateX(-50%);*/
+}
+
+.atd-container a.image-wrapper {
+    display:inline-block;
+    /*position:relative;
+    left:50%;
+    transform:translateX(-50%);*/
+}
+
+.atd-container div.selector-wrapper {
+    display:inline-block;
+    vertical-align:middle;
+    padding-bottom:6px;
+}

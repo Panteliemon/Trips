@@ -1,0 +1,78 @@
+div.toolbar {
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+div.toolbar > button,
+div.group > button {
+    position:relative;
+    height:32px;
+    min-width:32px;
+    margin-bottom:5px;
+    margin-right:5px;
+}
+
+div.toolbar .group {
+    display:flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+div.toolbar > button:hover div.selector-tooltip,
+div.group > button:hover div.selector-tooltip {
+    display:block;
+}
+
+#buttonB > div > span {
+    font-weight: bold;
+}
+
+#buttonI > div > span {
+    font-style: italic;
+}
+
+#buttonU > div > span {
+    text-decoration: underline;
+}
+
+#buttonS {
+    margin-right:15px;   
+}
+#buttonS > div > span {
+    text-decoration: line-through;
+}
+
+
+#buttonColor > img {
+    position:relative;
+    top:2px;
+}
+
+#buttonSize {
+    margin-right:15px;
+}
+#buttonSize > div {
+    position:relative;
+    top:-4px;
+}
+
+#buttonH3 {
+    margin-right:15px;
+}
+
+#buttonGalPicture {
+    margin-right:15px;
+}
+
+#buttonUser {
+    margin-right:15px;
+}
+
+.enum-button-tooltip {
+    top:32px;
+}
+.enum-button-tooltip button {
+    margin-top:5px;
+    width:100%;
+}

@@ -48,6 +48,9 @@ import { VehicleDetailsComponent } from './components/vehicles/vehicle-details/v
 import { UserSelectorComponent } from './components/common/selectors/user-selector/user-selector.component';
 import { VehiclesMultiSelectorComponent } from './components/common/selectors/vehicles-multi-selector/vehicles-multi-selector.component';
 import { VehiclePickerComponent } from './components/common/pickers/vehicle-picker/vehicle-picker.component';
+import { AdvancedEditorComponent } from './components/common/advanced-editor/advanced-editor.component';
+import { AdvancedTextDisplayerComponent } from './components/common/advanced-text-displayer/advanced-text-displayer.component';
+import { TripPickerComponent } from './components/common/pickers/trip-picker/trip-picker.component';
 
 @NgModule({
   declarations: [
@@ -93,7 +96,10 @@ import { VehiclePickerComponent } from './components/common/pickers/vehicle-pick
     VehicleDetailsComponent,
     UserSelectorComponent,
     VehiclesMultiSelectorComponent,
-    VehiclePickerComponent
+    VehiclePickerComponent,
+    AdvancedEditorComponent,
+    AdvancedTextDisplayerComponent,
+    TripPickerComponent
   ],
   imports: [
     BrowserModule,
