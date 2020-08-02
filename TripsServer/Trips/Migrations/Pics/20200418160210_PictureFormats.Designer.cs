@@ -9,6 +9,9 @@ using Trips.Entities.Pics;
 
 namespace Trips.Migrations.Pics
 {
+    /* REMOVED.
+     * Picture storage, for the first 2 months of the project when pictures were stored in DB.
+     * Commented code left for history.
     [DbContext(typeof(PicsContext))]
     [Migration("20200418160210_PictureFormats")]
     partial class PictureFormats
@@ -41,4 +44,5 @@ namespace Trips.Migrations.Pics
 #pragma warning restore 612, 618
         }
     }
+    */
 }

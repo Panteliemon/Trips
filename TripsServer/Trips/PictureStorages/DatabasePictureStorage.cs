@@ -7,6 +7,7 @@ using Trips.Entities.Pics;
 
 namespace Trips.PictureStorages
 {
+    /* REMOVED
     /// <summary>
     /// Storage that stored pictures in a database with dbcontext PicsContext.
     /// </summary>
@@ -49,5 +50,5 @@ namespace Trips.PictureStorages
 
             await picsContext.SaveChangesAsync();
         }
-    }
+    } */
 }

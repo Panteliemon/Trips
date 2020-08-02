@@ -74,27 +74,7 @@ namespace Trips.Controllers
                 response.AppendLine("[x] TripsDB doesn't work: " + ex.ToString());
             }
 
-            if (!Program.PicsConnectionString.ToLower().Contains("server="))
-            {
-                response.AppendLine("[!] PicsDB uses local DB");
-            }
-
-            try
-            {
-                PicsContext picsDb = new PicsContext();
-                int picsCount = picsDb.PicData.Count();
-                response.AppendLine("PicsDB werks");
-            }
-            catch (Exception ex)
-            {
-                response.AppendLine("[x] PicsDB doesn't work: " + ex.ToString());
-            }
-
-            if (Program.PictureStorage is DatabasePictureStorage)
-            {
-                response.AppendLine("The app is using DATABASE for picture storage");
-            }
-            else if (Program.PictureStorage is LocalFSPictureStorage)
+            if (Program.PictureStorage is LocalFSPictureStorage)
             {
                 response.AppendLine("The app is using LOCAL PC FOLDER for picture storage");
             }

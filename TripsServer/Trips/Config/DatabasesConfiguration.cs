@@ -17,21 +17,12 @@ namespace Trips.Config
         /// </summary>
         public string RemoteTripsTemplate { get; set; }
         /// <summary>
-        /// 0 - username, 1 - password
-        /// </summary>
-        public string RemotePicsTemplate { get; set; }
-
-        /// <summary>
         /// 0 - service name, 1 - db file path
         /// </summary>
         public string LocalTripsTemplate { get; set; }
-        /// <summary>
-        /// 0 - service name, 1 - db file path
-        /// </summary>
-        public string LocalPicsTemplate { get; set; }
+
         public string LocalServerName { get; set; }
         public string LocalTripsPath { get; set; }
-        public string LocalPicsPath { get; set; }
 
         public string PicsStorageFolder { get; set; }
 
@@ -52,14 +43,11 @@ namespace Trips.Config
             example.UseRemote = false;
             
             example.RemoteTripsTemplate = "Server=tcp:tripsdb-bn.database.windows.net,1433;Initial Catalog=TripsDB;Persist Security Info=False;User ID={0};Password={1};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-            example.RemotePicsTemplate = "Server=tcp:tripsdb-bn.database.windows.net,1433;Initial Catalog=PicsDB;Persist Security Info=False;User ID={0};Password={1};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
             // Because: why not
 
             example.LocalServerName = @"(localdb)\MSSQLLocalDB";
             example.LocalTripsPath = @"c:\your_local_dbfile.mdf";
             example.LocalTripsTemplate = "Data Source={0};AttachDbFilename=\"{1}\";Initial Catalog=TripsDB;Integrated Security=True";
-            example.LocalPicsPath = @"c:\your_local_dbfile.mdf";
-            example.LocalPicsTemplate = "Data Source={0};AttachDbFilename=\"{1}\";Initial Catalog=PicsDB;Integrated Security=True";
             example.PicsStorageFolder = @"c:\pics_storage_folder";
 
             XmlSerializer serializer = new XmlSerializer(typeof(DatabasesConfiguration));

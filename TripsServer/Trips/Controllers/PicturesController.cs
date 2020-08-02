@@ -14,11 +14,8 @@ namespace Trips.Controllers
     [ApiController]
     public class PicturesController : ControllerBase
     {
-        private PicsContext _dbContext;
-
-        public PicturesController(PicsContext dbContext)
+        public PicturesController()
         {
-            _dbContext = dbContext;
         }
 
         [HttpGet]
@@ -41,22 +38,23 @@ namespace Trips.Controllers
                 byte[] data = await System.IO.File.ReadAllBytesAsync(Path.Combine(localFsStorage.RootFolder, fileName));
                 return new FileStreamResult(new MemoryStream(data), PictureUtils.GetMimeTypeFor(extension));
             }
-            else // Database (obsolete)
-            {
-                // Not use Storage for read (it cannot read anyway), but use DB directly
-                if (Guid.TryParse(id, out Guid pictureId))
-                {
-                    PicData pic = await Task.Run(() => _dbContext.PicData.FirstOrDefault(p => p.Id == pictureId));
-                    if (pic != null)
-                    {
-                        return new FileStreamResult(new MemoryStream(pic.Data), PictureUtils.GetMimeTypeFor(pic.Format));
-                    }
-                    else
-                    {
-                        NotFound();
-                    }
-                }
-            }
+            // REMOVED with removing PicsDB. The code is left for history.
+            //else // Database (obsolete)
+            //{
+            //    // Not use Storage for read (it cannot read anyway), but use DB directly
+            //    if (Guid.TryParse(id, out Guid pictureId))
+            //    {
+            //        PicData pic = await Task.Run(() => _dbContext.PicData.FirstOrDefault(p => p.Id == pictureId));
+            //        if (pic != null)
+            //        {
+            //            return new FileStreamResult(new MemoryStream(pic.Data), PictureUtils.GetMimeTypeFor(pic.Format));
+            //        }
+            //        else
+            //        {
+            //            NotFound();
+            //        }
+            //    }
+            //}
 
             return NotFound();
         }

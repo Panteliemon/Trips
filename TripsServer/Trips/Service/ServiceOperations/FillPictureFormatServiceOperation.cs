@@ -9,6 +9,8 @@ using Trips.Entities.Pics;
 
 namespace Trips.Service.ServiceOperations
 {
+    /* REMOVED with removing PicsDB
+     * The code left here for history.
     public class FillPictureFormatServiceOperation : IServiceOperation
     {
         public const string KEY = "PIC_FORMAT";
@@ -135,4 +137,5 @@ namespace Trips.Service.ServiceOperations
             return new TripsContext(new DbContextOptions<TripsContext>());
         }
     }
+    */
 }

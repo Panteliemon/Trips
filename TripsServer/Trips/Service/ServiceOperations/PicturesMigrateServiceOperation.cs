@@ -10,6 +10,8 @@ using Trips.PictureStorages;
 
 namespace Trips.Service.ServiceOperations
 {
+    /* REMOVED with removing PicsDB
+     * The code left here for history.
     public class PicturesMigrateServiceOperation : IServiceOperation
     {
         private IPictureStorage _targetStorage;
@@ -172,4 +174,5 @@ When launched, this operation will display info about what it is going to do, an
             return new TripsContext(new DbContextOptions<TripsContext>());
         }
     }
+    */
 }

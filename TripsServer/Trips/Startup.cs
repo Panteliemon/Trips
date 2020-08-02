@@ -31,7 +31,7 @@ namespace Trips
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<TripsContext>(options => options.UseSqlServer(Program.TripsConnectionString));
-            services.AddDbContext<PicsContext>(options => options.UseSqlServer(Program.PicsConnectionString));
+            // REMOVED: PicsDB is a history now: services.AddDbContext<PicsContext>(options => options.UseSqlServer(Program.PicsConnectionString));
             
             services.AddCors(options =>
             {

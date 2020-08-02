@@ -290,8 +290,8 @@ namespace Trips.Service
         {
             ServiceOperations.Clear();
             ServiceOperations.Add(new EmptyServiceOperation());
-            ServiceOperations.Add(new FillPictureFormatServiceOperation());
-            ServiceOperations.Add(new PicturesMigrateServiceOperation(Program.PictureStorage));
+            // Obsolete - removed: ServiceOperations.Add(new FillPictureFormatServiceOperation());
+            // Obsolete - removed: ServiceOperations.Add(new PicturesMigrateServiceOperation(Program.PictureStorage));
             ServiceOperations.Add(new VisitIndexFixServiceOperation());
         }
 
