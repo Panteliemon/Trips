@@ -9,5 +9,6 @@ namespace Trips.Dtos
     {
         public UserDto User { get; set; }
         public string Token { get; set; }
+        public DateTime Expires { get; set; }
     }
 }

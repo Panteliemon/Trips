@@ -32,10 +32,13 @@ namespace Trips.Controllers
             if (user != null)
             {
                 if (user.HashedPassword == Encryption.GetHashedPassword(password))
-                {
+                { 
                     AuthenticationResponseDto result = new AuthenticationResponseDto();
                     result.User = _mapper.Map<UserDto>(user);
-                    result.Token = Encryption.GetAuthenticationToken(result.User);
+                    var tokenResult = Encryption.GetAuthenticationToken(result.User);
+                    result.Token = tokenResult.Token;
+                    result.Expires = tokenResult.Expires;
+
                     return result;
                 }
                 else

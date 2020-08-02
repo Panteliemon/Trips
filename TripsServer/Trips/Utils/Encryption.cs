@@ -15,6 +15,18 @@ namespace Trips.Utils
 {
     public static class Encryption
     {
+        public class AuthenticationTokenResult
+        {
+            public AuthenticationTokenResult(string token, DateTime expires)
+            {
+                Token = token;
+                Expires = expires;
+            }
+
+            public string Token { get; }
+            public DateTime Expires { get; }
+        }
+
         public const string USER_ID_CLAIM = "uid";
 
         private static bool _configured = false;
@@ -68,7 +80,7 @@ namespace Trips.Utils
             return Convert.ToBase64String(hash);
         }
 
-        public static string GetAuthenticationToken(UserDto userDto)
+        public static AuthenticationTokenResult GetAuthenticationToken(UserDto userDto)
         {
             if (_keyForTokens == null)
             {
@@ -78,11 +90,14 @@ namespace Trips.Utils
             SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor();
             tokenDescriptor.Subject = new ClaimsIdentity();
             tokenDescriptor.Subject.AddClaim(new Claim(USER_ID_CLAIM, userDto.Id.ToString()));
-            tokenDescriptor.Expires = DateTime.Now.Add(Program.TOKEN_EXPIRATION);
+            tokenDescriptor.Expires = DateTime.UtcNow.Add(Program.TOKEN_EXPIRATION);
             tokenDescriptor.SigningCredentials = new SigningCredentials(AuthenticationTokenKey, SecurityAlgorithms.HmacSha256Signature);
 
             SecurityToken token = _tokenHandler.CreateToken(tokenDescriptor);
-            return _tokenHandler.WriteToken(token);
+            return new AuthenticationTokenResult(
+                _tokenHandler.WriteToken(token),
+                tokenDescriptor.Expires.Value.ToLocalTime()
+            );
         }
     }
 }
