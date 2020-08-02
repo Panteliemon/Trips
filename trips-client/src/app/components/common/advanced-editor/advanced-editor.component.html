@@ -1,5 +1,5 @@
 <div *ngIf="isEditable" class="toolbar">
-    <div class="group">
+    <div class="group" id="group1">
         <button id="buttonB" class="button" (click)="bClick()">
             <div>
                 <span>B</span>
@@ -40,7 +40,7 @@
         </button>
     </div>
 
-    <div class="group">
+    <div class="group" id="group2">
         <button class="button" (click)="h1Click()">
             <div><span>H1</span></div>
             <div class="selector-tooltip">Заголовок 1</div>
@@ -55,12 +55,12 @@
         </button>
     </div>
 
-    <button id="buttonGalPicture" class="button" *ngIf="gallerySelector" (click)="galleryPictureClick()">
+    <button id="buttonGalPicture" class="button" *ngIf="galleries && (galleries.length > 0)" (click)="galleryPictureClick()">
         <i class="material-icons">image</i>
         <div class="selector-tooltip">Картинка из галереи</div>
     </button>
 
-    <div class="group">
+    <div class="group" id="group4">
         <button class="button" (click)="linkClick()">
             <i class="material-icons">link</i>
             <div class="selector-tooltip">Ссылка</div>
@@ -75,7 +75,7 @@
         </button>
         <button class="button" (click)="vehicleClick()">
             <img src="assets/ae-vehicle-button.png" />
-            <div class="selector-tooltip selector-tooltip-left">Транспортное средство</div>
+            <div class="selector-tooltip selector-tooltip-left" style="right:-20px;">Транспортное средство</div>
         </button>
         <button id="buttonUser" class="button" (click)="userClick()">
             <img src="assets/ae-user-button.png" />
@@ -83,7 +83,7 @@
         </button>
     </div>
 
-    <div class="group">
+    <div class="group" id="group5">
         <button class="button">
             <div><span>ТМ</span></div>
             <div class="selector-tooltip enum-button-tooltip">
@@ -112,7 +112,7 @@
         </button>
         <button class="button">
             <div><span>П</span></div>
-            <div class="selector-tooltip selector-tooltip-left enum-button-tooltip">
+            <div class="selector-tooltip selector-tooltip-left enum-button-tooltip" style="right:-40px;">
                 <p>Популярность</p>
                 <button class="button" (click)="placePopClick(null)">N/A</button> <br/>
                 <button class="button" (click)="placePopClick(1)">Всегда свободно</button> <br/>
@@ -123,7 +123,7 @@
         </button>
         <button class="button">
             <div><span>КС</span></div>
-            <div class="selector-tooltip selector-tooltip-left enum-button-tooltip">
+            <div class="selector-tooltip selector-tooltip-left enum-button-tooltip" style="right:-5px;">
                 <p>Количество стоянок</p>
                 <button class="button" (click)="placeCapacityClick(null)">N/A</button> <br/>
                 <button class="button" (click)="placeCapacityClick(0)">0 Нет</button> <br/>
@@ -135,7 +135,7 @@
     </div>
 </div>
 <textarea #tbMain *ngIf="isEditable" [(ngModel)]="text"
-          class="advanced-editor"></textarea>
+          class="advanced-editor" (blur)="textAreaBlur()"></textarea>
 <ng-container *ngIf="isEditable">
     <p *ngFor="let warning of warnings" class="error">
         <i class="material-icons">warning</i>

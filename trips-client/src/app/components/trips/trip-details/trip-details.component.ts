@@ -43,6 +43,7 @@ export class TripDetailsComponent implements OnInit {
   tripName: string;
   tripDate: string;
   titlePicSrc: string;
+  allGalleries: Gallery[] = [];
 
   isTripGalleryVisible: boolean;
 
@@ -123,15 +124,7 @@ export class TripDetailsComponent implements OnInit {
 
   setTitlePicButtonClicked() {
     if (this.hasAnyPictures()) {
-      let concatGalleries: Gallery[] = [];
-      if (this.trip.visits) { // always should be true
-        concatGalleries = this.trip.visits.filter(v => v.gallery).map(v => v.gallery);
-      }
-      if (this.trip.gallery) { // always should be true
-        concatGalleries.push(this.trip.gallery);
-      }
-
-      this.popupsService.fromGalleryPicker.open(concatGalleries, this.trip?.titlePicture?.smallSizeId, pic => {
+      this.popupsService.fromGalleryPicker.open(this.allGalleries, this.trip?.titlePicture?.smallSizeId, pic => {
         this.trip.titlePicture = pic;
         this.refreshTitlePicSrc();
         this.refreshTitlePicButtonsVisible();
@@ -453,6 +446,7 @@ export class TripDetailsComponent implements OnInit {
       this.refreshTripName();
       this.refreshTripDate();
       this.refreshTitlePicSrc();
+      this.refreshAllGalleries();
       this.refreshTripGalleyVisible();
       this.refreshVisitsData();
       this.refreshTitlePicButtonsVisible();
@@ -484,6 +478,16 @@ export class TripDetailsComponent implements OnInit {
       this.titlePicSrc = getPictureUrl(this.trip.titlePicture.mediumSizeId, this.trip.titlePicture.format);
     } else {
       this.titlePicSrc = "/assets/no-pic-trip.png";
+    }
+  }
+
+  private refreshAllGalleries() {
+    this.allGalleries = [];
+    if (this.trip.visits) { // always should be true
+      this.allGalleries = this.trip.visits.filter(v => v.gallery).map(v => v.gallery);
+    }
+    if (this.trip.gallery) { // always should be true
+      this.allGalleries.push(this.trip.gallery);
     }
   }
 

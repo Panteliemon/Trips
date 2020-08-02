@@ -9,6 +9,7 @@ import { PopupsService } from 'src/app/services/popups.service';
 import { TripsService } from 'src/app/services/trips.service';
 import { FilterOperation } from 'src/app/models/filter-operation';
 import { TripHeader } from 'src/app/models/trip-header';
+import { Gallery } from 'src/app/models/gallery';
 
 const LOAD_TRIPS_PORTION: number = 20;
 
@@ -27,6 +28,7 @@ export class PlaceDetailsComponent implements OnInit {
 
   titlePicSrc: string;
   mapRef: string;
+  allGalleries: Gallery[] = [];
 
   isEditButtonVisible: boolean;
   isAccessibilityVisible: boolean;
@@ -180,6 +182,7 @@ export class PlaceDetailsComponent implements OnInit {
         this.gallerySelectedPictureSmallSizeId = this.place?.gallery?.pictures[0]?.smallSizeId || null;
       }
       this.refreshTitlePicSrc();
+      this.allGalleries = [this.place.gallery];
       this.refreshSelectorsVisible();
       this.refreshGalleryVisible();
       this.updateMapRef();

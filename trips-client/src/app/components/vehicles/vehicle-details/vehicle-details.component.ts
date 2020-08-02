@@ -10,6 +10,7 @@ import { PopupsService } from 'src/app/services/popups.service';
 import { PlaceAccessibility } from 'src/app/models/place';
 import { TripsService } from 'src/app/services/trips.service';
 import { TripHeader } from 'src/app/models/trip-header';
+import { Gallery } from 'src/app/models/gallery';
 
 const TRIPS_LOAD_PORTION: number = 20;
 
@@ -30,6 +31,7 @@ export class VehicleDetailsComponent implements OnInit {
   vehicleName: string;
   isEditButtonVisible: boolean;
   titlePictureImgSrc: string;
+  allGalleries: Gallery[] = [];
   isSelectTitlePicButtonVisible: boolean;
   isSelectTitlePicAdviceVisible: boolean;
   isResetTitlePicButtonVisible: boolean;
@@ -334,6 +336,7 @@ export class VehicleDetailsComponent implements OnInit {
 
       this.refreshVehicleName();
       this.refreshTitlePictureImgSrc();
+      this.allGalleries = [this.vehicle.gallery];
       this.refreshSelectTitlePicButtons();
     } else {
       this.isNotFound = true;

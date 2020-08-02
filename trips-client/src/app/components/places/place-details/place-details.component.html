@@ -56,14 +56,10 @@
                     <app-place-kind-selector [(value)]="placeKind" [isEditable]="isEditMode"></app-place-kind-selector>
                 </div>
 
-                <div *ngIf="isEditMode" class="form-field">
-                    <label for="tbDescription">Описание:</label>
-                    <textarea id="tbDescription" class="description-field" [value]="place.description"
-                              #tbDescription (blur)="setPlaceDescription(tbDescription.value)"></textarea>
-                </div>
-                <div *ngIf="(!isEditMode) && place.description" class="form-field">
+                <div class="form-field" *ngIf="isEditMode || place.description">
                     <p>Описание:</p>
-                    <p class="preserve-linebreaks">{{place.description}}</p>
+                    <app-advanced-editor #aeDescription [text]="place.description" [isEditable]="isEditMode"
+                                         [galleries]="allGalleries" (update)="setPlaceDescription(aeDescription.text)"></app-advanced-editor>
                 </div>
 
                 <div *ngIf="isEditMode" class="form-field">

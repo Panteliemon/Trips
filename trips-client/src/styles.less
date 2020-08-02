@@ -671,6 +671,7 @@ div.modal-popup-background {
     height: 100%;
     width: 100%;
     background-color: rgba(0, 0, 0, 0.25);
+    z-index: 10; /* because Advanced Editor owner's z-index interferes with popups (don't understand why) */
 }
 
 div.sub-entities-list {
@@ -690,6 +691,10 @@ div.editor-picture-panel {
 
 div.editor-picture-panel-narrow {
     margin-bottom:10px;
+}
+
+div.editor-main-panel {
+    z-index:1; /* for Advanced Editor popups */
 }
 
 button.button-pic-select {

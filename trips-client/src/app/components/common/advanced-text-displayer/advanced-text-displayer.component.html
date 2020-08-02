@@ -8,12 +8,14 @@
         <a *ngSwitchCase="ChunkType.URL" class="inline-ref" [href]="chunk.url">{{chunk.text}}</a>
 
         <ng-container *ngSwitchCase="ChunkType.IMG">
-            <div *ngIf="chunk.url">
-                <a *ngIf="chunk.url" [href]="chunk.url" class="image-wrapper">
+            <div *ngIf="chunk.url" class="image-wrapper">
+                <a *ngIf="chunk.url" [href]="chunk.url">
                     <img [src]="chunk.src" />
                 </a>
             </div>
-            <img *ngIf="!chunk.url" [src]="chunk.src" />
+            <div *ngIf="!chunk.url" class="image-wrapper">
+                <img [src]="chunk.src" />
+            </div>
         </ng-container>
 
         <h1 *ngSwitchCase="ChunkType.H1">{{chunk.text}}</h1>

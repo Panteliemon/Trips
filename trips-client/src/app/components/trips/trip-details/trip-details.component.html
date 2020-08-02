@@ -72,15 +72,10 @@
                                                  (removed)="vehicleRemoved($event)"></app-vehicles-multi-selector>
                 </div>
 
-                <div class="form-field" *ngIf="isEditMode">
-                    <label for="tbDescription">Описание:</label>
-                    <textarea id="tbDescription" #tbDescription
-                              class="description-field" [value]="trip.description"
-                              (blur)="setDescription(tbDescription.value)"></textarea>
-                </div>
-                <div class="form-field" *ngIf="(!isEditMode) && (trip.description)">
+                <div class="form-field" *ngIf="isEditMode || trip.description">
                     <p>Описание:</p>
-                    <p class="preserve-linebreaks">{{trip.description}}</p>
+                    <app-advanced-editor #aeDescription [text]="trip.description" [isEditable]="isEditMode"
+                                         [galleries]="allGalleries" (update)="setDescription(aeDescription.text)"></app-advanced-editor>
                 </div>
             </div>
         </div>

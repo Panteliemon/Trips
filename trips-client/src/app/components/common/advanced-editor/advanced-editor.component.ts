@@ -1,5 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
-import { logging } from 'protractor';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, ViewChild, ElementRef, EventEmitter, Output } from '@angular/core';
 import { PopupsService } from 'src/app/services/popups.service';
 import { TripsService } from 'src/app/services/trips.service';
 import { PlacesService } from 'src/app/services/places.service';
@@ -23,8 +22,10 @@ export class AdvancedEditorComponent implements OnInit, OnChanges {
   @Input()
   isEditable: boolean = true;
   @Input()
-  // Returns galleries to select picture from
-  gallerySelector: () => Gallery[];
+  galleries: Gallery[];
+
+  @Output()
+  update = new EventEmitter<string>();
 
   @ViewChild("tbMain")
   tbMain: ElementRef;
@@ -48,12 +49,14 @@ export class AdvancedEditorComponent implements OnInit, OnChanges {
   bClick() {
     let selection = this.getSelection();
     if (selection) {
+      this.ensureTextNotNull();
       if (selection.start == selection.end) {
         this.text = this.text.substring(0, selection.start) + "[b][/b]" + this.text.substring(selection.end);
       } else {
         this.text = this.text.substring(0, selection.start) + "[b]" + this.text.substring(selection.start, selection.end) + "[/b]" + this.text.substring(selection.end);
       }
 
+      this.update.emit(this.text);
       this.selectAndFocusWithDelay(selection.start + 3, selection.end + 3);
     }
   }
@@ -61,12 +64,14 @@ export class AdvancedEditorComponent implements OnInit, OnChanges {
   iClick() {
     let selection = this.getSelection();
     if (selection) {
+      this.ensureTextNotNull();
       if (selection.start == selection.end) {
         this.text = this.text.substring(0, selection.start) + "[i][/i]" + this.text.substring(selection.end);
       } else {
         this.text = this.text.substring(0, selection.start) + "[i]" + this.text.substring(selection.start, selection.end) + "[/i]" + this.text.substring(selection.end);
       }
 
+      this.update.emit(this.text);
       this.selectAndFocusWithDelay(selection.start + 3, selection.end + 3);
     }
   }
@@ -74,12 +79,14 @@ export class AdvancedEditorComponent implements OnInit, OnChanges {
   uClick() {
     let selection = this.getSelection();
     if (selection) {
+      this.ensureTextNotNull();
       if (selection.start == selection.end) {
         this.text = this.text.substring(0, selection.start) + "[u][/u]" + this.text.substring(selection.end);
       } else {
         this.text = this.text.substring(0, selection.start) + "[u]" + this.text.substring(selection.start, selection.end) + "[/u]" + this.text.substring(selection.end);
       }
 
+      this.update.emit(this.text);
       this.selectAndFocusWithDelay(selection.start + 3, selection.end + 3);
     }
   }
@@ -87,12 +94,14 @@ export class AdvancedEditorComponent implements OnInit, OnChanges {
   sClick() {
     let selection = this.getSelection();
     if (selection) {
+      this.ensureTextNotNull();
       if (selection.start == selection.end) {
         this.text = this.text.substring(0, selection.start) + "[s][/s]" + this.text.substring(selection.end);
       } else {
         this.text = this.text.substring(0, selection.start) + "[s]" + this.text.substring(selection.start, selection.end) + "[/s]" + this.text.substring(selection.end);
       }
 
+      this.update.emit(this.text);
       this.selectAndFocusWithDelay(selection.start + 3, selection.end + 3);
     }
   }
@@ -102,12 +111,15 @@ export class AdvancedEditorComponent implements OnInit, OnChanges {
     if (selection) {
       let standardColorName = getStandardColor(value);
       let openTag = (standardColorName) ? `[color=${standardColorName}]` : `[color=${value}]`;
+      
+      this.ensureTextNotNull();
       if (selection.start == selection.end) {
         this.text = this.text.substring(0, selection.start) + openTag + "[/color]" + this.text.substring(selection.end);
       } else {
         this.text = this.text.substring(0, selection.start) + openTag + this.text.substring(selection.start, selection.end) + "[/color]" + this.text.substring(selection.end);
       }
 
+      this.update.emit(this.text);
       this.selectAndFocusWithDelay(selection.start + openTag.length, selection.end + openTag.length);
     }
   }
@@ -115,12 +127,14 @@ export class AdvancedEditorComponent implements OnInit, OnChanges {
   sizeClick() {
     let selection = this.getSelection();
     if (selection) {
+      this.ensureTextNotNull();
       if (selection.start == selection.end) {
         this.text = this.text.substring(0, selection.start) + "[size=12][/size]" + this.text.substring(selection.end);
       } else {
         this.text = this.text.substring(0, selection.start) + "[size=12]" + this.text.substring(selection.start, selection.end) + "[/size]" + this.text.substring(selection.end);
       }
 
+      this.update.emit(this.text);
       this.selectAndFocusWithDelay(selection.start+6, selection.start+8);
     }
   }
@@ -128,12 +142,14 @@ export class AdvancedEditorComponent implements OnInit, OnChanges {
   h1Click() {
     let selection = this.getSelection();
     if (selection) {
+      this.ensureTextNotNull();
       if (selection.start == selection.end) {
         this.text = this.text.substring(0, selection.start) + "[h1][/h1]" + this.text.substring(selection.end);
       } else {
         this.text = this.text.substring(0, selection.start) + "[h1]" + this.text.substring(selection.start, selection.end) + "[/h1]" + this.text.substring(selection.end);
       }
 
+      this.update.emit(this.text);
       this.selectAndFocusWithDelay(selection.start + 4, selection.end + 4);
     }
   }
@@ -141,12 +157,14 @@ export class AdvancedEditorComponent implements OnInit, OnChanges {
   h2Click() {
     let selection = this.getSelection();
     if (selection) {
+      this.ensureTextNotNull();
       if (selection.start == selection.end) {
         this.text = this.text.substring(0, selection.start) + "[h2][/h2]" + this.text.substring(selection.end);
       } else {
         this.text = this.text.substring(0, selection.start) + "[h2]" + this.text.substring(selection.start, selection.end) + "[/h2]" + this.text.substring(selection.end);
       }
 
+      this.update.emit(this.text);
       this.selectAndFocusWithDelay(selection.start + 4, selection.end + 4);
     }
   }
@@ -154,26 +172,30 @@ export class AdvancedEditorComponent implements OnInit, OnChanges {
   h3Click() {
     let selection = this.getSelection();
     if (selection) {
+      this.ensureTextNotNull();
       if (selection.start == selection.end) {
         this.text = this.text.substring(0, selection.start) + "[h3][/h3]" + this.text.substring(selection.end);
       } else {
         this.text = this.text.substring(0, selection.start) + "[h3]" + this.text.substring(selection.start, selection.end) + "[/h3]" + this.text.substring(selection.end);
       }
 
+      this.update.emit(this.text);
       this.selectAndFocusWithDelay(selection.start + 4, selection.end + 4);
     }
   }
 
   galleryPictureClick() {
     let selection = this.getSelection();
-    if (selection && this.gallerySelector) {
-      this.popupsService.fromGalleryPicker.open(this.gallerySelector(), null, (picture) => {
+    if (selection && this.galleries) {
+      this.popupsService.fromGalleryPicker.open(this.galleries, null, (picture) => {
         let insertedText = `[img]${getPictureUrl(picture.mediumSizeId, picture.format)}[/img]`;
         if (picture.largeSizeId != picture.mediumSizeId) {
           insertedText = `[url=${getPictureUrl(picture.largeSizeId, picture.format)}]${insertedText}[/url]`;
         }
 
+        this.ensureTextNotNull();
         this.text = this.text.substring(0, selection.start) + insertedText + this.text.substring(selection.start);
+        this.update.emit(this.text);
         this.selectAndFocusWithDelay(selection.start + insertedText.length, selection.start + insertedText.length);
       });
     }
@@ -182,6 +204,7 @@ export class AdvancedEditorComponent implements OnInit, OnChanges {
   linkClick() {
     let selection = this.getSelection();
     if (selection) {
+      this.ensureTextNotNull();
       const exampleUrl: string = "https://poezdo4ki.azurewebsites.net";
       if (selection.start == selection.end) {
         this.text = this.text.substring(0, selection.start) + "[url=" + exampleUrl + "]ссылка[/url]" + this.text.substring(selection.end);
@@ -189,6 +212,7 @@ export class AdvancedEditorComponent implements OnInit, OnChanges {
         this.text = this.text.substring(0, selection.start) + "[url=" + exampleUrl + "]" + this.text.substring(selection.start, selection.end) + "[/url]" + this.text.substring(selection.end);
       }
 
+      this.update.emit(this.text);
       this.selectAndFocusWithDelay(selection.start + 5, selection.start + 5 + exampleUrl.length);
     }
   }
@@ -199,7 +223,9 @@ export class AdvancedEditorComponent implements OnInit, OnChanges {
       if (selection) { // Usually always not null
         let openTag = `[url=/trip/${trip.id}]`;
         let middle = (selection.start == selection.end) ? this.tripsService.getDisplayableTripTitle(trip) : this.text.substring(selection.start, selection.end);
+        this.ensureTextNotNull();
         this.text = this.text.substring(0, selection.start) + openTag + middle + "[/url]" + this.text.substring(selection.end);
+        this.update.emit(this.text);
         this.selectAndFocusWithDelay(selection.start + openTag.length, selection.start + openTag.length + middle.length);
       }
     });
@@ -211,7 +237,9 @@ export class AdvancedEditorComponent implements OnInit, OnChanges {
       if (selection) { // Usually always not null
         let openTag = `[url=/place/${place.id}]`;
         let middle = (selection.start == selection.end) ? this.placesService.getDisplayablePlaceName(place.name) : this.text.substring(selection.start, selection.end);
+        this.ensureTextNotNull();
         this.text = this.text.substring(0, selection.start) + openTag + middle + "[/url]" + this.text.substring(selection.end);
+        this.update.emit(this.text);
         this.selectAndFocusWithDelay(selection.start + openTag.length, selection.start + openTag.length + middle.length);
       }
     });
@@ -223,7 +251,9 @@ export class AdvancedEditorComponent implements OnInit, OnChanges {
       if (selection) { // Usually always not null
         let openTag = `[url=/vehicle/${vehicle.id}]`;
         let middle = (selection.start == selection.end) ? this.vehiclesService.getDisplayableVehicleName(vehicle) : this.text.substring(selection.start, selection.end);
+        this.ensureTextNotNull();
         this.text = this.text.substring(0, selection.start) + openTag + middle + "[/url]" + this.text.substring(selection.end);
+        this.update.emit(this.text);
         this.selectAndFocusWithDelay(selection.start + openTag.length, selection.start + openTag.length + middle.length);
       }
     });
@@ -235,7 +265,9 @@ export class AdvancedEditorComponent implements OnInit, OnChanges {
       if (selection) { // Usually always not null
         let openTag = `[url=/user/${user.id}]`;
         let middle = (selection.start == selection.end) ? user.name : this.text.substring(selection.start, selection.end);
+        this.ensureTextNotNull();
         this.text = this.text.substring(0, selection.start) + openTag + middle + "[/url]" + this.text.substring(selection.end);
+        this.update.emit(this.text);
         this.selectAndFocusWithDelay(selection.start + openTag.length, selection.start + openTag.length + middle.length);
       }
     });
@@ -246,7 +278,9 @@ export class AdvancedEditorComponent implements OnInit, OnChanges {
     if (selection) {
       let strValue = (value == null) ? "N/A" : value.toString();
       let insertedText = `[placekind]${strValue}[/placekind]`;
+      this.ensureTextNotNull();
       this.text = this.text.substring(0, selection.start) + insertedText + this.text.substring(selection.start);
+      this.update.emit(this.text);
       this.selectAndFocusWithDelay(selection.start + insertedText.length, selection.start + insertedText.length);
     }
   }
@@ -256,7 +290,9 @@ export class AdvancedEditorComponent implements OnInit, OnChanges {
     if (selection) {
       let strValue = (value == null) ? "N/A" : value.toString();
       let insertedText = `[placeaccess]${strValue}[/placeaccess]`;
+      this.ensureTextNotNull();
       this.text = this.text.substring(0, selection.start) + insertedText + this.text.substring(selection.start);
+      this.update.emit(this.text);
       this.selectAndFocusWithDelay(selection.start + insertedText.length, selection.start + insertedText.length);
     }
   }
@@ -266,7 +302,9 @@ export class AdvancedEditorComponent implements OnInit, OnChanges {
     if (selection) {
       let strValue = (value == null) ? "N/A" : value.toString();
       let insertedText = `[placepop]${strValue}[/placepop]`;
+      this.ensureTextNotNull();
       this.text = this.text.substring(0, selection.start) + insertedText + this.text.substring(selection.start);
+      this.update.emit(this.text);
       this.selectAndFocusWithDelay(selection.start + insertedText.length, selection.start + insertedText.length);
     }
   }
@@ -276,21 +314,27 @@ export class AdvancedEditorComponent implements OnInit, OnChanges {
     if (selection) {
       let strValue = (value == null) ? "N/A" : value.toString();
       let insertedText = `[placecapacity]${strValue}[/placecapacity]`;
+      this.ensureTextNotNull();
       this.text = this.text.substring(0, selection.start) + insertedText + this.text.substring(selection.start);
+      this.update.emit(this.text);
       this.selectAndFocusWithDelay(selection.start + insertedText.length, selection.start + insertedText.length);
     }
+  }
+
+  textAreaBlur() {
+    this.update.emit(this.text);
   }
 
   // Gets current selection from the DOM and makes sure everything is valid
   private getSelection(): Selection {
     if ((this.tbMain?.nativeElement)
           && (this.tbMain.nativeElement.selectionStart !== undefined)
-          && (this.tbMain.nativeElement.selectionEnd !== undefined)
-          && (this.text != null)) {
+          && (this.tbMain.nativeElement.selectionEnd !== undefined)) {
       let start: number = this.tbMain.nativeElement.selectionStart;
       let end: number = this.tbMain.nativeElement.selectionEnd;
-      if ((start >= 0) && (start <= this.text.length)
-          && (end >= 0) && (end <= this.text.length)) {
+      let textLength = this.text?.length ?? 0;
+      if ((start >= 0) && (start <= textLength)
+          && (end >= 0) && (end <= textLength)) {
         let result = new Selection();    
         if (start > end) { // Never observed this, but the specification says it's acceptable
           result.start = end;
@@ -305,6 +349,12 @@ export class AdvancedEditorComponent implements OnInit, OnChanges {
     }
 
     return null;
+  }
+
+  private ensureTextNotNull() {
+    if (this.text == null) {
+      this.text = "";
+    }
   }
 
   private selectAndFocusWithDelay(selectionStart: number, selectionEnd: number) {

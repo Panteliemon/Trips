@@ -88,16 +88,10 @@
                            (change)="setYear(tbYear.value)" />
                 </div>
 
-                <div class="form-field" *ngIf="(!isEditMode) && vehicle.description">
+                <div class="form-field" *ngIf="isEditMode || vehicle.description">
                     <p>Описание:</p>
-                    <p class="preserve-linebreaks">{{vehicle.description}}</p>
-                </div>
-                <div class="form-field" *ngIf="isEditMode">
-                    <label for="tbDescription">Описание:</label>
-                    <textarea id="tbDescription" #tbDescription
-                              class="description-field"
-                              [value]="vehicle.description"
-                              (blur)="setDescription(tbDescription.value)"></textarea>
+                    <app-advanced-editor #aeDescription [text]="vehicle.description" [isEditable]="isEditMode"
+                                         [galleries]="allGalleries" (update)="setDescription(aeDescription.text)"></app-advanced-editor>
                 </div>
 
                 <div class="form-field">

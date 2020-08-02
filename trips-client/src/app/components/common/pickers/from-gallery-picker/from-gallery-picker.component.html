@@ -9,6 +9,7 @@
                 <img [src]="getPictureUrl(picture.smallSizeId, picture.format)"
                      class="gal-miniature-img centered-both" />
             </div>
+            <p *ngIf="allPictures.length == 0" class="big-gray-text centered">Нет изображений</p>
         </div>
         <div class="clearfix">
             <button class="button button-std pickerbutton-right" (click)="onCancelClicked()">Отмена</button>
