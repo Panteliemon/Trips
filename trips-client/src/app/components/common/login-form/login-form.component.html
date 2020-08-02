@@ -1,24 +1,25 @@
 <div *ngIf="isShown">
-    <div class="modal-popup-background"></div>
-    <div class="login-form">
-        <div class="uniter">
-            <div>
-                <div class="form-field">
-                    <label for="userName">Имя</label>
-                    <input id="userName" type="text" [(ngModel)]="userName" (keyup)="onTextFieldsKeyUp($event)" />
+    <div class="modal-popup-background">
+        <div class="login-form">
+            <div class="uniter">
+                <div>
+                    <div class="form-field">
+                        <label for="userName">Имя</label>
+                        <input id="userName" type="text" [(ngModel)]="userName" (keyup)="onTextFieldsKeyUp($event)" />
+                    </div>
+                    <div class="form-field">
+                        <label for="password">Пароль</label>
+                        <input id="password" type="password" [(ngModel)]="password" (keyup)="onTextFieldsKeyUp($event)" />
+                    </div>
+                    <div class="even-buttons-holder margin-above">
+                        <button class="button" (click)="onEnterButtonClicked()">Вход</button>
+                        <button class="button" (click)="closeButtonClicked()">Отмена</button>
+                    </div>
                 </div>
-                <div class="form-field">
-                    <label for="password">Пароль</label>
-                    <input id="password" type="password" [(ngModel)]="password" (keyup)="onTextFieldsKeyUp($event)" />
+                <div class="fog" *ngIf="isLoaderVisible"></div>
+                <div *ngIf="isLoaderVisible">
+                    <app-loader class="centered-both"></app-loader>
                 </div>
-                <div class="even-buttons-holder margin-above">
-                    <button class="button" (click)="onEnterButtonClicked()">Вход</button>
-                    <button class="button" (click)="closeButtonClicked()">Отмена</button>
-                </div>
-            </div>
-            <div class="fog" *ngIf="isLoaderVisible"></div>
-            <div *ngIf="isLoaderVisible">
-                <app-loader class="centered-both"></app-loader>
             </div>
         </div>
     </div>
