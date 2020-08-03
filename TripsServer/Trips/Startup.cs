@@ -58,7 +58,9 @@ namespace Trips
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = Encryption.AuthenticationTokenKey,
                     ValidateIssuer = false,
-                    ValidateAudience = false
+                    ValidateAudience = false,
+                    // For testing purposes, when token expires in 1 minute or so:
+                    // ClockSkew = TimeSpan.Zero
                 };
             });
 
