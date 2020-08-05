@@ -40,6 +40,8 @@ export class Place {
     name: string;
     description: string;
     location: string;
+    latitude: number;
+    longitude: number;
     addedBy: UserHeader;
     addedDate: Date;
     changedBy: UserHeader;

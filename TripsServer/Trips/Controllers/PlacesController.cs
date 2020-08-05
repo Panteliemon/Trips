@@ -207,6 +207,8 @@ namespace Trips.Controllers
             place.Name = placeDto.Name;
             place.Description = placeDto.Description;
             place.Location = placeDto.Location;
+            place.Latitude = placeDto.Latitude;
+            place.Longitude = placeDto.Longitude;
             // TODO REGION
             place.DiscoveryDate = placeDto.DiscoveryDate;
             place.Accessibility = placeDto.Accessibility;

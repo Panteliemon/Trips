@@ -293,6 +293,7 @@ namespace Trips.Service
             // Obsolete - removed: ServiceOperations.Add(new FillPictureFormatServiceOperation());
             // Obsolete - removed: ServiceOperations.Add(new PicturesMigrateServiceOperation(Program.PictureStorage));
             ServiceOperations.Add(new VisitIndexFixServiceOperation());
+            ServiceOperations.Add(new LngLatServiceOperation());
         }
 
         private TripsContext GetTripsContext()
