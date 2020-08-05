@@ -51,6 +51,7 @@ import { VehiclePickerComponent } from './components/common/pickers/vehicle-pick
 import { AdvancedEditorComponent } from './components/common/advanced-editor/advanced-editor.component';
 import { AdvancedTextDisplayerComponent } from './components/common/advanced-text-displayer/advanced-text-displayer.component';
 import { TripPickerComponent } from './components/common/pickers/trip-picker/trip-picker.component';
+import { MapControlComponent } from './components/common/map-control/map-control.component';
 
 @NgModule({
   declarations: [
@@ -99,7 +100,8 @@ import { TripPickerComponent } from './components/common/pickers/trip-picker/tri
     VehiclePickerComponent,
     AdvancedEditorComponent,
     AdvancedTextDisplayerComponent,
-    TripPickerComponent
+    TripPickerComponent,
+    MapControlComponent
   ],
   imports: [
     BrowserModule,

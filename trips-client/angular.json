@@ -25,6 +25,7 @@
               "src/web.config"
             ],
             "styles": [
+              "./node_modules/ol/ol.css",
               "src/styles.less"
             ],
             "scripts": []
