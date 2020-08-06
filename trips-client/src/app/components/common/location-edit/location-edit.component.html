@@ -1,0 +1,9 @@
+<div>
+    <div #map class="map" [class.with-border]="isEditable"></div>
+    <input #tbCoordinate type="text" id="tbCoordinate" class="form-field-margin-above"
+           *ngIf="isEditable"
+           [value]="coordinateText"
+           (blur)="coordinateTextChange(tbCoordinate.value)"
+           (keyup.enter)="coordinateTextChange(tbCoordinate.value)" />
+    <a *ngIf="(!isEditable) && linkText" [href]="linkUrl">{{linkText}}</a>
+</div>

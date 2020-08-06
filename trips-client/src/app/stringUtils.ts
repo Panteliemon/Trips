@@ -115,6 +115,11 @@ export class Coordinates {
   latitude: number;
   longitude: number;
 
+  constructor(latitude: number, longitude: number) {
+    this.latitude = latitude;
+    this.longitude = longitude;
+  }
+
   get latitudeDegreeStr(): string {
     // 0°00'00.0"N
     return getDegreeStr(Math.abs(this.latitude)) + (this.latitude >= 0 ? "N" : "S");
@@ -142,10 +147,7 @@ export function parseCoordinates(coordStr: string): Coordinates {
       if (previousNumber !== null) {
         // ok, we have two numbers, validate
         if ((previousNumber > -90) && (previousNumber < 90) && (currentNumber >= -180) && (currentNumber < 180)) {
-          let result = new Coordinates();
-          result.latitude = previousNumber;
-          result.longitude = currentNumber;
-          return result;
+          return new Coordinates(previousNumber, currentNumber);
         } else {
           // May be try the next number
           previousNumber = currentNumber;
@@ -161,12 +163,16 @@ export function parseCoordinates(coordStr: string): Coordinates {
   return null;
 }
 
+export function createGoogleRefFromCoordinates(coordinates: Coordinates): string {
+  return `https://www.google.com/maps/place/${coordinates.latitudeDegreeStr}+${coordinates.longitudeDegreeStr}`;
+}
+
 // From place location field tries to recognize coordinates, and if succeeds, returns
 // google ref to these coordinates. If not succeed, returns null.
 export function createGoogleRefFromLocation(locationValue: string): string {
   let coordsObj = parseCoordinates(locationValue);
   if (coordsObj) {
-    return `https://www.google.com/maps/place/${coordsObj.latitudeDegreeStr}+${coordsObj.longitudeDegreeStr}`;
+    return createGoogleRefFromCoordinates(coordsObj);;
   }
 
   return null;
