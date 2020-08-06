@@ -62,19 +62,10 @@
                                          [galleries]="allGalleries" (update)="setPlaceDescription(aeDescription.text)"></app-advanced-editor>
                 </div>
 
-                <div *ngIf="isEditMode" class="form-field">
-                    <label for="tbLocation">Расположение:</label>
-                    <input type="text" #tbLocation id="tbLocation" [value]="place.location"
-                           (blur)="setPlaceLocation(tbLocation.value)" (keyup.enter)="setPlaceLocation(tbLocation.value)" />
-                    <p class="advice">
-                        <i class="material-icons">info</i>
-                        <span>Для превращения в ссылку гугол вставьте координаты точки в десятичном формате</span>
-                    </p>
-                </div>
-                <div *ngIf="(!isEditMode) && place.location" class="form-field">
+                <div class="form-field" *ngIf="isEditMode || (place.latitude && place.longitude)">
                     <p>Расположение:</p>
-                    <a *ngIf="mapRef" [href]="mapRef">{{place.location}}</a>
-                    <p *ngIf="!mapRef">{{place.location}}</p>
+                    <app-location-edit [isEditable]="isEditMode" [latitude]="place.latitude" [longitude]="place.longitude"
+                                       (valueChange)="setPlaceLocation($event)"></app-location-edit>
                 </div>
 
                 <div *ngIf="isAccessibilityVisible" class="form-field">

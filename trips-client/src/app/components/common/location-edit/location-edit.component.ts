@@ -24,7 +24,7 @@ export class LocationEditComponent implements OnInit, AfterViewInit, OnChanges {
   isEditable: boolean = true;
 
   @Output()
-  change = new EventEmitter<Coordinates>();
+  valueChange = new EventEmitter<Coordinates>();
 
   private _map: Map;
   private _markerSource: VectorSource;
@@ -36,9 +36,15 @@ export class LocationEditComponent implements OnInit, AfterViewInit, OnChanges {
   linkText: string;
   linkUrl: string;
 
+  // To detect that we catch changes from model that we initiated by ourselves earlier.
+  private _raisedLatitude: number = undefined;
+  private _raisedLongitude: number = undefined;
+
   constructor() { }
 
   ngOnInit(): void {
+    this.showCoordinateText();
+    this.tuneLink();
   }
 
   ngAfterViewInit(): void {
@@ -81,17 +87,28 @@ export class LocationEditComponent implements OnInit, AfterViewInit, OnChanges {
       }
     });
 
-    this.lngLatChanged();
+    this.showCurrentValueMarker();
+    this.autoCenter();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this._map) { // initialized
       if (changes["latitude"]) {
-        this.lngLatChanged();
+        // If the change was initiated by ourselves, then ignore.
+        if ((this._raisedLatitude === undefined) || (this._raisedLatitude != this.latitude)) { // no raised event || change differs from what was raised
+          this.lngLatChanged();
+        }
+
+        this._raisedLatitude = undefined; // reset every time
       }
 
       if (changes["longitude"]) {
-        this.lngLatChanged();
+        // If the change was initiated by ourselves, then ignore.
+        if ((this._raisedLongitude === undefined) || (this._raisedLongitude != this.longitude)) {
+          this.lngLatChanged();
+        }
+
+        this._raisedLongitude = undefined; // reset every time
       }
     }
   }
@@ -167,6 +184,8 @@ export class LocationEditComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   private raiseChange() {
-    this.change.emit(new Coordinates(this.latitude, this.longitude));
+    this._raisedLatitude = this.latitude;
+    this._raisedLongitude = this.longitude;
+    this.valueChange.emit(new Coordinates(this.latitude, this.longitude));  
   }
 }

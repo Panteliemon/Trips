@@ -4,10 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PlacesService } from 'src/app/services/places.service';
 import { MessageService, MessageButtons, MessageIcon, MessageResult } from 'src/app/services/message.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { dateToInputString, inputStringToDate, possibleStringToDate, createGoogleRefFromLocation, getPictureUrl } from 'src/app/stringUtils';
+import { dateToInputString, inputStringToDate, possibleStringToDate, getPictureUrl, Coordinates } from 'src/app/stringUtils';
 import { PopupsService } from 'src/app/services/popups.service';
 import { TripsService } from 'src/app/services/trips.service';
-import { FilterOperation } from 'src/app/models/filter-operation';
 import { TripHeader } from 'src/app/models/trip-header';
 import { Gallery } from 'src/app/models/gallery';
 
@@ -162,10 +161,11 @@ export class PlaceDetailsComponent implements OnInit {
     }
   }
 
-  setPlaceLocation(value: string) {
-    if (value != this.place.location) {
-      this.place.location = value;
-      this.updateMapRef();
+  setPlaceLocation(value: Coordinates) {
+    if ((value.latitude != this.place.latitude)
+        && (value.longitude != this.place.longitude)) {
+      this.place.latitude = value.latitude;
+      this.place.longitude = value.longitude;
       this.initiatePartialSilentUpdate();
     }
   }
@@ -185,7 +185,6 @@ export class PlaceDetailsComponent implements OnInit {
       this.allGalleries = [this.place.gallery];
       this.refreshSelectorsVisible();
       this.refreshGalleryVisible();
-      this.updateMapRef();
       this.isOverallLoaderVisible = false;
 
       if (this.authService.user?.canEditGeography) {
@@ -470,13 +469,5 @@ export class PlaceDetailsComponent implements OnInit {
   private refreshXBApprovalCheckboxVisible() {
     // Open for admins only: only on client, just for fun.
     this.isXBApprovalCheckboxVisible = this.isEditMode && this.authService.user && this.authService.user.isAdmin;
-  }
-
-  private updateMapRef() {
-    if (this.place) {
-      this.mapRef = createGoogleRefFromLocation(this.place.location);
-    } else {
-      this.mapRef = null;
-    }
   }
 }

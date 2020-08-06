@@ -5,5 +5,5 @@
            [value]="coordinateText"
            (blur)="coordinateTextChange(tbCoordinate.value)"
            (keyup.enter)="coordinateTextChange(tbCoordinate.value)" />
-    <a *ngIf="(!isEditable) && linkText" [href]="linkUrl">{{linkText}}</a>
+    <a *ngIf="(!isEditable) && linkText" [href]="linkUrl" class="inline-ref">{{linkText}}</a>
 </div>
