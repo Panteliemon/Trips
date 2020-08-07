@@ -97,6 +97,13 @@ img.small-profile-pic {
     border-radius:3px;
 }
 
+img.small-entity-pic { /* the same as if in items-presenter */
+    width:100px;
+    height:80px;
+    object-fit:cover;
+    border-radius:5px;
+}
+
 .button {
     display:inline-block;
     background-color:@theme-color-dark;
@@ -913,14 +920,18 @@ div.selector-responsive-buttons {
     text-align:right;
 }
 
-/*----------------------------------- Main page -------------------------------------*/
+/*----------------------------------- Navigation -------------------------------------*/
 
-nav {
+nav#navMain {
     clear:both;
     margin-bottom: 5px;
 }
 
-nav>a {
+nav.sub-category {
+    margin-bottom:5px;
+}
+
+nav > a{
     display:block;
     background-color:@theme-color-dark;
     color:@color-text-on-dark;
@@ -928,15 +939,21 @@ nav>a {
     text-transform: uppercase;
     float:left;
     padding:8px 8px 10px 8px;
-    margin: 5px 5px 0 0;
+    margin:5px 5px 0 0;
+}
+
+nav.sub-category > a {
+    min-width:200px;
+    text-align:center;
+    margin-top:0px;
 }
 
 @media only screen and (min-width: 680px) {
-    nav {
+    nav#navMain {
         margin-bottom: 0px;
     }
 
-    /*nav>a {
+    /*nav#navMain>a {
         border-radius:5px 5px 0 0;
     } */  
 }
@@ -950,9 +967,18 @@ nav > a.active {
     color: black;
     outline:none;
 }
+nav.sub-category > a.active {
+    border:2px solid @theme-color-light;
+    /* compensate shift because of border added: */
+    position:relative;
+    top:-2px;
+} 
+
 nav > a:focus {
     outline:none;
 }
+
+/*----------------------------------- Main page -------------------------------------*/
 
 div.content-presenter {
     clear:both;

@@ -17,12 +17,19 @@ import { TripDetailsComponent } from './components/trips/trip-details/trip-detai
 import { VehicleDetailsComponent } from './components/vehicles/vehicle-details/vehicle-details.component';
 
 import { AuthGuard } from './services/auth.guard';
+import { PlacesMapComponent } from './components/places/places-map/places-map.component';
 
 const routes: Routes = [
   { path: "news", component: NewsMainComponent },
   { path: "trips", component: TripsMainComponent, canActivate: [AuthGuard] },
   { path: "trip/:id", component: TripDetailsComponent, canActivate: [AuthGuard] },
-  { path: "places", component: PlacesMainComponent, canActivate: [AuthGuard] },
+  { path: "places", canActivate: [AuthGuard],
+    children: [
+      { path: "list", component: PlacesMainComponent },
+      { path: "map", component: PlacesMapComponent },
+      { path: "", redirectTo: "list", pathMatch: "full"},
+      { path: "**", component: Page404Component }
+    ] },
   { path: "place/:id", component: PlaceDetailsComponent, canActivate: [AuthGuard] },
   { path: "regions", component: RegionsMainComponent, canActivate: [AuthGuard] },
   { path: "vehicles", component: VehiclesMainComponent, canActivate: [AuthGuard] },

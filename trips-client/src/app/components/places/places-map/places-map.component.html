@@ -1,0 +1,33 @@
+<app-places-category-selection></app-places-category-selection>
+<h1>Места на карте</h1>
+<div class="uniter">
+    <div>
+        <div #mapDiv class="map"></div>
+        <div #popupDiv>
+            <div *ngIf="selectedPlace" class="popup-wrapper">
+                <div class="tooltip">
+                    <a routerLink="/place/{{selectedPlace.id}}">
+                        <img class="small-entity-pic" [src]="selectedPlacePicSrc" />
+                    </a>
+                    <div>
+                        <a routerLink="/place/{{selectedPlace.id}}" class="inline-ref">
+                            {{selectedPlaceName}}
+                        </a>
+                        <div class="shifter">
+                            <div class="diminisher">
+                                <app-place-kind-selector [value]="selectedPlace.kind" [isEditable]="false"></app-place-kind-selector>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-field form-field-margin-above">
+            <p>Тип места:</p>
+            <app-place-kind-multi-selector [(selectedValues)]="placeKindFilter"></app-place-kind-multi-selector>
+        </div>
+    </div>
+    <div *ngIf="isLoading" class="fog">
+        <app-loader class="centered-both"></app-loader>
+    </div>    
+</div>

@@ -76,7 +76,11 @@ export class SelectorEngineComponent implements OnInit, OnChanges {
     }
 
     if (changes["selectedValue"]) {
-      recalculateNeeded = true;
+      if (this.isEditable) {
+        recalculateNeeded = true;
+      } else {
+        refillNeeded = true;
+      }
     }
 
     if (changes["isEditable"]) {

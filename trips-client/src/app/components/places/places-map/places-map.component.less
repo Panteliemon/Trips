@@ -1,0 +1,55 @@
+@import "../../../../colors.less";
+
+div.map {
+    height:350px;
+}
+
+@media only screen and (min-width: 680px) {
+    div.map {
+        height:550px;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    div.map {
+        height:750px;
+    }
+}
+
+div.popup-wrapper .tooltip {
+    position: relative;
+    left: 15px;
+    top:-30px;
+
+    border:2px solid @theme-color-light;
+    background-color:@color-tooltip-background;
+    padding:5px;
+
+    display:flex;
+    flex-direction:row;
+}
+
+div.popup-wrapper .tooltip > a {
+    display:block;
+    height:80px;
+}
+
+div.popup-wrapper .tooltip div {
+    margin-left:10px;
+}
+
+div.popup-wrapper .tooltip a.inline-ref {
+    font-size:14pt;
+    margin-right:5px;
+}
+
+div.shifter {
+    position:relative;
+    left:-20px;
+    margin-top:10px;
+}
+
+div.diminisher {
+    /* put to bottom left corner of itself */
+    transform: translate(-15%, 15%) scale(0.7);
+}

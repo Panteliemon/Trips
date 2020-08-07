@@ -7,6 +7,7 @@ import { Place, PlaceKind } from '../models/place';
 import { Picture } from '../models/picture';
 import { MessageIcon } from './message.service';
 import { getPictureUrl } from '../stringUtils';
+import { PlaceOnMap } from '../models/place-on-map';
 
 @Injectable({
   providedIn: 'root'
@@ -46,6 +47,10 @@ export class PlacesService {
 
   getPlace(id: number): Observable<Place> {
     return this.http.get<Place>(`${API_BASE_PATH}/place/${id}`)
+  }
+
+  getPlacesOnMap(): Observable<PlaceOnMap[]> {
+    return this.http.get<PlaceOnMap[]>(`${API_BASE_PATH}/places/onmap`);
   }
 
   createPlace(): Observable<Place> {

@@ -173,6 +173,6 @@ export class PlacesMainComponent implements OnInit {
       parametersObj.kind = this.placesService.getKindFilterStr(this._placeKindFilter);
     }
 
-    this.router.navigate(["/places", parametersObj]);
+    this.router.navigate(["/places/list", parametersObj]);
   }
 }
