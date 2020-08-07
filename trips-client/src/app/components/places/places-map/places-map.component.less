@@ -16,9 +16,15 @@ div.map {
     }
 }
 
+button.btn-center-map {
+    position: absolute;
+    top:5px;
+    right:5px;
+}
+
 div.popup-wrapper .tooltip {
     position: relative;
-    left: 15px;
+    left:20px;
     top:-30px;
 
     border:2px solid @theme-color-light;
@@ -27,6 +33,12 @@ div.popup-wrapper .tooltip {
 
     display:flex;
     flex-direction:row;
+}
+
+div.popup-wrapper > svg {
+    position: absolute;
+    left:8px;
+    top:-8px;
 }
 
 div.popup-wrapper .tooltip > a {
@@ -41,6 +53,17 @@ div.popup-wrapper .tooltip div {
 div.popup-wrapper .tooltip a.inline-ref {
     font-size:14pt;
     margin-right:5px;
+}
+
+div.popup-wrapper #pol1 {
+    stroke-width:2px;
+    stroke:@theme-color-light;
+    fill:@color-tooltip-background;  
+}
+
+div.popup-wrapper #lin1 {
+    stroke-width:4px;
+    stroke:@color-tooltip-background;
 }
 
 div.shifter {

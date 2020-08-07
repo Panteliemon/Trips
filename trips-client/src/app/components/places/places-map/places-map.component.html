@@ -20,8 +20,13 @@
                         </div>
                     </div>
                 </div>
+                <svg width="16" height="16">
+                    <polygon id="pol1" points="16,0 0,8 16,16" />
+                    <line id="lin1" x1="16" y1="0" x2="16" y2="16"></line>
+                </svg>
             </div>
         </div>
+        <button class="button btn-center-map" (click)="autoFit()">Центрировать</button>
         <div class="form-field form-field-margin-above">
             <p>Тип места:</p>
             <app-place-kind-multi-selector [(selectedValues)]="placeKindFilter"></app-place-kind-multi-selector>

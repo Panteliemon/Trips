@@ -149,6 +149,20 @@ export class PlacesMapComponent implements OnInit, AfterViewInit {
     this.autoFit();
   }
 
+  autoFit() {
+    if (this._map && this._places) {
+      let allFeatures = this._markersSource.getFeatures();
+      if (allFeatures.length >= 2) {
+        this._map.getView().fit(this.scaleExtent(this._markersSource.getExtent(), 1.1));
+      } else if (allFeatures.length == 1) {
+        let place: PlaceOnMap = allFeatures[0].get("place");
+        if (place) {
+          this._map.getView().setCenter(fromLonLat([place.longitude, place.latitude]));
+        }
+      }
+    }
+  }
+
   private setSelectedPlace(value: PlaceOnMap) {
     this.selectedPlace = value;
 
@@ -181,12 +195,6 @@ export class PlacesMapComponent implements OnInit, AfterViewInit {
       }
 
       this._markersSource.addFeatures(featuresToAdd);
-    }
-  }
-
-  private autoFit() {
-    if (this._map && this._places) {
-      this._map.getView().fit(this.scaleExtent(this._markersSource.getExtent(), 1.1));
     }
   }
 
