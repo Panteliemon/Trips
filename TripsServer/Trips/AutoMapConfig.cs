@@ -20,6 +20,7 @@ namespace Trips
 
             CreateMap<Place, PlaceDto>();
             CreateMap<Place, PlaceHeaderDto>();
+            CreateMap<Place, PlaceOnMapDto>();
 
             CreateMap<Vehicle, VehicleDto>();
             CreateMap<Vehicle, VehicleHeaderDto>();

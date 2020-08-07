@@ -66,7 +66,7 @@ namespace Trips.Controllers
 
             if (order?.ToLower() == "date")
             {
-                query = query.OrderByDescending(p => p.DiscoveryDate);
+                query = query.OrderByDescending(p => p.DiscoveryDate).ThenByDescending(p => p.Id);
             }
             else
             {
@@ -115,6 +115,17 @@ namespace Trips.Controllers
             }
 
             PlaceDto result = Mapper.Map<PlaceDto>(place);
+            return result;
+        }
+
+        [HttpGet]
+        [Route("places/onmap")]
+        public async Task<IList<PlaceOnMapDto>> GetPlacesOnMap()
+        {
+            List<Place> places = await DbContext.Places.Where(p => p.Latitude.HasValue && p.Longitude.HasValue)
+                                                       .Include(p => p.TitlePicture)
+                                                       .ToListAsync();
+            List<PlaceOnMapDto> result = places.Select(p => Mapper.Map<PlaceOnMapDto>(p)).ToList();
             return result;
         }
 
