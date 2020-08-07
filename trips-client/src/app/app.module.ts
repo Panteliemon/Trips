@@ -51,7 +51,6 @@ import { VehiclePickerComponent } from './components/common/pickers/vehicle-pick
 import { AdvancedEditorComponent } from './components/common/advanced-editor/advanced-editor.component';
 import { AdvancedTextDisplayerComponent } from './components/common/advanced-text-displayer/advanced-text-displayer.component';
 import { TripPickerComponent } from './components/common/pickers/trip-picker/trip-picker.component';
-import { MapControlComponent } from './components/common/map-control/map-control.component';
 import { LocationEditComponent } from './components/common/location-edit/location-edit.component';
 import { PlacesMapComponent } from './components/places/places-map/places-map.component';
 import { PlacesCategorySelectionComponent } from './components/places/places-category-selection/places-category-selection.component';
@@ -104,7 +103,6 @@ import { PlacesCategorySelectionComponent } from './components/places/places-cat
     AdvancedEditorComponent,
     AdvancedTextDisplayerComponent,
     TripPickerComponent,
-    MapControlComponent,
     LocationEditComponent,
     PlacesMapComponent,
     PlacesCategorySelectionComponent
