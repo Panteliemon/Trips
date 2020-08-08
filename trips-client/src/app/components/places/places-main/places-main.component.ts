@@ -73,7 +73,7 @@ export class PlacesMainComponent implements OnInit {
     if (this.activatedRoute.snapshot.paramMap.get("order")) {
       this._sortingOrder = this.activatedRoute.snapshot.paramMap.get("order");
     } else {
-      this._sortingOrder = "name";
+      this._sortingOrder = "date";
     }
     if (this.activatedRoute.snapshot.paramMap.get("kind")) {
       this._placeKindFilter = this.placesService.parseKindFilterStr(this.activatedRoute.snapshot.paramMap.get("kind"));
