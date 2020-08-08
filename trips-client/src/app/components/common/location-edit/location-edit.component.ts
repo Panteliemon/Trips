@@ -124,6 +124,10 @@ export class LocationEditComponent implements OnInit, AfterViewInit, OnChanges {
         this.tuneLink();
         this.raiseChange();
       }
+
+      if (this._isMobileBrowser) { // On desktop this event is not enough, see mousedown
+        this.setReactsOnScroll(true);
+      }
     });
 
     // Map is not scrollable until clicked.
@@ -133,9 +137,11 @@ export class LocationEditComponent implements OnInit, AfterViewInit, OnChanges {
     this._dragPanInteraction = this._map.getInteractions().getArray().find(i => i instanceof olInteraction.DragPan);
     this.setReactsOnScroll(false); // now can use setter function
 
-    this.mapElement.nativeElement.addEventListener("mousedown", evt => {
-      this.setReactsOnScroll(true);
-    });
+    if (!this._isMobileBrowser) { // On mobile only wake up on click, because mousedown can be scroll
+      this.mapElement.nativeElement.addEventListener("mousedown", evt => {
+        this.setReactsOnScroll(true);
+      });
+    }
 
     this.showCurrentValueMarker();
     this.autoCenter();
