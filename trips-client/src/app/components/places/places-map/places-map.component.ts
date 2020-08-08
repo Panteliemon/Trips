@@ -9,6 +9,7 @@ import VectorSource from 'ol/source/Vector';
 import TileLayer from 'ol/layer/Tile';
 import { fromLonLat } from 'ol/proj';
 import { Extent } from 'ol/extent';
+import * as olInteraction from 'ol/interaction';
 
 import { DEFAULT_LONGITUDE, DEFAULT_LATITUDE } from '../../common/maps';
 import { PlaceKind } from 'src/app/models/place';
@@ -116,6 +117,10 @@ export class PlacesMapComponent implements OnInit, AfterViewInit {
       view: new View({
         center: fromLonLat([DEFAULT_LONGITUDE, DEFAULT_LATITUDE]),
         zoom: 10
+      }),
+      interactions: olInteraction.defaults({
+        pinchRotate: false,
+        altShiftDragRotate: false
       })
     });
 

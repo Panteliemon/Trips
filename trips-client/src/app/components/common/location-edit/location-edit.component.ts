@@ -7,6 +7,7 @@ import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { Style, Circle, Fill, Stroke} from 'ol/style';
 import { Point } from 'ol/geom';
+import * as olInteraction from 'ol/interaction';
 import { DEFAULT_LONGITUDE, DEFAULT_LATITUDE } from '../maps';
 import { Coordinates, parseCoordinates, createGoogleRefFromCoordinates } from 'src/app/stringUtils';
 
@@ -72,6 +73,10 @@ export class LocationEditComponent implements OnInit, AfterViewInit, OnChanges {
         center: fromLonLat([DEFAULT_LONGITUDE, DEFAULT_LATITUDE]),
         zoom: 11,
         minZoom: 5
+      }),
+      interactions: olInteraction.defaults({
+        pinchRotate: false,
+        altShiftDragRotate: false
       })
     });
 
