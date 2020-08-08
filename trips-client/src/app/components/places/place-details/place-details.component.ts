@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Place, PlaceKind, PlaceAccessibility, PlacePopularity, PlaceCapacity } from 'src/app/models/place';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PlacesService } from 'src/app/services/places.service';
@@ -9,6 +9,7 @@ import { PopupsService } from 'src/app/services/popups.service';
 import { TripsService } from 'src/app/services/trips.service';
 import { TripHeader } from 'src/app/models/trip-header';
 import { Gallery } from 'src/app/models/gallery';
+import { LocationEditComponent } from '../../common/location-edit/location-edit.component';
 
 const LOAD_TRIPS_PORTION: number = 20;
 
@@ -18,6 +19,9 @@ const LOAD_TRIPS_PORTION: number = 20;
   styleUrls: ['./place-details.component.css']
 })
 export class PlaceDetailsComponent implements OnInit {
+  @ViewChild("locationEdit")
+  locationEdit: LocationEditComponent;
+
   place: Place;
 
   isEditMode: boolean;
@@ -235,6 +239,9 @@ export class PlaceDetailsComponent implements OnInit {
     this.refreshGalleryVisible();
     this.refreshSelectTitlePicVisible();
     this.refreshXBApprovalCheckboxVisible()
+
+    this.locationEdit?.setReactsOnScroll(false);
+    this.locationEdit?.autoCenter();
   }
 
   onDeleteClicked() {

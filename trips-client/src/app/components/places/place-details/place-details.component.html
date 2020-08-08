@@ -64,7 +64,7 @@
 
                 <div class="form-field" *ngIf="isEditMode || (place.latitude && place.longitude)">
                     <p>Расположение:</p>
-                    <app-location-edit [isEditable]="isEditMode" [latitude]="place.latitude" [longitude]="place.longitude"
+                    <app-location-edit #locationEdit [isEditable]="isEditMode" [latitude]="place.latitude" [longitude]="place.longitude"
                                        (valueChange)="setPlaceLocation($event)"></app-location-edit>
                 </div>
 

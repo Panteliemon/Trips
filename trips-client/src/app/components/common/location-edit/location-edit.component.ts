@@ -10,6 +10,7 @@ import { Point } from 'ol/geom';
 import * as olInteraction from 'ol/interaction';
 import { DEFAULT_LONGITUDE, DEFAULT_LATITUDE } from '../maps';
 import { Coordinates, parseCoordinates, createGoogleRefFromCoordinates } from 'src/app/stringUtils';
+import { isMobileBrowser } from 'src/app/platformUtils';
 
 @Component({
   selector: 'app-location-edit',
@@ -29,6 +30,10 @@ export class LocationEditComponent implements OnInit, AfterViewInit, OnChanges {
 
   private _map: Map;
   private _markerSource: VectorSource;
+  private _reactsOnScroll: boolean = false;
+  private _mouseWheelInteraction: olInteraction.Interaction;
+  private _dragPanInteraction: olInteraction.Interaction;
+  private _isMobileBrowser: boolean;
  
   @ViewChild("map")
   mapElement: ElementRef;
@@ -42,6 +47,35 @@ export class LocationEditComponent implements OnInit, AfterViewInit, OnChanges {
   private _raisedLongitude: number = undefined;
 
   constructor() { }
+
+  public setReactsOnScroll(value: boolean) {
+    if ((value != this._reactsOnScroll) && (this._map)) {
+      if (value) {
+        this._map.addInteraction(this._mouseWheelInteraction);
+        if (this._isMobileBrowser) {
+          this._map.addInteraction(this._dragPanInteraction);
+        }
+      } else {
+        this._map.removeInteraction(this._mouseWheelInteraction);
+        if (this._isMobileBrowser) {
+          this._map.removeInteraction(this._dragPanInteraction);
+        }
+      }
+
+      this._reactsOnScroll = value;
+    }
+  }
+
+  public autoCenter() {
+    // Only if both null or both not null.
+    if (this.latitude && this.longitude) {
+      this._map.getView().setCenter(fromLonLat([this.longitude, this.latitude]));
+      this._map.getView().setZoom(14);
+    } else if ((!this.latitude) && (!this.longitude)) {
+      this._map.getView().setCenter(fromLonLat([DEFAULT_LONGITUDE, DEFAULT_LATITUDE]));
+      this._map.getView().setZoom(11);
+    }
+  }
 
   ngOnInit(): void {
     this.showCoordinateText();
@@ -90,6 +124,17 @@ export class LocationEditComponent implements OnInit, AfterViewInit, OnChanges {
         this.tuneLink();
         this.raiseChange();
       }
+    });
+
+    // Map is not scrollable until clicked.
+    this._reactsOnScroll = true; // initialize without setter function
+    this._isMobileBrowser = isMobileBrowser();
+    this._mouseWheelInteraction = this._map.getInteractions().getArray().find(i => i instanceof olInteraction.MouseWheelZoom);
+    this._dragPanInteraction = this._map.getInteractions().getArray().find(i => i instanceof olInteraction.DragPan);
+    this.setReactsOnScroll(false); // now can use setter function
+
+    this.mapElement.nativeElement.addEventListener("mousedown", evt => {
+      this.setReactsOnScroll(true);
     });
 
     this.showCurrentValueMarker();
@@ -174,17 +219,6 @@ export class LocationEditComponent implements OnInit, AfterViewInit, OnChanges {
     } else if ((!this.latitude) && (!this.longitude)) {
       this.linkText = "";
       this.linkUrl = "";
-    }
-  }
-
-  private autoCenter() {
-    // Only if both null or both not null.
-    if (this.latitude && this.longitude) {
-      this._map.getView().setCenter(fromLonLat([this.longitude, this.latitude]));
-      this._map.getView().setZoom(14);
-    } else if ((!this.latitude) && (!this.longitude)) {
-      this._map.getView().setCenter(fromLonLat([DEFAULT_LONGITUDE, DEFAULT_LATITUDE]));
-      this._map.getView().setZoom(11);
     }
   }
 
