@@ -12,8 +12,6 @@ namespace Trips.Dtos
         public PlaceKind? Kind { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        [Obsolete("No more. Use Latitude/Longitude. This field will be removed.")]
-        public string Location { get; set; }
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
         public UserHeaderDto AddedBy { get; set; }

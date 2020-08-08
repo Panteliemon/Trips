@@ -39,7 +39,6 @@ export class Place {
     kind: PlaceKind;
     name: string;
     description: string;
-    location: string;
     latitude: number;
     longitude: number;
     addedBy: UserHeader;

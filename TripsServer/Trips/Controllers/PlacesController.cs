@@ -260,7 +260,6 @@ namespace Trips.Controllers
             place.Kind = placeDto.Kind;
             place.Name = placeDto.Name;
             place.Description = placeDto.Description;
-            place.Location = placeDto.Location;
             place.Latitude = placeDto.Latitude;
             place.Longitude = placeDto.Longitude;
             // TODO REGION
