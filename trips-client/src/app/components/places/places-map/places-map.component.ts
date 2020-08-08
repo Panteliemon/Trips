@@ -17,6 +17,7 @@ import { PlacesService } from 'src/app/services/places.service';
 import { MessageService, MessageButtons, MessageIcon } from 'src/app/services/message.service';
 import { PlaceOnMap } from 'src/app/models/place-on-map';
 import { getPictureUrl } from 'src/app/stringUtils';
+import { isMobileBrowser } from 'src/app/platformUtils';
 
 function iconStyle(src: string): Style {
   return new Style({
@@ -64,6 +65,10 @@ export class PlacesMapComponent implements OnInit, AfterViewInit {
   private _map: Map;
   private _markersSource: VectorSource;
   private _popupOverlay: Overlay;
+  private _reactsOnScroll: boolean = false;
+  private _mouseWheelInteraction: olInteraction.Interaction;
+  private _dragPanInteraction: olInteraction.Interaction;
+  private _isMobileBrowser: boolean;
 
   private _places: PlaceOnMap[];
 
@@ -138,6 +143,10 @@ export class PlacesMapComponent implements OnInit, AfterViewInit {
       } else {
         this._popupOverlay.setPosition(undefined);
       }
+
+      if (this._isMobileBrowser) { // On desktop this event is not enough, see mousedown
+        this.setReactsOnScroll(true);
+      }
     });
 
     this._map.on("pointermove", event => {
@@ -148,7 +157,26 @@ export class PlacesMapComponent implements OnInit, AfterViewInit {
           this._map.getTargetElement().style.cursor = "";
         }
       }
-    })
+    });
+
+    this._reactsOnScroll = true; // first set without setter
+    this._isMobileBrowser = isMobileBrowser();
+    this._mouseWheelInteraction = this._map.getInteractions().getArray().find(i => i instanceof olInteraction.MouseWheelZoom);
+    this._dragPanInteraction = this._map.getInteractions().getArray().find(i => i instanceof olInteraction.DragPan);
+    this.setReactsOnScroll(false); // now can use setter function
+
+    if (!this._isMobileBrowser) { // On mobile only wake up on click, because mousedown can be scroll
+      this.mapDiv?.nativeElement.addEventListener("mousedown", evt => {
+        this.setReactsOnScroll(true);
+      });
+    }
+
+    // Also awake when scrolled to the bottom (all platforms)
+    window.addEventListener("scroll", evt => {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+        this.setReactsOnScroll(true);
+      }
+    });
 
     this.putPlacesOnMap();
     this.autoFit();
@@ -200,6 +228,24 @@ export class PlacesMapComponent implements OnInit, AfterViewInit {
       }
 
       this._markersSource.addFeatures(featuresToAdd);
+    }
+  }
+
+  private setReactsOnScroll(value: boolean) {
+    if ((value != this._reactsOnScroll) && (this._map)) {
+      if (value) {
+        this._map.addInteraction(this._mouseWheelInteraction);
+        if (this._isMobileBrowser) {
+          this._map.addInteraction(this._dragPanInteraction);
+        }
+      } else {
+        this._map.removeInteraction(this._mouseWheelInteraction);
+        if (this._isMobileBrowser) {
+          this._map.removeInteraction(this._dragPanInteraction);
+        }
+      }
+
+      this._reactsOnScroll = value;
     }
   }
 

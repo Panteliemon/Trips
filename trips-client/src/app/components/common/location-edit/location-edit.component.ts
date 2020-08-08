@@ -138,7 +138,7 @@ export class LocationEditComponent implements OnInit, AfterViewInit, OnChanges {
     this.setReactsOnScroll(false); // now can use setter function
 
     if (!this._isMobileBrowser) { // On mobile only wake up on click, because mousedown can be scroll
-      this.mapElement.nativeElement.addEventListener("mousedown", evt => {
+      this.mapElement?.nativeElement.addEventListener("mousedown", evt => {
         this.setReactsOnScroll(true);
       });
     }
