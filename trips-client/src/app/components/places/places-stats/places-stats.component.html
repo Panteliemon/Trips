@@ -1,0 +1,128 @@
+<app-places-category-selection></app-places-category-selection>
+<h1>Рейтинги</h1>
+<h2>Наиболее посещаемые</h2>
+<app-loader *ngIf="isLoading"></app-loader>
+<table class="items-presenter form-field-margin"
+       *ngIf="(!isLoading) && mostVisited && (mostVisited.length > 0)">
+    <thead>
+        <th class="show-middle">Место</th>
+        <th class="show-middle">Кол-во<br/>посещений</th>
+        <th class="hide-middle">Место<br/>/Кол-во</th>
+        <th></th>
+        <th class="name-column">Название</th>
+        <th class="show-small">Тип</th>
+    </thead>
+    <tr *ngFor="let entry of mostVisited" class="entity-row selectable-row">
+        <td class="place-column show-middle">
+            <a class="cell-wrapper" routerLink="/place/{{entry.place.id}}">
+                <p class="centered-both"
+                   [class.gold]="entry.rating == 1"
+                   [class.silver]="entry.rating == 2"
+                   [class.bronze]="entry.rating == 3">{{entry.rating}}</p>
+            </a>
+        </td>
+        <td class="value-column show-middle">
+            <a class="cell-wrapper" routerLink="/place/{{entry.place.id}}">
+                <p class="centered-both">{{entry.value}}</p>
+            </a>
+        </td>
+        <td class="united-place-value-column hide-middle">
+            <a class="cell-wrapper" routerLink="/place/{{entry.place.id}}">
+                <p class="centered-both">
+                    <span [class.gold]="entry.rating == 1"
+                          [class.silver]="entry.rating == 2"
+                          [class.bronze]="entry.rating == 3">{{entry.rating}}</span>
+                    <span>/{{entry.value}}</span>
+                </p>
+            </a>
+        </td>
+        <td class="entity-picture-column">
+            <a class="cell-wrapper" routerLink="/place/{{entry.place.id}}">
+                <img [src]="getPlacePicSrc(entry.place)" />
+            </a>
+        </td>
+        <td class="general-column hide-small">
+            <a class="cell-wrapper" routerLink="/place/{{entry.place.id}}">
+                <p class="title">{{getPlaceName(entry.place)}}</p>
+                <app-place-kind-selector [value]="entry.place.kind" [isEditable]="false"></app-place-kind-selector>
+            </a>
+        </td>
+        <td class="name-column show-small">
+            <a class="cell-wrapper" routerLink="/place/{{entry.place.id}}">
+                <p>{{getPlaceName(entry.place)}}</p>
+            </a>
+        </td>
+        <td class="enum-column show-small">
+            <a class="cell-wrapper" routerLink="/place/{{entry.place.id}}">
+                <app-place-kind-selector class="centered" [value]="entry.place.kind" [isEditable]="false"
+                                         [isShortView]="true" [isTooltipToLeft]="true"></app-place-kind-selector>
+            </a>
+        </td>
+    </tr>
+</table>
+<p class="big-gray-text centered form-field-margin"
+   *ngIf="(!isLoading) && ((!mostVisited) || (mostVisited.length == 0))">Не найдено</p>
+
+<h2>Больше всего ночёвок</h2>
+<app-loader *ngIf="isLoading"></app-loader>
+<table class="items-presenter form-field-margin"
+       *ngIf="(!isLoading) && mostNightStay && (mostNightStay.length > 0)">
+    <!-- copy-paste from the table above -->
+    <thead>
+        <th class="show-middle">Место</th>
+        <th class="show-middle">Кол-во<br/>ночёвок</th>
+        <th class="hide-middle">Место<br/>/Кол-во</th>
+        <th></th>
+        <th class="name-column">Название</th>
+        <th class="show-small">Тип</th>
+    </thead>
+    <tr *ngFor="let entry of mostNightStay" class="entity-row selectable-row">
+        <td class="place-column show-middle">
+            <a class="cell-wrapper" routerLink="/place/{{entry.place.id}}">
+                <p class="centered-both"
+                   [class.gold]="entry.rating == 1"
+                   [class.silver]="entry.rating == 2"
+                   [class.bronze]="entry.rating == 3">{{entry.rating}}</p>
+            </a>
+        </td>
+        <td class="value-column show-middle">
+            <a class="cell-wrapper" routerLink="/place/{{entry.place.id}}">
+                <p class="centered-both">{{entry.value}}</p>
+            </a>
+        </td>
+        <td class="united-place-value-column hide-middle">
+            <a class="cell-wrapper" routerLink="/place/{{entry.place.id}}">
+                <p class="centered-both">
+                    <span [class.gold]="entry.rating == 1"
+                          [class.silver]="entry.rating == 2"
+                          [class.bronze]="entry.rating == 3">{{entry.rating}}</span>
+                    <span>/{{entry.value}}</span>
+                </p>
+            </a>
+        </td>
+        <td class="entity-picture-column">
+            <a class="cell-wrapper" routerLink="/place/{{entry.place.id}}">
+                <img [src]="getPlacePicSrc(entry.place)" />
+            </a>
+        </td>
+        <td class="general-column hide-small">
+            <a class="cell-wrapper" routerLink="/place/{{entry.place.id}}">
+                <p class="title">{{getPlaceName(entry.place)}}</p>
+                <app-place-kind-selector [value]="entry.place.kind" [isEditable]="false"></app-place-kind-selector>
+            </a>
+        </td>
+        <td class="name-column show-small">
+            <a class="cell-wrapper" routerLink="/place/{{entry.place.id}}">
+                <p>{{getPlaceName(entry.place)}}</p>
+            </a>
+        </td>
+        <td class="enum-column show-small">
+            <a class="cell-wrapper" routerLink="/place/{{entry.place.id}}">
+                <app-place-kind-selector class="centered" [value]="entry.place.kind" [isEditable]="false"
+                                         [isShortView]="true" [isTooltipToLeft]="true"></app-place-kind-selector>
+            </a>
+        </td>
+    </tr>
+</table>
+<p class="big-gray-text centered form-field-margin"
+   *ngIf="(!isLoading) && ((!mostNightStay) || (mostNightStay.length == 0))">Не найдено</p>

@@ -18,6 +18,7 @@ import { VehicleDetailsComponent } from './components/vehicles/vehicle-details/v
 
 import { AuthGuard } from './services/auth.guard';
 import { PlacesMapComponent } from './components/places/places-map/places-map.component';
+import { PlacesStatsComponent } from './components/places/places-stats/places-stats.component';
 
 const routes: Routes = [
   { path: "news", component: NewsMainComponent },
@@ -27,6 +28,7 @@ const routes: Routes = [
     children: [
       { path: "list", component: PlacesMainComponent },
       { path: "map", component: PlacesMapComponent },
+      { path: "stats", component: PlacesStatsComponent },
       { path: "", redirectTo: "list", pathMatch: "full"},
       { path: "**", component: Page404Component }
     ] },

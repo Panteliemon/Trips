@@ -18,6 +18,12 @@ namespace Trips.Controllers
     [Authorize]
     public class PlacesController : TripsControllerBase
     {
+        class PlaceWithMetric<T>
+        {
+            public Place Place { get; set; }
+            public T Metric { get; set; }
+        }
+
         public PlacesController(TripsContext dbContext, IMapper mapper)
             : base(dbContext, mapper)
         {
@@ -126,6 +132,43 @@ namespace Trips.Controllers
                                                        .Include(p => p.TitlePicture)
                                                        .ToListAsync();
             List<PlaceOnMapDto> result = places.Select(p => Mapper.Map<PlaceOnMapDto>(p)).ToList();
+            return result;
+        }
+
+        [HttpGet]
+        [Route("places/stats")]
+        public async Task<PlacesStatsDto> GetPlacesStats()
+        {
+            PlacesStatsDto result = new PlacesStatsDto();
+
+            var visited = await DbContext.Places
+                .Include(p => p.TitlePicture)
+                .Select(p => new PlaceWithMetric<int>
+                {
+                    Place = p,
+                    // Only one time per trip counts
+                    Metric = p.Visits.Where(v => v.Trip != null).Select(v => v.Trip.Id).Distinct().Count()
+                })
+                .Where(rec => rec.Metric > 0) // No point to include "0" records in the rating
+                .OrderByDescending(rec => rec.Metric)
+                .ToListAsync();
+
+            result.MostVisited = GroupByMetricAndSelectFirst(visited, 5);
+
+            var nightStay = await DbContext.Places
+                .Include(p => p.TitlePicture)
+                .Select(p => new PlaceWithMetric<int>
+                {
+                    Place = p,
+                    // Only one night stay per trip counts
+                    Metric = p.Visits.Where(v => (v.Trip != null) && v.WithNightStay).Select(v => v.Trip.Id).Distinct().Count()
+                })
+                .Where(rec => rec.Metric > 0) // No point to include "0" records in the rating
+                .OrderByDescending(rec => rec.Metric)
+                .ToListAsync();
+
+            result.MostNightStay = GroupByMetricAndSelectFirst(nightStay, 5);
+
             return result;
         }
 
@@ -440,5 +483,42 @@ namespace Trips.Controllers
         }
 
         #endregion
+
+        private List<PlacesMetricDto<T>> GroupByMetricAndSelectFirst<T>(IList<PlaceWithMetric<T>> orderedList, int maxCount)
+        {
+            List<PlacesMetricDto<T>> result = new List<PlacesMetricDto<T>>();
+            PlacesMetricDto<T> currentPlaceGroup = null;
+
+            for (int i=0; i<orderedList.Count; i++)
+            {
+                if ((currentPlaceGroup == null) || (!orderedList[i].Metric.Equals(currentPlaceGroup.Metric)))
+                {
+                    if (currentPlaceGroup != null)
+                    {
+                        result.Add(currentPlaceGroup);
+                        if ((maxCount > 0) && (result.Count >= maxCount))
+                        {
+                            currentPlaceGroup = null;
+                            break;
+                        }
+                    }
+
+                    currentPlaceGroup = new PlacesMetricDto<T>
+                    {
+                        Places = new List<PlaceHeaderDto>(),
+                        Metric = orderedList[i].Metric
+                    };
+                }
+
+                currentPlaceGroup.Places.Add(Mapper.Map<PlaceHeaderDto>(orderedList[i].Place));
+            }
+
+            if (currentPlaceGroup != null)
+            {
+                result.Add(currentPlaceGroup);
+            }
+
+            return result;
+        }
     }
 }

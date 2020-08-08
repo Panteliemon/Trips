@@ -54,6 +54,7 @@ import { TripPickerComponent } from './components/common/pickers/trip-picker/tri
 import { LocationEditComponent } from './components/common/location-edit/location-edit.component';
 import { PlacesMapComponent } from './components/places/places-map/places-map.component';
 import { PlacesCategorySelectionComponent } from './components/places/places-category-selection/places-category-selection.component';
+import { PlacesStatsComponent } from './components/places/places-stats/places-stats.component';
 
 @NgModule({
   declarations: [
@@ -105,7 +106,8 @@ import { PlacesCategorySelectionComponent } from './components/places/places-cat
     TripPickerComponent,
     LocationEditComponent,
     PlacesMapComponent,
-    PlacesCategorySelectionComponent
+    PlacesCategorySelectionComponent,
+    PlacesStatsComponent
   ],
   imports: [
     BrowserModule,
