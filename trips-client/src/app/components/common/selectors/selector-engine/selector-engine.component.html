@@ -6,13 +6,15 @@
          [style.color]="option.isSelected ? option.choice.colorWhenSelected : option.choice.colorWhenNotSelected"
          [style.background-color]="option.isSelected ? option.choice.backgroundColorWhenSelected : option.choice.backgroundColorWhenNotSelected"
          (click)="selectOption(option.choice)">
-        <div class="centered clearfix">
+        <div class="centered">
             <span *ngIf="option.choice.showBigText" class="selector-big-text"
                   [class.space-after]="option.isSmallTextVisible">{{option.choice.bigText}}</span>
-            <span *ngIf="option.isSmallTextVisible" class="selector-small-text">{{option.choice.smallText}}</span>
-            <div *ngIf="option.tooltip" class="selector-tooltip"
-                 [class.selector-tooltip-left]="isTooltipToLeft">{{option.tooltip}}</div>
+            <span *ngIf="option.isSmallTextVisible" class="selector-small-text"
+                  [class.single]="!option.choice.showBigText"
+                  [class.with-big]="option.choice.showBigText">{{option.choice.smallText}}</span>
         </div>
+        <div *ngIf="option.tooltip" class="selector-tooltip"
+             [class.selector-tooltip-left]="isTooltipToLeft">{{option.tooltip}}</div>
     </div>
     <p *ngIf="showDescription && (!isEditable)"
        class="selector-description-inline">{{selectedValue.description}}</p>

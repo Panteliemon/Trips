@@ -5,10 +5,12 @@
          [style.color]="option.isSelected ? option.choice.colorWhenSelected : option.choice.colorWhenNotSelected"
          [style.background-color]="option.isSelected ? option.choice.backgroundColorWhenSelected : option.choice.backgroundColorWhenNotSelected"
          (click)="onOptionClick(option)">
-        <div class="centered clearfix">
+        <div class="centered">
             <span *ngIf="option.choice.bigText" class="selector-big-text"
                   [class.space-after]="option.choice.smallText">{{option.choice.bigText}}</span>
-            <span *ngIf="option.choice.smallText" class="selector-small-text">{{option.choice.smallText}}</span>
+            <span *ngIf="option.choice.smallText" class="selector-small-text"
+                  [class.single]="!option.choice.bigText"
+                  [class.with-big]="option.choice.bigText">{{option.choice.smallText}}</span>
         </div>
     </div>
 </div>

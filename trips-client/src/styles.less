@@ -873,22 +873,24 @@ div.picker-table-holder {
 /*----------------------------------- Selectors (shared) -------------------------------------*/
 
 span.selector-big-text {
-    display:block;
-    float:left;
-    font-size:20pt;
+    font-size:20pt; 
 }
 
 span.selector-small-text {
-    display:block;
-    float:left;
-    position:relative;
-    top:8px;
     font-size:12pt;
+}
+span.selector-small-text.single {
+    display:inline-block;
+    margin-top:7px;
+}
+span.selector-small-text.with-big {
+    position:relative;
+    top:-5px;
 }
 
 .selector-tooltip {
     position:absolute;
-    top:35px;
+    top:40px;
     left:-5px;
     border: 1px solid @theme-color-light;
     color:@theme-color-dark;

@@ -84,10 +84,10 @@ div.group > button:hover div.selector-tooltip {
     z-index:1;
 }
 
-.enum-button-tooltip {
+.ae-button-tooltip {
     top:32px;
 }
-.enum-button-tooltip button {
+.ae-button-tooltip button {
     margin-top:5px;
     width:100%;
 }

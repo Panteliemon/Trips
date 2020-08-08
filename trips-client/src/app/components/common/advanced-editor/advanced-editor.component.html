@@ -4,38 +4,38 @@
             <div>
                 <span>B</span>
             </div>
-            <div class="selector-tooltip">Полужирный</div>
+            <div class="selector-tooltip ae-button-tooltip">Полужирный</div>
         </button>
         <button id="buttonI" class="button" (click)="iClick()">
             <div>
                 <span>I</span>
             </div>
-            <div class="selector-tooltip">Курсив</div>
+            <div class="selector-tooltip ae-button-tooltip">Курсив</div>
         </button>
         <button id="buttonU" class="button" (click)="uClick()">
             <div>
                 <span>U</span>
             </div>
-            <div class="selector-tooltip">Подчёркнутый</div>
+            <div class="selector-tooltip ae-button-tooltip">Подчёркнутый</div>
         </button>
         <button id="buttonS" class="button" (click)="sClick()">
             <div>
                 <span>S</span>
             </div>
-            <div class="selector-tooltip">Зачёркнутый</div>
+            <div class="selector-tooltip ae-button-tooltip">Зачёркнутый</div>
         </button>
 
         <input type="color" #inputColor style="display:none;" (change)="colorChange(inputColor.value)" />
         <button id="buttonColor" class="button" (click)="inputColor.click()">
             <img src="assets/ae-color-button.png" />
-            <div class="selector-tooltip">Цвет</div>
+            <div class="selector-tooltip ae-button-tooltip">Цвет</div>
         </button>
         <button id="buttonSize" class="button" (click)="sizeClick()">
             <div>
                 <span style="font-size:0.8em">A</span>
                 <span>A</span>
                 <span style="font-size:1.3em">A</span>
-                <div class="selector-tooltip">Размер шрифта</div>
+                <div class="selector-tooltip" style="top:31px;">Размер шрифта</div>
             </div> 
         </button>
     </div>
@@ -43,50 +43,50 @@
     <div class="group" id="group2">
         <button class="button" (click)="h1Click()">
             <div><span>H1</span></div>
-            <div class="selector-tooltip">Заголовок 1</div>
+            <div class="selector-tooltip ae-button-tooltip">Заголовок 1</div>
         </button>
         <button class="button" (click)="h2Click()">
             <div><span>H2</span></div>
-            <div class="selector-tooltip">Заголовок 2</div>
+            <div class="selector-tooltip ae-button-tooltip">Заголовок 2</div>
         </button>
         <button id="buttonH3" class="button" (click)="h3Click()">
             <div><span>H3</span></div>
-            <div class="selector-tooltip selector-tooltip-left">Заголовок 3</div>
+            <div class="selector-tooltip selector-tooltip-left ae-button-tooltip">Заголовок 3</div>
         </button>
     </div>
 
     <button id="buttonGalPicture" class="button" *ngIf="galleries && (galleries.length > 0)" (click)="galleryPictureClick()">
         <i class="material-icons">image</i>
-        <div class="selector-tooltip">Картинка из галереи</div>
+        <div class="selector-tooltip ae-button-tooltip">Картинка из галереи</div>
     </button>
 
     <div class="group" id="group4">
         <button class="button" (click)="linkClick()">
             <i class="material-icons">link</i>
-            <div class="selector-tooltip">Ссылка</div>
+            <div class="selector-tooltip ae-button-tooltip">Ссылка</div>
         </button>
         <button class="button" (click)="tripClick()">
             <img src="assets/ae-trip-button.png" />
-            <div class="selector-tooltip">Поездка</div>
+            <div class="selector-tooltip ae-button-tooltip">Поездка</div>
         </button>
         <button class="button" (click)="placeClick()">
             <img src="assets/ae-place-button.png" />
-            <div class="selector-tooltip">Место</div>
+            <div class="selector-tooltip ae-button-tooltip">Место</div>
         </button>
         <button class="button" (click)="vehicleClick()">
             <img src="assets/ae-vehicle-button.png" />
-            <div class="selector-tooltip selector-tooltip-left" style="right:-20px;">Транспортное средство</div>
+            <div class="selector-tooltip selector-tooltip-left ae-button-tooltip" style="right:-20px;">Транспортное средство</div>
         </button>
         <button id="buttonUser" class="button" (click)="userClick()">
             <img src="assets/ae-user-button.png" />
-            <div class="selector-tooltip selector-tooltip-left">Пользователь</div>
+            <div class="selector-tooltip selector-tooltip-left ae-button-tooltip">Пользователь</div>
         </button>
     </div>
 
     <div class="group" id="group5">
         <button class="button">
             <div><span>ТМ</span></div>
-            <div class="selector-tooltip enum-button-tooltip">
+            <div class="selector-tooltip ae-button-tooltip">
                 <p>Тип места</p>
                 <button class="button" (click)="placeKindClick(null)">N/A</button> <br/>
                 <button class="button" (click)="placeKindClick(1)">Озеро</button> <br/>
@@ -100,7 +100,7 @@
         </button>
         <button class="button">
             <div><span>Д</span></div>
-            <div class="selector-tooltip enum-button-tooltip">
+            <div class="selector-tooltip ae-button-tooltip">
                 <p>Доступность</p>
                 <button class="button" (click)="placeAccessClick(null)">N/A</button> <br/>
                 <button class="button" (click)="placeAccessClick(1)">Асфальт/Грав.</button> <br/>
@@ -112,7 +112,7 @@
         </button>
         <button class="button">
             <div><span>П</span></div>
-            <div class="selector-tooltip selector-tooltip-left enum-button-tooltip" style="right:-40px;">
+            <div class="selector-tooltip selector-tooltip-left ae-button-tooltip" style="right:-40px;">
                 <p>Популярность</p>
                 <button class="button" (click)="placePopClick(null)">N/A</button> <br/>
                 <button class="button" (click)="placePopClick(1)">Всегда свободно</button> <br/>
@@ -123,7 +123,7 @@
         </button>
         <button class="button">
             <div><span>КС</span></div>
-            <div class="selector-tooltip selector-tooltip-left enum-button-tooltip" style="right:-5px;">
+            <div class="selector-tooltip selector-tooltip-left ae-button-tooltip" style="right:-5px;">
                 <p>Количество стоянок</p>
                 <button class="button" (click)="placeCapacityClick(null)">N/A</button> <br/>
                 <button class="button" (click)="placeCapacityClick(0)">0 Нет</button> <br/>
