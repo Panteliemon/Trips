@@ -2,7 +2,7 @@
     <section>
         <div class="clearfix">
             <h1 class="allows-float-beside">Транспортные средства</h1>
-            <button class="button up-right-button" (click)="addButtonClicked()">
+            <button *ngIf="isAddNewVehicleVisible" class="button up-right-button" (click)="addButtonClicked()">
                 <i class="material-icons">add</i>
                 <span>Добавить...</span>
             </button>

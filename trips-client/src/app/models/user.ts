@@ -12,4 +12,5 @@ export class User {
     canPublishNews: boolean;
     canPublishTrips: boolean;
     canEditGeography: boolean;
+    isGuest: boolean;
 }

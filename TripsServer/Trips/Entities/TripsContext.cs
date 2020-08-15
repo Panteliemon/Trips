@@ -115,6 +115,9 @@ namespace Trips.Entities
 
             modelBuilder.Entity<Vehicle>().HasOne(v => v.Owner).WithMany(u => u.Vehicles).OnDelete(DeleteBehavior.SetNull);
 
+            // Indexes for performance
+            modelBuilder.Entity<News>().HasIndex(n => n.UrlId);
+            modelBuilder.Entity<Place>().HasIndex(p => p.UrlId);
             modelBuilder.Entity<ServiceOperationHistory>().HasIndex(h => new { h.Key, h.Ended });
         }
 

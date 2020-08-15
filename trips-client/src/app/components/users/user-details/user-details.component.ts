@@ -34,8 +34,10 @@ export class UserDetailsComponent implements OnInit {
   canChangePassword: boolean;
   canResetPassword: boolean;
   canSeeIsAdmin: boolean;
+  canSeeIsGuest: boolean;
   canSeePrivileges: boolean;
   canSetIsAdmin: boolean;
+  canSetIsGuest: boolean;
   canEditPrivileges: boolean;
   canDeleteUser: boolean;
 
@@ -87,8 +89,8 @@ export class UserDetailsComponent implements OnInit {
 
       // Decide whether we display "vehicles of this user" and "trips of this user" sections
       if (this.user) {
-        // Admin or self: allow edit vehicles, so the section is always visible. Else: read only, display only if not empty.
-        if (this.authService.user?.isAdmin || (this.authService.user?.id == this.user.id)) {
+        // Admin or self-not-guest: allow edit vehicles, so the section is always visible. Else: read only, display only if not empty.
+        if (this.authService.user?.isAdmin || ((this.authService.user?.isGuest == false) && (this.authService.user?.id == this.user.id))) {
           this.isVehiclesOfUserVisible = true;
           this.isAddNewVehicleVisible = true;
         } else {
@@ -217,6 +219,27 @@ export class UserDetailsComponent implements OnInit {
             this.refreshAllVisibility();
           });
         }
+      });
+    }
+  }
+
+  async onIsGuestCheckboxChanged() {
+    if (this.user) {
+      // Restricted by UI: should not happen.
+      if (this.user.isAdmin && this.user.isGuest) {
+        if (this.authService.user?.id == this.user.id) {
+          await this.messageService.showMessage("Птичку ставим, но поскольку вы админ, для вас ничего не изменится.", MessageButtons.ok, MessageIcon.info).toPromise();
+        } else {
+          await this.messageService.showMessage(`Ограничение "Гость" для пользователя ${this.user.name} не будет работать, поскольку этот пользователь является Администраторым.`, MessageButtons.ok, MessageIcon.warning).toPromise();
+        }
+      }
+
+      // Don't indicate
+      this.usersService.updateUser(this.user).subscribe(() => {
+        this.refreshCanSetIsGuest();
+        // no indication
+      }, error => {
+        this.handleServerError(error);
       });
     }
   }
@@ -459,10 +482,13 @@ export class UserDetailsComponent implements OnInit {
 
   private refreshAllVisibility() {
     if (this.user) {
+      // For simplicity
+      let isSelfAndNotGuest = (this.authService.user?.id == this.user.id) && (this.authService.user?.isGuest == false);
+
       this.imgSrc = userPicSrc(this.user.profilePicture, this.user.profilePictureFormat);
       if (this.user.profilePicture) {
         this.imgAlt = this.user.name;
-        this.isResetProfilePicButtonVisible = (this.authService.user?.isAdmin) || (this.authService.user?.id == this.user.id);
+        this.isResetProfilePicButtonVisible = (this.authService.user?.isAdmin) || isSelfAndNotGuest;
         this.changeProfilePicButtonCaption = "Изменить аватар";
       } else {
         this.imgAlt = "(без аватара)";
@@ -470,10 +496,10 @@ export class UserDetailsComponent implements OnInit {
         this.changeProfilePicButtonCaption = "Загрузить аватар";
       }
 
-      this.isChangeProfilePicButtonVisible = (this.authService.user?.isAdmin) || (this.authService.user?.id == this.user.id);
+      this.isChangeProfilePicButtonVisible = (this.authService.user?.isAdmin) || isSelfAndNotGuest;
       this.notFound = false;
 
-      this.canChangeLogin = this.authService.user?.id == this.user.id;
+      this.canChangeLogin = isSelfAndNotGuest;
       if (this.user.lastChangedName) {
         let endDate = new Date(this.user.lastChangedName);
         endDate.setDate(endDate.getDate() + 6);
@@ -481,12 +507,13 @@ export class UserDetailsComponent implements OnInit {
       }
       this.canChangeLogin = this.canChangeLogin || this.authService.user?.isAdmin;
 
-      this.canChangePassword = this.authService.user?.id == this.user.id;
+      this.canChangePassword = isSelfAndNotGuest;
       this.canResetPassword = this.authService.user?.isAdmin;
-      this.canSeePrivileges = this.authService.user?.isAdmin || (this.authService.user?.id == this.user.id);
+      this.canSeePrivileges = this.authService.user?.isAdmin || (this.authService.user?.id == this.user.id); // guest also can see priviliges
       this.canEditPrivileges = this.authService.user?.isAdmin;
       this.canSeeIsAdmin = this.authService.user?.isAdmin;
       this.canSetIsAdmin = this.authService.user?.isAdmin && (this.authService.user?.id != this.user.id);
+      this.canSeeIsGuest = this.authService.user?.isAdmin || (this.authService.user?.isGuest && (this.authService.user?.id == this.user.id));
       this.canDeleteUser = this.authService.user?.isAdmin && (this.authService.user?.id != this.user.id);
     } else {
       this.notFound = true;
@@ -497,11 +524,23 @@ export class UserDetailsComponent implements OnInit {
       this.canEditPrivileges = false;
       this.canSeeIsAdmin = false;
       this.canSetIsAdmin = false;
+      this.canSeeIsGuest = false;
+      this.canSetIsGuest = false;
       this.canDeleteUser = false;
     }
 
+    this.refreshCanSetIsGuest();
+
     this.isPictureLoaderVisible = false;
     this.isOverallLoaderVisible = false;
+  }
+
+  private refreshCanSetIsGuest() {
+    if (this.user && (this.authService.user?.isGuest == false)) {
+      this.canSetIsGuest = (!this.user.isAdmin) || this.user.isGuest; // be able to uncheck if accidentally is admin and guest simultaneously
+    } else {
+      this.canSetIsGuest = false;
+    }
   }
 
   private loadVehicles() {

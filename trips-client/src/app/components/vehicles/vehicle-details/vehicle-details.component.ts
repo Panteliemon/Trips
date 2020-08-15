@@ -368,7 +368,7 @@ export class VehicleDetailsComponent implements OnInit {
 
   private getCanEditCurrentVehicle(): boolean {
     if (this.vehicle && this.authService.user) {
-      return this.authService.user.isAdmin || (this.vehicle.owner?.id == this.authService.user.id);
+      return this.authService.user.isAdmin || ((!this.authService.user.isGuest) && (this.vehicle.owner?.id == this.authService.user.id));
     } else {
       return false;
     }

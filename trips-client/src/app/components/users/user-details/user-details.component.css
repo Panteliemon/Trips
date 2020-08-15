@@ -6,3 +6,13 @@ p.no-user-vehicles {
     float:left;
     margin-top:7px;
 }
+
+#cbIsGuest {
+    position:relative;
+}
+#cbIsGuest .selector-tooltip {
+    top:20px;
+}
+#cbIsGuest:hover .selector-tooltip {
+    display:block;
+}

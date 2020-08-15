@@ -21,6 +21,7 @@ namespace Trips.Entities
         public bool CanPublishNews { get; set; }
         public bool CanPublishTrips { get; set; }
         public bool CanEditGeography { get; set; }
+        public bool IsGuest { get; set; }
 
         public ICollection<UsersToTrips> Trips { get; set; }
         public ICollection<Vehicle> Vehicles { get; set; }

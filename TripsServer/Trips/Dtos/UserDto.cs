@@ -23,5 +23,6 @@ namespace Trips.Dtos
         public bool CanPublishNews { get; set; }
         public bool CanPublishTrips { get; set; }
         public bool CanEditGeography { get; set; }
+        public bool IsGuest { get; set; }
     }
 }

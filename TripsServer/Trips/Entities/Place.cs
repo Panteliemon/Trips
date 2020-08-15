@@ -8,6 +8,7 @@ namespace Trips.Entities
     public class Place
     {
         public int Id { get; set; }
+        public string UrlId { get; set; }
         public PlaceKind? Kind { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

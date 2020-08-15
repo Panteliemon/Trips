@@ -80,6 +80,11 @@
                         <app-checkbox [(value)]="user.isAdmin" [isEnabled]="canSetIsAdmin"
                                       (valueChange)="onIsAdminCheckboxChanged()">Администратор</app-checkbox>
                     </div>
+                    <div *ngIf="canSeeIsGuest" id="cbIsGuest" class="form-field-margin-above">
+                        <app-checkbox [(value)]="user.isGuest" [isEnabled]="canSetIsGuest"
+                                      (valueChange)="onIsGuestCheckboxChanged()">Гость</app-checkbox>
+                        <div class="selector-tooltip">Нельзя менять логин/пароль, аватар и транспортные средства</div>
+                    </div>
                     <fieldset *ngIf="canSeePrivileges" class="form-field-margin form-field-margin-above">
                         <legend>Может редактировать:</legend>
                         <div>

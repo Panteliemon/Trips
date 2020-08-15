@@ -15,6 +15,8 @@ export class VehiclesMainComponent implements OnInit {
   isLoaderVisible: boolean;
   isNotFoundVisible: boolean;
 
+  isAddNewVehicleVisible: boolean;
+
   isOverallLoaderVisible: boolean; // for create new vehicle only
 
   constructor(private messageService: MessageService,
@@ -23,6 +25,7 @@ export class VehiclesMainComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit(): void {
+    this.isAddNewVehicleVisible = (this.authService.user?.isGuest == false) || this.authService.user?.isAdmin;
     this.isLoaderVisible = true;
     this.vehiclesService.getVehiclesList().subscribe(vehicles => {
       this.isLoaderVisible = false;

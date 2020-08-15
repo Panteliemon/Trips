@@ -84,8 +84,8 @@ namespace Trips.Controllers
             // Check permissions
             User currentUser = await GetCurrentUserAsync();
             if ((currentUser == null) || (
-                    // Is allowed to edit vehicle if is admin or if it's his vehicle
-                    (!currentUser.IsAdmin) && (owner != currentUser.Id)
+                    // Is allowed to edit vehicle if is admin or [if it's his vehicle and is not guest]
+                    (!currentUser.IsAdmin) && ((owner != currentUser.Id) || currentUser.IsGuest)
                ))
             {
                 Response.StatusCode = StatusCodes.Status403Forbidden;
@@ -163,8 +163,9 @@ namespace Trips.Controllers
             // Check permissions
             User currentUser = await GetCurrentUserAsync();
             if ((currentUser == null) || (
-                    // Is allowed to edit vehicle if is admin or if it's his vehicle (and remains his after update)
-                    (!currentUser.IsAdmin) && ((vehicle.Owner?.Id != currentUser.Id)
+                    // Is allowed to edit vehicle if is admin or [if it's his vehicle, and remains his after update, and is not guest]
+                    (!currentUser.IsAdmin) && (currentUser.IsGuest
+                                               || (vehicle.Owner?.Id != currentUser.Id)
                                                || (vehicleDto.Owner?.Id != currentUser.Id))
                ))
             {
@@ -247,8 +248,8 @@ namespace Trips.Controllers
             // Check permissions
             User currentUser = await GetCurrentUserAsync();
             if ((currentUser == null) || (
-                    // Is allowed to delete vehicle if is admin or if it's his vehicle
-                    (!currentUser.IsAdmin) && (vehicle.Owner?.Id != currentUser.Id)
+                    // Is allowed to delete vehicle if is admin or [if it's his vehicle and is not guest]
+                    (!currentUser.IsAdmin) && (currentUser.IsGuest || (vehicle.Owner?.Id != currentUser.Id))
                ))
             {
                 return Forbid();
@@ -296,8 +297,8 @@ namespace Trips.Controllers
             // Check permissions
             User currentUser = await GetCurrentUserAsync();
             if ((currentUser == null) || (
-                    // Is allowed to edit vehicle if is admin or if it's his vehicle
-                    (!currentUser.IsAdmin) && (vehicleData.OwnerId != currentUser.Id)
+                    // Is allowed to edit vehicle if is admin or [if it's his vehicle and he is not guest]
+                    (!currentUser.IsAdmin) && (currentUser.IsGuest || (vehicleData.OwnerId != currentUser.Id))
                ))
             {
                 return Forbid();
@@ -339,8 +340,8 @@ namespace Trips.Controllers
             // Check permissions
             User currentUser = await GetCurrentUserAsync();
             if ((currentUser == null) || (
-                    // Is allowed to edit vehicle if is admin or if it's his vehicle
-                    (!currentUser.IsAdmin) && (vehicle.Owner?.Id != currentUser.Id)
+                    // Is allowed to edit vehicle if is admin or [if it's his vehicle and he is not guest]
+                    (!currentUser.IsAdmin) && (currentUser.IsGuest || (vehicle.Owner?.Id != currentUser.Id))
                ))
             {
                 return Forbid();

@@ -147,8 +147,9 @@ namespace Trips.Controllers
             }
             else
             {
-                // Allow if update self or if is admin
-                if ((user.Id != currentUser.Id) && (!currentUser.IsAdmin))
+                // Allow if update self and is not guest. This rule is not applicable to admins.
+                if ((currentUser.IsGuest || (user.Id != currentUser.Id))
+                    && (!currentUser.IsAdmin))
                 {
                     return Forbid();
                 }
@@ -189,7 +190,8 @@ namespace Trips.Controllers
                 if ((userDto.IsAdmin != user.IsAdmin)
                     || (userDto.CanEditGeography != user.CanEditGeography)
                     || (userDto.CanPublishNews != user.CanPublishNews)
-                    || (userDto.CanPublishTrips != user.CanPublishTrips))
+                    || (userDto.CanPublishTrips != user.CanPublishTrips)
+                    || (userDto.IsGuest != user.IsGuest))
                 {
                     if (!currentUser.IsAdmin)
                     {
@@ -204,6 +206,7 @@ namespace Trips.Controllers
                     user.CanEditGeography = userDto.CanEditGeography;
                     user.CanPublishNews = userDto.CanPublishNews;
                     user.CanPublishTrips = userDto.CanPublishTrips;
+                    user.IsGuest = userDto.IsGuest;
                 }
 
                 await DbContext.SaveChangesAsync();
@@ -228,6 +231,12 @@ namespace Trips.Controllers
                 return Unauthorized();
             }
 
+            // Guests cannot change password (but Admin overrides this rule)
+            if (currentUser.IsGuest && (!currentUser.IsAdmin))
+            {
+                return Forbid();
+            }
+
             User user = await Task.Run(() => DbContext.Users.FirstOrDefault(u => u.Id == id));
             if (user == null)
             {
@@ -235,7 +244,7 @@ namespace Trips.Controllers
             }
             else
             {
-                // Can only change password to himself
+                // Can only change password to himself.
                 if (currentUser.Id != user.Id)
                 {
                     return Forbid();
@@ -318,8 +327,10 @@ namespace Trips.Controllers
             }
             else
             {
-                // Allow if changes to himself, or if is admin
-                if ((currentUser.Id != user.Id) && (!currentUser.IsAdmin))
+                // Allow if changes to himself if is not guest.
+                // If is admin, then this rule is not applicable.
+                if ((currentUser.IsGuest || (currentUser.Id != user.Id))
+                    && (!currentUser.IsAdmin))
                 {
                     return Forbid();
                 }
@@ -402,8 +413,10 @@ namespace Trips.Controllers
             {
                 if (user.ProfilePicture.HasValue || user.SmallSizeProfilePicture.HasValue)
                 {
-                    // Allow if changes to himself, or if is admin
-                    if ((currentUser.Id != user.Id) && (!currentUser.IsAdmin))
+                    // Allow if changes to himself, if is not guest.
+                    // This rule is not applicable to admins.
+                    if ((currentUser.IsGuest || (currentUser.Id != user.Id))
+                        && (!currentUser.IsAdmin))
                     {
                         return Forbid();
                     }
