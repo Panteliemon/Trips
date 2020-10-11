@@ -9,6 +9,7 @@ namespace Trips.Dtos
     public class PlaceOnMapDto
     {
         public int Id { get; set; }
+        public string UrlId { get; set; }
         public PlaceKind? Kind { get; set; }
         public string Name { get; set; }
         public double? Latitude { get; set; }

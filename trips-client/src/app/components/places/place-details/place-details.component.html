@@ -51,6 +51,16 @@
                            (keyup.enter)="setPlaceName(tbName.value)" />
                 </div>
 
+                <div *ngIf="isEditMode" class="form-field">
+                    <label for="tbUrlId">URL:</label>
+                    <div class="field-with-button">
+                        <input type="text" #tbUrlId id="tbUrlId" [value]="place.urlId"
+                               (blur)="setPlaceUrlId(tbUrlId.value, true)"
+                               (keyup.enter)="setPlaceUrlId(tbUrlId.value, true)" />
+                        <button class="button" (click)="onUrlIdAutoSetClicked()">Авто</button>
+                    </div>
+                </div>
+
                 <div class="form-field">
                     <p>Тип места:</p>
                     <app-place-kind-selector [(value)]="placeKind" [isEditable]="isEditMode"></app-place-kind-selector>
@@ -151,7 +161,7 @@
         </app-expander>
     </section>
     <div class="fog" *ngIf="isOverallLoaderVisible">
-        <app-loader *ngIf="isOverallLoaderVisible" class="centered"></app-loader>
+        <app-loader class="centered"></app-loader>
     </div>
 </div>
 <app-page404 *ngIf="isNotFound"></app-page404>

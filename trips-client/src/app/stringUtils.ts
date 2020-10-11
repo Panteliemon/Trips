@@ -220,3 +220,98 @@ export function getStandardColor(webColor: string): string {
 
   return null;
 }
+
+// Data arrays for automatic transliteration. Known substrings and replacements must be separated by any amount of spaces,
+// substrings count should be the same in both arrays. The transliterating algorithm detects the longest possible known substrings.
+// All substrings here should be in lower case.
+let knownLetters = "а б в г д е  ё  ж  з и й к л м н о п р с т у ф х  ц  ч  ш  щ   ы э ю  я  ть дь бя  бё  бю  бе  вя  вё  вю  ве  гя  гё  гю  ге  дя  дё  дю  де  жя жё жю же  зя  зё  зю  зе  кя  кё  кю  ке  ля  лё  лю  ле  мя  мё  мю  ме  ня  нё  ню  не  пя  пё  пю  пе  ря  рё  рю  ре  ся  сё  сю  се  тя  тё  тю  те  фя  фё  фю  фе  хя   хё   хю   хе   ця   цё   цю   це  чя   чё   чю   че  шя   шё   шю   ше  щя    щё    щю    ще    ьа ьо ьу ьэ ьи ьы á ä é í ó ô ú ý č ď ľ ĺ ň ŕ š ť ž";
+let replacements = "a b v g d ye yo zh z i y k l m n o p r s t u f kh ts ch sh sch y e yu ya ts dz bia bio biu bie via vio viu vie gia gio giu gie dia dio diu die ja jo ju zhe zia zio ziu zie kia kio kiu kie lia lio liu lie mia mio miu mie nia nio niu nie pia pio piu pie ria rio riu rie sia sio siu sie tia tio tiu tie fia fio fiu fie khia khio khiu khie tsia tsio tsiu tse chia chio chiu che shia shio shiu she schia schio schiu schie ya yo yu ye yi yy a a e i o o u y c d l l n r s t z";
+
+let punctuationMarks = "\",.?!;:\'"
+
+// These variables are initialized automatically on the first use.
+let isTransliterationInitialized: boolean = false;
+let knownLettersArr = [];
+let replacementsArr = [];
+
+// Generates UrlId by the specified string
+export function generateUrlId(sourceString: string): string {
+  if (!isTransliterationInitialized) {
+    initializeTransliteration();
+  }
+
+  sourceString = sourceString.toLowerCase();
+  let position: number = 0;
+  let result = "";
+  while (position < sourceString.length) {
+    // Latin letters, numbers, underscore and hyphen - as is
+    if (((sourceString[position] >= 'a') && (sourceString[position] <= 'z'))
+        || ((sourceString[position] >= '0') && (sourceString[position] <= '9'))
+        || (sourceString[position] == '_') || (sourceString[position] == '-')) {
+      result += sourceString[position];
+      position++;
+    } else {
+      // Punctuation marks - as empty strings
+      if (punctuationMarks.indexOf(sourceString[position]) >= 0) {
+        position++;
+      } else {
+        // Known combinations - to replacements
+        let letterIndex = detectKnownLetter(sourceString, position);
+        if (letterIndex >= 0) {
+          result += replacementsArr[letterIndex];
+          position += knownLettersArr[letterIndex].length;
+        } else {
+          // Everything else - to underscores
+          result += "_";
+          position++;
+        }
+      }
+    }
+  }
+
+  return result;
+}
+
+function initializeTransliteration() {
+  knownLettersArr = knownLetters.split(/\s+/);
+  replacementsArr = replacements.split(/\s+/);
+
+  if (knownLettersArr.length != replacementsArr.length) {
+    throw new Error("Discrepancy between input and output arrays! Automatic transliteration cannot work!");
+  }
+
+  isTransliterationInitialized = true;
+}
+
+// Detects the longest known entry in str, starting from position position.
+// Returns index of entry if detected and -1 if not detected.
+function detectKnownLetter(str: string, position: number): number {
+  let result: number = -1;
+  for (let i=0; i<knownLettersArr.length; i++) {
+    if (detectSubString(str, position, knownLettersArr[i])) {
+      if (result >= 0) {
+        if (knownLettersArr[result].length < knownLettersArr[i].length) {
+          result = i;
+        }
+      } else {
+        result = i;
+      }
+    }
+  }
+
+  return result;
+}
+
+function detectSubString(outerString: string, position: number, subString: string): boolean {
+  if (subString && (position + subString.length <= outerString.length)) {
+    for (let i: number = 0; i<subString.length; i++) {
+      if (subString[i] != outerString[position + i]) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  return false;
+}

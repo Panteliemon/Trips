@@ -31,29 +31,29 @@
             </thead>
             <tr *ngFor="let place of places" class="entity-row selectable-row">
                 <td class="entity-picture-column">
-                    <a class="cell-wrapper" routerLink="/place/{{place.id}}">
+                    <a class="cell-wrapper" routerLink="/place/{{getPlaceId(place)}}">
                         <img [src]="getPlacePicSrc(place)" />
                     </a>
                 </td>
                 <td class="general-column hide-small">
-                    <a class="cell-wrapper" routerLink="/place/{{place.id}}">
+                    <a class="cell-wrapper" routerLink="/place/{{getPlaceId(place)}}">
                         <p class="title">{{getPlaceName(place.name)}}</p>
                         <app-place-kind-selector [value]="place.kind" [isEditable]="false"></app-place-kind-selector>
                         <p *ngIf="place.discoveryDate">{{place.discoveryDate | tripsDate}}</p>
                     </a>
                 </td>
                 <td class="name-column show-small">
-                    <a class="cell-wrapper" routerLink="/place/{{place.id}}">
+                    <a class="cell-wrapper" routerLink="/place/{{getPlaceId(place)}}">
                         <p>{{getPlaceName(place.name)}}</p>
                     </a>
                 </td>
                 <td class="enum-column show-small">
-                    <a class="cell-wrapper" routerLink="/place/{{place.id}}">
+                    <a class="cell-wrapper" routerLink="/place/{{getPlaceId(place)}}">
                         <app-place-kind-selector class="centered" [value]="place.kind" [isEditable]="false" [isShortView]="true"></app-place-kind-selector>
                     </a>
                 </td>
                 <td class="date-column show-small">
-                    <a class="cell-wrapper" routerLink="/place/{{place.id}}">
+                    <a class="cell-wrapper" routerLink="/place/{{getPlaceId(place)}}">
                         <p *ngIf="place.discoveryDate" class="centered">{{place.discoveryDate | tripsDate}}</p>
                     </a>
                 </td>

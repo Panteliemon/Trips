@@ -52,5 +52,33 @@ namespace Trips.Utils
 
             return result;
         }
+
+        /// <summary>
+        /// Returns if the specified string can be used as UrlId.
+        /// Checks only that all chars are valid. Doesn't check: null or empty,
+        /// or if string is a number.
+        /// </summary>
+        /// <param name="urlId"></param>
+        public static bool AreAllCharsValidForUrlId(string urlId)
+        {
+            for (int i = 0; i < urlId.Length; i++)
+            {
+                if (!IsValidUrlIdChar(urlId[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static bool IsValidUrlIdChar(char cr)
+        {
+            return ((cr >= 'a') && (cr <= 'z'))
+                   || ((cr >= 'A') && (cr <= 'Z'))
+                   || ((cr >= '0') && (cr <= '9'))
+                   || (cr == '-')
+                   || (cr == '_');
+        }
     }
 }

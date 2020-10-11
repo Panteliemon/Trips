@@ -36,6 +36,7 @@ export enum PlaceCapacity {
 
 export class Place {
     id: number;
+    urlId: string;
     kind: PlaceKind;
     name: string;
     description: string;

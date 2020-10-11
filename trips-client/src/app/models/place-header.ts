@@ -3,12 +3,10 @@ import { PicFormat } from './picture';
 
 export class PlaceHeader {
     id: number;
+    urlId: string;
     kind: PlaceKind;
     name: string;
     discoveryDate: Date;
-    accessibility: PlaceAccessibility;
-    popularity: PlacePopularity;
-    capacity: PlaceCapacity;
     titlePictureFormat: PicFormat;
     titlePictureSmallSizeId: string;
 }

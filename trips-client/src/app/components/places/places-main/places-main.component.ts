@@ -102,6 +102,10 @@ export class PlacesMainComponent implements OnInit {
     this.fetchMorePlaces();
   }
 
+  getPlaceId(place: PlaceHeader):number|string {
+    return place.urlId ?? place.id;
+  }
+
   getPlaceName(placeName: string) {
     return this.placesService.getDisplayablePlaceName(placeName);
   }

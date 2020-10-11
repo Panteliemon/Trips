@@ -24,6 +24,9 @@ namespace Trips.Controllers
             public T Metric { get; set; }
         }
 
+        // Use lock on this object to check/set UrlId
+        private static object _urlIdLocker = new object();
+
         public PlacesController(TripsContext dbContext, IMapper mapper)
             : base(dbContext, mapper)
         {
@@ -103,21 +106,38 @@ namespace Trips.Controllers
 
         [HttpGet]
         [Route("place/{id}")]
-        public async Task<PlaceDto> GetPlace(int id)
+        public async Task<PlaceDto> GetPlace(string id)
         {
-            Place place = await DbContext.Places.Where(p => p.Id == id)
-                                                // TODO REGION
-                                                .Include(p => p.AddedBy)
-                                                .Include(p => p.ChangedBy)
-                                                .Include(p => p.Gallery)
-                                                .ThenInclude(g => g.Pictures)
-                                                .ThenInclude((Picture pic) => pic.UploadedBy)
-                                                .FirstOrDefaultAsync();
-
-            if (place?.Gallery?.Pictures != null)
+            IQueryable<Place> query = null;
+            if (int.TryParse(id, out int intId))
             {
-                // Order by index
-                place.Gallery.Pictures = place.Gallery.Pictures.OrderBy(p => p.Index).ToList();
+                query = DbContext.Places.Where(p => p.Id == intId);
+            }
+            else
+            {
+                if (!string.IsNullOrWhiteSpace(id))
+                {
+                    string urlId = id.ToLower();
+                    query = DbContext.Places.Where(p => p.UrlId == urlId);
+                }
+            }
+
+            Place place = null;
+            if (query != null)
+            {
+                place = await query.Include(p => p.AddedBy)
+                                   .Include(p => p.ChangedBy)
+                                   // TODO REGION
+                                   .Include(p => p.Gallery)
+                                   .ThenInclude(g => g.Pictures)
+                                   .ThenInclude((Picture pic) => pic.UploadedBy)
+                                   .FirstOrDefaultAsync();
+
+                if (place?.Gallery?.Pictures != null)
+                {
+                    // Order by index
+                    place.Gallery.Pictures = place.Gallery.Pictures.OrderBy(p => p.Index).ToList();
+                }
             }
 
             PlaceDto result = Mapper.Map<PlaceDto>(place);
@@ -269,6 +289,7 @@ namespace Trips.Controllers
             place.Popularity = placeDto.Popularity;
             place.Capacity = placeDto.Capacity;
             place.IsXBApproved = placeDto.IsXBApproved;
+            // UrlId is not changed by this action.
 
             // 3. ---------- Title picture
             if (place.TitlePicture?.SmallSizeId != placeDto.TitlePicture?.SmallSizeId)
@@ -298,13 +319,89 @@ namespace Trips.Controllers
             // 4. ---------- Changes in the gallery
             EntityUtils.ApplyChangesToGallery(place.Gallery, placeDto.Gallery);
 
-            // 5. ---------- Changed By
+            // 5. ---------- Signatures and save
             place.ChangedBy = currentUser;
             place.ChangedDate = DateTime.Now;
-
             await DbContext.SaveChangesAsync();
 
             return Ok();
+        }
+
+        [HttpPut]
+        [Route("place/{placeId}/urlid")]
+        public async Task<IActionResult> UpdatePlaceUrlId(int placeId, NewUrlIdDto newUrlIdDto)
+        {
+            if (Program.IsLocked)
+            {
+                return StatusCode(StatusCodes.Status423Locked);
+            }
+
+            // Check permissions
+            User currentUser = await GetCurrentUserAsync();
+            if ((currentUser == null) || (!currentUser.CanEditGeography))
+            {
+                return Forbid();
+            }
+
+            Place place = await DbContext.Places.FirstOrDefaultAsync(predicate => predicate.Id == placeId);
+            if (place == null)
+            {
+                return NotFound();
+            }
+
+            string newUrlId = newUrlIdDto?.NewUrlId;
+            if (string.IsNullOrEmpty(newUrlId))
+            {
+                // Empty UrlId is valid: means no UrlId. Save always as null, just because.
+                place.UrlId = null;
+
+                // Sign the place and update
+                place.ChangedBy = currentUser;
+                place.ChangedDate = DateTime.Now;
+                await DbContext.SaveChangesAsync();
+
+                return Ok();
+            }
+            else
+            {
+                newUrlId = newUrlId.ToLower();
+
+                if (int.TryParse(newUrlId, out int exampleInt))
+                {
+                    return BadRequest("URLID_NUMBER");
+                }
+
+                if (!StringUtils.AreAllCharsValidForUrlId(newUrlId))
+                {
+                    return BadRequest("URLID_INVALID");
+                }
+
+                // Find conflicts, and if there are no, update immediately
+                IActionResult result = await Task.Run<IActionResult>(() =>
+                {
+                    lock (_urlIdLocker)
+                    {
+                        Place anotherPlace = DbContext.Places.Where(p => p.UrlId == newUrlId).FirstOrDefault();
+                        if ((anotherPlace != null)
+                            && (anotherPlace.Id != place.Id)) // don't know how it might happen, so check for safety only
+                        {
+                            return BadRequest("URLID_EXISTS");
+                        }
+
+                        // UrlId change approved
+                        place.UrlId = newUrlId;
+
+                        // Sign the place and update
+                        place.ChangedBy = currentUser;
+                        place.ChangedDate = DateTime.Now;
+                        DbContext.SaveChanges();
+                    }
+
+                    return Ok();
+                });
+
+                return result;
+            }
         }
 
         [HttpDelete]

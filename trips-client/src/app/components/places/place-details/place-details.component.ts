@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PlacesService } from 'src/app/services/places.service';
 import { MessageService, MessageButtons, MessageIcon, MessageResult } from 'src/app/services/message.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { dateToInputString, inputStringToDate, possibleStringToDate, getPictureUrl, Coordinates } from 'src/app/stringUtils';
+import { dateToInputString, inputStringToDate, possibleStringToDate, getPictureUrl, Coordinates, generateUrlId } from 'src/app/stringUtils';
 import { PopupsService } from 'src/app/services/popups.service';
 import { TripsService } from 'src/app/services/trips.service';
 import { TripHeader } from 'src/app/models/trip-header';
@@ -148,14 +148,71 @@ export class PlaceDetailsComponent implements OnInit {
     }
   }
 
-  setPlaceName(value: string) {
-    let changed = this.place.name != value;
-    this.place.name = value;
-    if (changed && (!value)) {
-      this.messageService.showMessage("Всё же неплохо бы, чтобы имя не было пустым. Так будет легче найти данное место поиском, и т.д.", MessageButtons.ok, MessageIcon.info);
-    }
+  async setPlaceName(value: string) {
+    let oldName = this.place.name;
+    if (value != oldName) {
+      this.place.name = value;
+      if (!value) {
+        this.messageService.showMessage("Всё же неплохо бы, чтобы имя не было пустым. Так будет легче найти данное место поиском, и т.д.", MessageButtons.ok, MessageIcon.info);
+      }
 
-    this.initiatePartialSilentUpdate();
+      try {
+        // Send request to update name
+        let withoutGallery: Place = Object.assign({}, this.place);
+        withoutGallery.gallery = null;
+        await this.placesService.updatePlace(withoutGallery).toPromise();
+
+        // If changed from null to something - try to automatically generate and save UrlId (if not assigned yet).
+        if ((!oldName) && (!this.place.urlId)) {
+          await this.setPlaceUrlId(generateUrlId(this.place.name), false); // if no success, then nevermind
+        }
+      } catch (error) {
+        this.messageService.showMessage(this.placesService.getServerErrorText(error), MessageButtons.ok, MessageIcon.error);
+      }
+    } 
+  }
+
+  async setPlaceUrlId(value: string, showErrors: boolean) {
+    if (value != this.place.urlId) {
+      let previousValue = this.place.urlId;
+      if (value != null) {
+        value = value.toLowerCase();
+      }
+
+      this.place.urlId = value || null; // empty strings to nulls
+
+      // Server also performs these checks, but let's make them more user friendly
+      if (Math.trunc(+value).toString() == value) {
+        if (showErrors) {
+          await this.messageService.showMessage("URL не должен быть цифрой, так как цифра - это id.", MessageButtons.ok, MessageIcon.warning).toPromise();
+        }
+        this.place.urlId = previousValue;
+        return;
+      }
+
+      this.isOverallLoaderVisible = true;
+      try {
+        // Update
+        await this.placesService.updatePlaceUrlId(this.place).toPromise();
+        // Succeeded - then re-navigate
+        this.router.navigate([`/place/${this.place.urlId ?? this.place.id}`, {edit: true}]); // we are always in edit mode here
+      } catch (error) {
+        if (showErrors) {
+          await this.messageService.showMessage(this.placesService.getServerErrorText(error), MessageButtons.ok, MessageIcon.error).toPromise();
+        }
+        this.place.urlId = previousValue;
+      }
+
+      this.isOverallLoaderVisible = false;
+    }
+  }
+
+  async onUrlIdAutoSetClicked() {
+    if (this.place.name) {
+      await this.setPlaceUrlId(generateUrlId(this.place.name), true);
+    } else {
+      await this.setPlaceUrlId("", true);
+    }
   }
 
   setPlaceDescription(value: string) {
@@ -175,36 +232,35 @@ export class PlaceDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let placeId = +this.route.snapshot.paramMap.get("id");
+    let placeId = this.route.snapshot.paramMap.get("id");
     this.isOverallLoaderVisible = true;
     this.placesService.getPlace(placeId).subscribe(place => {
+      this.isOverallLoaderVisible = false;
       this.place = place;
       if (!place) {
         this.isNotFound = true;
       } else {
         // Avoid "expression changed after it has been checked" situation
         this.gallerySelectedPictureSmallSizeId = this.place?.gallery?.pictures[0]?.smallSizeId || null;
-      }
-      this.refreshTitlePicSrc();
-      this.allGalleries = [this.place.gallery];
-      this.refreshSelectorsVisible();
-      this.refreshGalleryVisible();
-      this.isOverallLoaderVisible = false;
 
-      if (this.authService.user?.canEditGeography) {
-        this.isEditButtonVisible = true;
-        if (this.route.snapshot.paramMap.get("edit") == "true") {
-          this.onEditClicked();
-        }
-      } else {
-        this.isEditButtonVisible = false;
-        if (this.route.snapshot.paramMap.get("edit") == "true") {
-          this.messageService.showMessage("У вас нет прав на редактирование");
-        }
-      }
+        this.refreshTitlePicSrc();
+        this.allGalleries = [this.place.gallery];
+        this.refreshSelectorsVisible();
+        this.refreshGalleryVisible();
 
-      // Decide once and forever, if we display "trips to here" section
-      if (this.place) {
+        if (this.authService.user?.canEditGeography) {
+          this.isEditButtonVisible = true;
+          if (this.route.snapshot.paramMap.get("edit") == "true") {
+            this.onEditClicked();
+          }
+        } else {
+          this.isEditButtonVisible = false;
+          if (this.route.snapshot.paramMap.get("edit") == "true") {
+            this.messageService.showMessage("У вас нет прав на редактирование");
+          }
+        }
+
+        // Decide once and forever, if we display "trips to here" section
         this.tripsService.getTripsList(1, 0, null, null, null, null, null, [this.place.id]).subscribe(trips => {
           this.areTripsToHereVisible = trips && (trips.length > 0);
         }); // on error ignore
@@ -219,7 +275,7 @@ export class PlaceDetailsComponent implements OnInit {
   onEditClicked() {
     // Set "edit" parameter in url
     if (!this.route.snapshot.paramMap.get("edit")) {
-      this.router.navigate([`/place/${this.place.id}`, {edit: true}]);
+      this.router.navigate([`/place/${this.place.urlId ?? this.place.id}`, {edit: true}]);
     }
 
     this.isEditMode = true;
@@ -230,7 +286,7 @@ export class PlaceDetailsComponent implements OnInit {
 
   onEndEditClicked() {
     if (this.route.snapshot.paramMap.get("edit")) {
-      this.router.navigate([`/place/${this.place.id}`]);
+      this.router.navigate([`/place/${this.place.urlId ?? this.place.id}`]);
       // This action doesn't actually reload the page, since url not changed,
       // but it clears the "edit" parameter, and that's exactly what we need.
     }

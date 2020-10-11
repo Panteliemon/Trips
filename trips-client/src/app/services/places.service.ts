@@ -46,7 +46,7 @@ export class PlacesService {
     return this.http.get<PlaceHeader[]>(`${API_BASE_PATH}/places`, { params: { exact: paramValue } });
   }
 
-  getPlace(id: number): Observable<Place> {
+  getPlace(id: number|string): Observable<Place> {
     return this.http.get<Place>(`${API_BASE_PATH}/place/${id}`)
   }
 
@@ -64,6 +64,10 @@ export class PlacesService {
 
   updatePlace(place: Place): Observable<any> {
     return this.http.put(`${API_BASE_PATH}/place`, place);
+  }
+
+  updatePlaceUrlId(place: Place): Observable<any> {
+    return this.http.put(`${API_BASE_PATH}/place/${place.id}/urlid`, { newUrlId: place.urlId });
   }
 
   deletePlace(id: number, deleteVisits: boolean): Observable<any> {
@@ -110,6 +114,12 @@ export class PlacesService {
         return "Слишком крохотная картинка для галереи. Почти как мой член. У-тю-тю-тю-тю! Минимум надо 200x200 пикселей.";
       case "CROOKED_PICTURE":
         return "Потребность в картинках с несуразными пропорциями ширины/высоты реально составляет ноль штук.";
+      case "URLID_NUMBER":
+        return "URL не может быть числом.";
+      case "URLID_INVALID":
+        return "URL может содержать только буквы английского алфавита, цифры, подчёркивания и минусы.";
+      case "URLID_EXISTS":
+        return "URL уже используется.";
     }
   }
 
