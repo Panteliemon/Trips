@@ -235,7 +235,7 @@ export class AdvancedEditorComponent implements OnInit, OnChanges {
     this.popupsService.placePicker.open("Выберите место", place => {
       let selection = this.getSelection();
       if (selection) { // Usually always not null
-        let openTag = `[url=/place/${place.id}]`;
+        let openTag = `[url=/place/${place.urlId || place.id}]`;
         let middle = (selection.start == selection.end) ? this.placesService.getDisplayablePlaceName(place.name) : this.text.substring(selection.start, selection.end);
         this.ensureTextNotNull();
         this.text = this.text.substring(0, selection.start) + openTag + middle + "[/url]" + this.text.substring(selection.end);

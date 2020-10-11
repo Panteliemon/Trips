@@ -103,7 +103,7 @@ export class PlacesMainComponent implements OnInit {
   }
 
   getPlaceId(place: PlaceHeader):number|string {
-    return place.urlId ?? place.id;
+    return place.urlId || place.id;
   }
 
   getPlaceName(placeName: string) {

@@ -82,10 +82,10 @@
         <section *ngFor="let visit of trip.visits" class="form-field-margin">
             <div class="clearfix">
                 <h2 class="allows-float-beside visit-header">
-                    <a *ngIf="visit.place" routerLink="/place/{{visit.place.id}}">
+                    <a *ngIf="visit.place" routerLink="/place/{{visit.place.urlId || visit.place.id}}">
                         <img [src]="getPlacePicture(visit.place)" />
                     </a>
-                    <a *ngIf="visit.place" routerLink="/place/{{visit.place.id}}">
+                    <a *ngIf="visit.place" routerLink="/place/{{visit.place.urlId || visit.place.id}}">
                         {{getPlaceName(visit.place)}}
                         <i class="material-icons">link</i>
                     </a>

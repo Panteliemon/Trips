@@ -3,12 +3,12 @@
            [class.no-border]="!isEditable">
         <tr *ngFor="let place of selectedPlaces">
             <td class="entity-picture-column">
-                <a class="value-wrapper" routerLink="/place/{{place.id}}">
+                <a class="value-wrapper" routerLink="/place/{{place.urlId || place.id}}">
                     <img [src]="getPlaceImgSrc(place)" />
                 </a>
             </td>
             <td class="name-column">
-                <a class="value-wrapper" routerLink="/place/{{place.id}}">
+                <a class="value-wrapper" routerLink="/place/{{place.urlId || place.id}}">
                     <span>{{getPlaceName(place)}}</span>
                     <i class="material-icons">link</i>
                 </a>

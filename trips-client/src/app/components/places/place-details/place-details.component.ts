@@ -275,7 +275,7 @@ export class PlaceDetailsComponent implements OnInit {
   onEditClicked() {
     // Set "edit" parameter in url
     if (!this.route.snapshot.paramMap.get("edit")) {
-      this.router.navigate([`/place/${this.place.urlId ?? this.place.id}`, {edit: true}]);
+      this.router.navigate([`/place/${this.place.urlId || this.place.id}`, {edit: true}]);
     }
 
     this.isEditMode = true;
@@ -286,7 +286,7 @@ export class PlaceDetailsComponent implements OnInit {
 
   onEndEditClicked() {
     if (this.route.snapshot.paramMap.get("edit")) {
-      this.router.navigate([`/place/${this.place.urlId ?? this.place.id}`]);
+      this.router.navigate([`/place/${this.place.urlId || this.place.id}`]);
       // This action doesn't actually reload the page, since url not changed,
       // but it clears the "edit" parameter, and that's exactly what we need.
     }

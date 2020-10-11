@@ -6,11 +6,11 @@
         <div #popupDiv>
             <div *ngIf="selectedPlace" class="popup-wrapper">
                 <div class="tooltip">
-                    <a routerLink="/place/{{selectedPlace.id}}">
+                    <a routerLink="/place/{{selectedPlace.urlId || selectedPlace.id}}">
                         <img class="small-entity-pic" [src]="selectedPlacePicSrc" />
                     </a>
                     <div>
-                        <a routerLink="/place/{{selectedPlace.id}}" class="inline-ref">
+                        <a routerLink="/place/{{selectedPlace.urlId || selectedPlace.id}}" class="inline-ref">
                             {{selectedPlaceName}}
                         </a>
                         <div class="shifter">
